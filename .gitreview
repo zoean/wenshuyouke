@@ -1,0 +1,5 @@
+[gerrit]
+host=192.168.10.105
+port=29418
+project=marketing-web
+defaultbranch=master
