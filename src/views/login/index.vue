@@ -1,158 +1,237 @@
 <template>
-  <div class="login-container pull-height" @keyup.enter.native="handleLogin">
-    <div class="login-info text-white animated fadeInLeft">
-      <div class="logo" style="margin-top:-426px">
-          <img src="../../assets/images/home/logo.png" width="160px" height="160px" alt="logo" style="vertical-align: middle;" />
-      </div>
-      <h2 class="login-info-title">{{website.info.title}}</h2>
-      <ul class="login-info-list">
-        <li class="login-info-item" v-for="item in website.info.list">
-          {{item}}
-        </li>
-      </ul>
-    </div>
-    <div class="login-border  animated fadeInRight">
-      <div class="login-main">
-        <h4 class="login-title">登录{{website.title}}
-        </h4>
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="用户密码" name="user">
-            <userLogin></userLogin>
-          </el-tab-pane>
-          <el-tab-pane label="短信验证码" name="code">
-            <codeLogin></codeLogin>
-          </el-tab-pane>
-        </el-tabs>
-      </div>
-    </div>
+  <div class="login-container">
+    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
+      <div class="title-container">
+        <h3 class="title">Login Form</h3>
+      </div>
+
+      <el-form-item prop="username">
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          ref="username"
+          v-model="loginForm.username"
+          placeholder="Username"
+          name="username"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
+      </el-form-item>
+
+      <el-form-item prop="password">
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          :key="passwordType"
+          ref="password"
+          v-model="loginForm.password"
+          :type="passwordType"
+          placeholder="Password"
+          name="password"
+          tabindex="2"
+          auto-complete="on"
+          @keyup.enter.native="handleLogin"
+        />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
+      </el-form-item>
+
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+
+      <div class="tips">
+        <span style="margin-right:20px;">username: admin</span>
+        <span> password: any</span>
+      </div>
+
+    </el-form>
   </div>
 </template>
+
 <script>
-import userLogin from './userlogin'
-import codeLogin from './codelogin'
-import { mapGetters } from 'vuex'
+import { validUsername } from '@/utils/validate'
+
 export default {
-  name: 'login',
-  components: {
-    userLogin,
-    codeLogin
-  },
+  name: 'Login',
   data() {
+    const validateUsername = (rule, value, callback) => {
+      if (!validUsername(value)) {
+        callback(new Error('Please enter the correct user name'))
+      } else {
+        callback()
+      }
+    }
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('The password can not be less than 6 digits'))
+      } else {
+        callback()
+      }
+    }
     return {
-      activeName: 'user'
+      loginForm: {
+        username: 'admin',
+        password: '111111'
+      },
+      loginRules: {
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+      },
+      loading: false,
+      passwordType: 'password',
+      redirect: undefined
     }
   },
-  created() {},
-  mounted() {},
-  computed: {
-    ...mapGetters(['website'])
+  watch: {
+    $route: {
+      handler: function(route) {
+        this.redirect = route.query && route.query.redirect
+      },
+      immediate: true
+    }
   },
-  props: [],
-  methods: {}
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
+    handleLogin() {
+      this.$refs.loginForm.validate(valid => {
+        if (valid) {
+          this.loading = true
+          this.$store.dispatch('user/login', this.loginForm).then(() => {
+            this.$router.push({ path: this.redirect || '/' })
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+/* 修复input 背景不协调 和光标变色 */
+/* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
+
+$bg:#283443;
+$light_gray:#fff;
+$cursor: #fff;
+
+@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
+  .login-container .el-input input {
+    color: $cursor;
+  }
+}
+
+/* reset element-ui css */
 .login-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  background: rgba(0, 0, 0, 0.2);
-  position: relative;
-  height: 100vh;
-}
-.login-container::before {
-  z-index: -999;
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("../../assets/images/top_images/login2.png");
-  background-size: cover;
-}
-.login-info {
-  padding-left: 60px;
-}
-.login-info-title {
-  line-height: 90px;
-}
-.login-info-item {
-  font-size: 14px;
-}
-.login-border {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 30px 50px 25px 50px;
-  background-color: #fff;
-  border-radius: 6px;
-  box-shadow: 1px 1px 2px #eee;
-}
-.login-main {
-  border-radius: 3px;
-  box-sizing: border-box;
-  background-color: #fff;
-}
-.login-main > h3 {
-  margin-bottom: 20px;
-}
-.login-main > p {
-  color: #76838f;
-}
-.login-title {
-  margin: 0 0 20px;
-  text-align: center;
-  color: #409eff;
-  letter-spacing: 3px;
-}
-.login-submit {
-  margin-top: 20px;
-  width: 100%;
-  border-radius: 28px;
-}
-.login-form {
-  margin: 10px 0;
-  .el-form-item__content {
-    width: 270px;
-  }
-  .el-form-item {
-    margin-bottom: 12px;
-  }
   .el-input {
+    display: inline-block;
+    height: 47px;
+    width: 85%;
+
     input {
-      text-indent: 5px;
-      border-color: #dcdcdc;
-      border-radius: 3px;
-    }
-    .el-input__prefix {
-      i {
-        padding: 0 5px;
-        font-size: 16px !important;
+      background: transparent;
+      border: 0px;
+      -webkit-appearance: none;
+      border-radius: 0px;
+      padding: 12px 5px 12px 15px;
+      color: $light_gray;
+      height: 47px;
+      caret-color: $cursor;
+
+      &:-webkit-autofill {
+        box-shadow: 0 0 0px 1000px $bg inset !important;
+        -webkit-text-fill-color: $cursor !important;
       }
     }
   }
+
+  .el-form-item {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #454545;
+  }
 }
-.login-code {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  margin: 0 0 0 10px;
-}
-.login-code-img {
-  margin-top: 2px;
-  width: 100px;
-  height: 32px;
-  background-color: #fdfdfd;
-  border: 1px solid #f0f0f0;
-  color: #333;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 5px;
-  line-height: 32px;
-  text-indent: 5px;
-  text-align: center;
+</style>
+
+<style lang="scss" scoped>
+$bg:#2d3a4b;
+$dark_gray:#889aa4;
+$light_gray:#eee;
+
+.login-container {
+  min-height: 100%;
+  width: 100%;
+  background-color: $bg;
+  overflow: hidden;
+
+  .login-form {
+    position: relative;
+    width: 520px;
+    max-width: 100%;
+    padding: 160px 35px 0;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  .tips {
+    font-size: 14px;
+    color: #fff;
+    margin-bottom: 10px;
+
+    span {
+      &:first-of-type {
+        margin-right: 16px;
+      }
+    }
+  }
+
+  .svg-container {
+    padding: 6px 5px 6px 15px;
+    color: $dark_gray;
+    vertical-align: middle;
+    width: 30px;
+    display: inline-block;
+  }
+
+  .title-container {
+    position: relative;
+
+    .title {
+      font-size: 26px;
+      color: $light_gray;
+      margin: 0px auto 40px auto;
+      text-align: center;
+      font-weight: bold;
+    }
+  }
+
+  .show-pwd {
+    position: absolute;
+    right: 10px;
+    top: 7px;
+    font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
 }
 </style>
