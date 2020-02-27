@@ -6,40 +6,9 @@ Vue.use(Router);
 /* Layout */
 import Layout from "@/layout";
 
-/**
- * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
- *
- * hidden: true                   if set true, item will not show in the sidebar(default is false)
- * alwaysShow: true               if set true, will always show the root menu
- *                                if not set alwaysShow, when item has more than one children route,
- *                                it will becomes nested mode, otherwise not show the root menu
- * redirect: noRedirect           if set noRedirect will no redirect in the breadcrumb
- * name:'router-name'             the name is used by <keep-alive> (must set!!!)
- * meta : {
-    roles: ['admin','editor']    control the page roles (you can set multiple roles)
-    title: 'title'               the name show in sidebar and breadcrumb (recommend set)
-    icon: 'svg-name'             the icon show in the sidebar
-    breadcrumb: false            if set false, the item will hidden in breadcrumb(default is true)
-    activeMenu: '/example/list'  if set path, the sidebar will highlight the path you set
-  }
- */
-
-/**
- * constantRoutes
- * a base page that does not have permission requirements
- * all roles can be accessed
- */
-export const constantRoutes = [
-  {
+export const constantRoutes = [{
     path: "/login",
     component: () => import("@/views/login/index"),
-    hidden: true
-  },
-
-  {
-    path: "/404",
-    component: () => import("@/views/404"),
     hidden: true
   },
 
@@ -47,61 +16,109 @@ export const constantRoutes = [
     path: "/",
     component: Layout,
     redirect: "/dashboard",
-    children: [
-      {
-        path: "dashboard",
-        name: "Dashboard",
-        component: () => import("@/views/dashboard/index"),
-        meta: {
-          title: "文投大数据",
-          icon: "dashboard"
-        }
+    children: [{
+      path: "dashboard",
+      name: "Dashboard",
+      component: () => import("@/views/dashboard/index"),
+      meta: {
+        title: "文投大数据",
+        icon: "dashboard"
       }
-    ]
+    }]
   },
-
+  {
+    path: "/dashboard",
+    component: Layout,
+    redirect: "/dashboard",
+    children: [{
+      path: "dashboard",
+      name: "Dashboard",
+      component: () => import("@/views/dashboard/index"),
+      meta: {
+        title: "工作台",
+        icon: "example",
+        roles: ['admin', 'super']
+      }
+    }]
+  },
   {
     path: "/example",
     component: Layout,
     redirect: "/example/table",
     name: "Example",
     meta: {
-      title: "呼叫中心业务",
-      icon: "example"
+      title: "发现线索",
+      icon: "sousuo",
+      roles: ['admin', 'super']
     },
-    children: [
-      {
-        path: "table",
-        name: "Table",
-        component: () => import("@/views/table/index"),
+    children: [{
+        path: "newcompanysearch",
+        name: "newcompanysearch",
+        component: () => import("@/views/foundclues/newcompanysearch/index"),
         meta: {
-          title: "Table",
-          icon: "table"
+          title: "新企搜索",
+          icon: "newcompany",
+          roles: ['admin', 'super']
         }
       },
       {
-        path: "tree",
-        name: "Tree",
-        component: () => import("@/views/tree/index"),
+        path: "advancefilter",
+        name: "advancefilter",
+        component: () => import("@/views/foundclues/advancefilter/index"),
         meta: {
-          title: "Tree",
-          icon: "tree"
+          title: "高级筛选",
+          icon: "advancesearch",
+          roles: ['super', 'admin']
+        }
+      },
+      {
+        path: "companysearch",
+        name: "companysearch",
+        component: () => import("@/views/foundclues/companysearch/index"),
+        meta: {
+          title: "企业搜索",
+          icon: "searchcompany",
+          roles: ['super', 'admin']
         }
       }
     ]
   },
-
   {
     path: "/form",
     component: Layout,
-    children: [
-      {
-        path: "index",
-        name: "Form",
-        component: () => import("@/views/form/index"),
+    name: "Form",
+    meta: {
+      title: "线索管理",
+      icon: "admin"
+    },
+    children: [{
+        path: "databag",
+        name: "databag",
+        component: () => import("@/views/cluesmanagement/databag/index"),
         meta: {
-          title: "Form",
-          icon: "form"
+          title: "线索池",
+          icon: "databag",
+          roles: ['super', 'admin', 'seat']
+        }
+      },
+      {
+        path: "privatesea",
+        name: "privatesea",
+        component: () => import("@/views/cluesmanagement/privatesea/index"),
+        meta: {
+          title: "私海",
+          icon: "privatesea",
+          roles: ['super', 'admin', 'seat']
+        }
+      },
+      {
+        path: "recycle",
+        name: "recycle",
+        component: () => import("@/views/cluesmanagement/recycle/index"),
+        meta: {
+          title: "回收站",
+          icon: "recycle",
+          roles: ['super', 'admin']
         }
       }
     ]
@@ -113,86 +130,46 @@ export const constantRoutes = [
     redirect: "/nested/menu1",
     name: "Nested",
     meta: {
-      title: "Nested",
-      icon: "nested"
+      title: "触达",
+      icon: "zhudongchuda"
     },
-    children: [
-      {
+    children: [{
         path: "menu1",
-        component: () => import("@/views/nested/menu1/index"), // Parent router-view
         name: "Menu1",
+        component: () => import("@/views/reach/callcenter/index"), // Parent router-view
         meta: {
-          title: "Menu1"
+          title: "呼叫中心",
+          icon: "callcenter",
+          roles: ['super', 'seat']
         },
-        children: [
-          {
-            path: "menu1-1",
-            component: () => import("@/views/nested/menu1/menu1-1"),
-            name: "Menu1-1",
-            meta: {
-              title: "Menu1-1"
-            }
-          },
-          {
-            path: "menu1-2",
-            component: () => import("@/views/nested/menu1/menu1-2"),
-            name: "Menu1-2",
-            meta: {
-              title: "Menu1-2"
-            },
-            children: [
-              {
-                path: "menu1-2-1",
-                component: () =>
-                  import("@/views/nested/menu1/menu1-2/menu1-2-1"),
-                name: "Menu1-2-1",
-                meta: {
-                  title: "Menu1-2-1"
-                }
-              },
-              {
-                path: "menu1-2-2",
-                component: () =>
-                  import("@/views/nested/menu1/menu1-2/menu1-2-2"),
-                name: "Menu1-2-2",
-                meta: {
-                  title: "Menu1-2-2"
-                }
-              }
-            ]
-          },
-          {
-            path: "menu1-3",
-            component: () => import("@/views/nested/menu1/menu1-3"),
-            name: "Menu1-3",
-            meta: {
-              title: "Menu1-3"
-            }
-          }
-        ]
       },
       {
         path: "menu2",
-        component: () => import("@/views/nested/menu2/index"),
+        component: () => import("@/views/reach/message/index"),
         meta: {
-          title: "menu2"
+          title: "短信",
+          icon: "message",
+          roles: ['super', 'seat']
+        }
+      },
+
+      {
+        path: "menu3",
+        component: () => import("@/views/reach/ai/index"),
+        meta: {
+          title: "AI机器人",
+          icon: "ai",
+          roles: ['super', 'seat']
         }
       }
     ]
   },
-
-  // {
-  //   path: 'external-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-  //       meta: { title: 'External Link', icon: 'link' }
-  //     }
-  //   ]
-  // },
-
   // 404 page must be placed at the end !!!
+  {
+    path: "/404",
+    component: () => import("@/views/404"),
+    hidden: true
+  },
   {
     path: "*",
     redirect: "/404",

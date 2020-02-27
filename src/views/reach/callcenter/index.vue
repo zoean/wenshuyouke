@@ -1,6 +1,7 @@
 <template>
   <div style="padding:30px;">
-    <el-alert :closable="false" title="menu 1-1" type="success">
+    <h2>呼叫中心</h2>
+    <el-alert :closable="false" type="success">
       <router-view />
     </el-alert>
   </div>
