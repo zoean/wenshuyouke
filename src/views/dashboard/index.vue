@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-container">
     <el-row>
-      <el-button type="primary"
+      <!-- <el-button type="primary"
                  @click="loginServer">链入</el-button>
       <el-button type="info"
-                 @click="DoDisConnect">断链</el-button>
+                 @click="DoDisConnect">断链</el-button> -->
       <el-button type="primary"
                  @click="checkIn(seatId,seatPassword,bindTel)">签入</el-button>
       <el-button type="info"
@@ -33,6 +33,9 @@ export default {
     ...mapGetters([
       'name'
     ])
+  },
+  created () {
+    this.loginServer()
   },
   data () {
     return {
@@ -143,7 +146,7 @@ export default {
     }
   },
   beforeDestroy () {
-    this.DisConnect()
+    this.DoDisConnect()
   }
 }
 </script>
