@@ -6,13 +6,32 @@ Vue.use(Router);
 /* Layout */
 import Layout from "@/layout";
 
+//实例化vue的时候只挂载constantRouter
 export const constantRoutes = [{
-    path: "/login",
-    component: () => import("@/views/login/index"),
-    hidden: true
-  },
+  path: "/login",
+  component: () => import("@/views/login/index"),
+  hidden: true
+}];
+const createRouter = () =>
+  new Router({
+    // mode: 'history', // require service support
+    scrollBehavior: () => ({
+      y: 0
+    }),
+    routes: constantRoutes
+  });
 
-  {
+const router = createRouter();
+
+// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
+export function resetRouter() {
+  const newRouter = createRouter();
+  router.matcher = newRouter.matcher; // reset router
+}
+
+//异步挂载的路由
+//动态需要根据权限加载的路由表
+export const asyncRouterMap = [{
     path: "/",
     component: Layout,
     redirect: "/dashboard",
@@ -108,7 +127,7 @@ export const constantRoutes = [{
         meta: {
           title: "私海",
           icon: "privatesea",
-          roles: ['super', 'admin', 'seat']
+          roles: ['super']
         }
       },
       {
@@ -175,23 +194,6 @@ export const constantRoutes = [{
     redirect: "/404",
     hidden: true
   }
-];
-
-const createRouter = () =>
-  new Router({
-    // mode: 'history', // require service support
-    scrollBehavior: () => ({
-      y: 0
-    }),
-    routes: constantRoutes
-  });
-
-const router = createRouter();
-
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
-export function resetRouter() {
-  const newRouter = createRouter();
-  router.matcher = newRouter.matcher; // reset router
-}
+]
 
 export default router;

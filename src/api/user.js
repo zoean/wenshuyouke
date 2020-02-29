@@ -8,17 +8,17 @@ export function userLogin(data) {
   })
 }
 
-export function getUserInfo(userId) {
+export function getUserInfo(params) {
   return request({
     url: '/user/api/person/getDataById',
     method: 'get',
-    userId
+    params
   })
 }
 
 export function logout() {
   return request({
-    url: '/vue-admin-template/user/logout',
+    url: '/user/logout',
     method: 'post'
   })
 }
