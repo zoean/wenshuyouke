@@ -14,7 +14,8 @@ export const constantRoutes = [{
 }];
 const createRouter = () =>
   new Router({
-    // mode: 'history', // require service support
+    mode: 'history', // require service support
+    path: '/login',
     scrollBehavior: () => ({
       y: 0
     }),
@@ -27,6 +28,9 @@ const router = createRouter();
 export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router
+  router.routes({
+    path: '/login'
+  })
 }
 
 //异步挂载的路由
@@ -40,7 +44,7 @@ export const asyncRouterMap = [{
       name: "Dashboard",
       component: () => import("@/views/dashboard/index"),
       meta: {
-        title: "文投大数据",
+        title: "企业主页",
         icon: "dashboard"
       }
     }]
@@ -55,7 +59,7 @@ export const asyncRouterMap = [{
       component: () => import("@/views/dashboard/index"),
       meta: {
         title: "工作台",
-        icon: "example",
+        icon: "workbench",
         roles: ['admin', 'super']
       }
     }]
@@ -67,7 +71,7 @@ export const asyncRouterMap = [{
     name: "Example",
     meta: {
       title: "发现线索",
-      icon: "sousuo",
+      icon: "found",
       roles: ['admin', 'super']
     },
     children: [{
@@ -182,6 +186,16 @@ export const asyncRouterMap = [{
         }
       }
     ]
+  },
+  {
+    path: "/nested",
+    component: Layout,
+    redirect: "/nested/menu1",
+    name: "Nested",
+    meta: {
+      title: "统计分析",
+      icon: "analysis"
+    },
   },
   // 404 page must be placed at the end !!!
   {

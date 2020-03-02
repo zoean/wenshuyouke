@@ -1,12 +1,36 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened"
+    <!-- <hamburger :is-active="sidebar.opened"
                class="hamburger-container"
-               @toggleClick="toggleSideBar" />
+               @toggleClick="toggleSideBar" /> -->
 
-    <breadcrumb class="breadcrumb-container" />
-
-    <div class="right-menu">
+    <!-- <breadcrumb class="breadcrumb-container" /> -->
+    <img width="134"
+         height="29"
+         class="logo"
+         src="@/assets/images/logo.png" />
+    <div class="narbar-right">
+      <ul>
+        <li>
+          <span class="svg-container">
+            <svg-icon icon-class="user-message" />
+          </span>
+          <span>消息</span>
+        </li>
+        <li>
+          <span class="svg-container">
+            <svg-icon icon-class="user-help" />
+          </span>
+          <span>帮助</span>
+        </li>
+        <li>
+          <span class="svg-container">
+            <svg-icon icon-class="user-set" />
+          </span>
+          <span>设置</span>
+        </li>
+      </ul>
+      <!-- <div class="right-menu">
       <el-dropdown class="avatar-container"
                    trigger="click">
         <div class="avatar-wrapper">
@@ -31,11 +55,21 @@
           </a>
           <el-dropdown-item divided
                             @click.native="logout">
-            <span style="display:block;">Log Out</span>
+            <span style="display:block;">
+              <router-link to="/login">Log Out</router-link>
+            </span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
+    </div> -->
+      <div class="user-info">
+        <img width="30"
+             height="30"
+             src="@/assets/images/avater.png" />
+        <span>李鲜花</span>
+      </div>
     </div>
+
   </div>
 </template>
 
@@ -69,28 +103,53 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  height: 64px;
   overflow: hidden;
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background 0.3s;
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.025);
+  display: flex;
+  justify-content: space-between;
+  .logo {
+    margin: 18px 0 0 30px;
+  }
+  .narbar-right {
+    display: flex;
+    justify-content: flex-end;
+    ul {
+      width: 480px;
+      list-style: none;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+    .user-info {
+      width: 180px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      img {
+        margin-right: 10px;
+      }
     }
   }
 
-  .breadcrumb-container {
-    float: left;
-  }
+  // .hamburger-container {
+  //   line-height: 46px;
+  //   height: 100%;
+  //   float: left;
+  //   cursor: pointer;
+  //   transition: background 0.3s;
+  //   -webkit-tap-highlight-color: transparent;
+
+  //   &:hover {
+  //     background: rgba(0, 0, 0, 0.025);
+  //   }
+  // }
+
+  // .breadcrumb-container {
+  //   float: left;
+  // }
 
   .right-menu {
     float: right;

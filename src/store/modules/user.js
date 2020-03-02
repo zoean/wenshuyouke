@@ -19,7 +19,10 @@ const getDefaultState = () => {
     name: '',
     avatar: '',
     userId: '',
-    roles: []
+    roles: [],
+    seatId: '8001',
+    seatPw: '1234',
+    bindTel: '8001'
   }
 }
 
@@ -42,6 +45,15 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_SEATID: (state, seatId) => {
+    state.seatId = seatId
+  },
+  SET_SEATPW: (state, seatPw) => {
+    state.seatPw = seatPw
+  },
+  SET_BINDTEL: (state, bindTel) => {
+    state.bindTel = bindTel
   }
 }
 
@@ -78,13 +90,15 @@ const actions = {
     state
   }) {
     return new Promise((resolve, reject) => {
-      getUserInfo({
-        userId: state.userId
-      }).then(response => {
+      getUserInfo().then(response => {
         const {
           obj
         } = response
 
+        if (response.status !== 200) {
+          removeToken()
+          router.push(`/login?redirect=${this.$route.fullPath}`)
+        }
         if (!obj) {
           reject('Verification failed, please Login again.')
         }
@@ -92,8 +106,17 @@ const actions = {
         const {
           nickName,
           userIcon,
-          roleType
+          roleType,
         } = obj
+        if (obj.seatId) {
+          commit('SET_SEATID', obj.seatId)
+        }
+        if (obj.seatPw) {
+          commit('SET_SEATID', obj.seatPw)
+        }
+        if (obj.bindTel) {
+          commit('SET_SEATID', obj.bindTel)
+        }
         commit('SET_NAME', nickName)
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
@@ -109,7 +132,7 @@ const actions = {
     commit
   }) {
     removeToken() // must remove  token  first
-    resetRouter()
+    // resetRouter()
     commit('RESET_STATE')
     // return new Promise((resolve, reject) => {
     //   logout(state.token).then(() => {

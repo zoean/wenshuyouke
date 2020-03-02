@@ -7,52 +7,50 @@
           拨打电话
         </el-col>
         <el-col :span="2">
-          <i class="el-icon-close" @click="closePop()"></i>
+          <i class="el-icon-close"
+             @click="closePop()"></i>
         </el-col>
       </el-row>
       <el-tabs v-model="activeName">
-        <el-tab-pane label="拨号键盘" name="first">
+        <el-tab-pane label="拨号键盘"
+                     name="first">
           <el-row class="input-telno">
-            <el-input
-              placeholder="输入电话号码"
-              v-model="telNumber"
-              minlength="4"
-              maxlength="12"
-              show-word-limit
-              autofocus="true"
-              clearable
-              type="tel"
-              @change="verifyInput"
-            ></el-input>
+            <el-input placeholder="输入电话号码"
+                      v-model="telNumber"
+                      minlength="4"
+                      maxlength="12"
+                      show-word-limit
+                      autofocus="true"
+                      clearable
+                      type="tel"
+                      @change="verifyInput"></el-input>
           </el-row>
           <ul class="number-keybord">
-            <li v-for="(numGrop, index) in keyboardNum" :key="index">
-              <p
-                v-for="number in numGrop"
-                :key="number"
-                @click="addNumber(number)"
-              >
+            <li v-for="(numGrop, index) in keyboardNum"
+                :key="index">
+              <p v-for="number in numGrop"
+                 :key="number"
+                 @click="addNumber(number)">
                 {{ number }}
               </p>
             </li>
           </ul>
           <el-row>
-            <el-button
-              class="call-handle"
-              size="medium"
-              type="primary"
-              @click="callHandle"
-              :disabled="callDisable"
-              >呼叫</el-button
-            >
+            <el-button class="call-handle"
+                       size="medium"
+                       type="primary"
+                       @click="callHandle"
+                       :disabled="callDisable">呼叫</el-button>
           </el-row>
         </el-tab-pane>
-        <el-tab-pane label="呼叫历史" name="second">呼叫历史</el-tab-pane>
+        <el-tab-pane label="呼叫历史"
+                     name="second">呼叫历史</el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script>
+import store from '@/store'
 export default {
   name: "PhoneKeyboard",
   props: {
@@ -62,7 +60,7 @@ export default {
       default: null
     }
   },
-  data() {
+  data () {
     return {
       activeName: "first",
       telNumber: "",
@@ -86,21 +84,27 @@ export default {
       calledTel: "13661190279"
     };
   },
-  created() {
-    this.loginServer();
+  watch: {
+    calledTel: function (val, oldVal) {
+      this.$store.commit('callcenter/SET_USERTEL', val)
+    }
+  },
+  created () {
+    // console.log(this.$store)
+    // console.log(store.dispatch)
+    this.$store.dispatch('callcenter/websocket_init')
   },
   methods: {
-    closePop() {
+    closePop () {
       this.toggleKeyboard(); //调用父组件关闭panel方法
     },
-    addNumber(item) {
+    addNumber (item) {
       this.telNumber += item;
-      console.log(this.telNumber);
     },
-    callHandle() {
-      this.checkIn(this.seatId, this.seatPassword, this.bindTel);
+    callHandle () {
+      this.$store.dispatch('callcenter/make_call')
     },
-    verifyInput() {
+    verifyInput () {
       // if (this.telNumber.length < 5) {
       //   this.callDisable = true;
       // } else if (this.telNumber.length > 12) {
@@ -110,111 +114,13 @@ export default {
       //   this.callDisable = false;
       // }
     },
-    loginServer() {
-      this.DisConnect(); //链入之前断链操作
-      this.init();
-    },
-    init() {
-      //心跳包
-      console.log("开始链入");
-      this.cc = 0;
-      if (this.heartbeat_timer != 0) clearInterval(this.heartbeat_timer);
-      this.heartbeat_timer = setInterval(() => {
-        this.keepAlive(this.websocket);
-      }, 5000); //每五秒监听一下ws状态
-      this.initSocket();
-    },
-    initSocket() {
-      //创建websocket链接
-      console.log("creatSoket");
-      if (this.websocket != null) this.DisConnect();
-      console.log(this.wsUri);
-      this.websocket = new WebSocket(this.wsUri);
-      this.websocket.onopen = evt => {
-        this.onOpen(evt);
-      };
-      this.websocket.onclose = evt => {
-        this.onClose(evt);
-      };
-      this.websocket.onmessage = evt => {
-        this.onMessage(evt);
-      };
-      this.websocket.onerror = evt => {
-        this.onError(evt);
-      };
-    },
-    onOpen(evt) {
-      console.log("open");
-    },
-    onClose(evt) {
-      console.log("onClose");
-    },
-    onMessage(evt) {
-      console.log("onMessage");
-      this.cc = 0;
-      if (evt.data.length > 4) {
-        this.rev = JSON.parse(evt.data);
-        if (this.rev.state == 0 && this.rev.para == "BeCheckout")
-          this.docheckin = 0;
-      }
-    },
-    onError(evt) {
-      console.log("onError");
-    },
-    DisConnect() {
-      if (this.websocket != null) {
-        this.websocket.close();
-        this.websocket = null;
-      }
-    },
-    DoDisConnect() {
-      if (this.docheckin == 1) this.checkOut(this.seatId);
-      this.DisConnect();
-    },
-    checkIn(seatId, password, telno) {
-      this.str = `{"cmd":"1","seatno":"${seatId}","telno":"${telno}","para":"${password}"}`;
-      console.log(this.str);
-      this.websocket.send(this.str);
-      this.docheckin = 1;
-      this.makeCall(this.seatId, this.telNumber);
-    },
-    checkOut(seatno) {
-      this.str = `{"cmd":"2","seatno":"${this.seatId}","telno":"","para":""}`;
-      this.docheckin = 0;
-      this.websocket.send(this.str);
-      console.log(this.str);
-    },
-    makeCall(seatId, telno) {
-      this.str = `{"cmd":"3","seatno":"${seatId}","telno":"${telno}","para":"1234567890-1234567890-1234567890-1234567890-ABCD"}`;
-      console.log(this.str);
-      this.websocket.send(this.str);
-    },
-    keepAlive(ws) {
-      //每五秒钟轮询一次判断ws是否保持，断开重启
-      this.cc++;
-      if (this.websocket == WebSocket.CONNECTING) {
-        console.log("链接正在建立");
-        return;
-      }
-      if (this.websocket == WebSocket.CLOSING) {
-        console.log("链接正在关闭");
-        return;
-      }
-      if (this.websocket == WebSocket.CLOSED) {
-        console.log("链接已关闭");
-        this.initSocket();
-        return;
-      }
-      if (this.docheckin && this.cc > 6) {
-        this.cc = 3;
-        this.initSocket();
-        return;
-      }
-      // ws.send('{}')
+    makeCall () {
+      this.$store.dispatch('SET_USERTEL', this.telNumber)
+      this.$store.dispatch('callcenter/make_call')
     }
   },
-  beforeDestroy() {
-    this.DoDisConnect();
+  beforeDestroy () {
+    this.$store.dispatch('callcenter/websocket_out')
   }
 };
 </script>
