@@ -10,7 +10,7 @@
          class="logo"
          src="@/assets/images/logo.png" />
     <div class="narbar-right">
-      <ul>
+      <!-- <ul>
         <li>
           <span class="svg-container">
             <svg-icon icon-class="user-message" />
@@ -29,7 +29,46 @@
           </span>
           <span>设置</span>
         </li>
-      </ul>
+      </ul> -->
+      <div class="right-menu">
+        <el-dropdown>          
+          <p>
+            <span class="svg-container">
+              <svg-icon icon-class="user-message" />
+            </span>
+            <span>消息</span>
+          </p>
+          <el-dropdown-menu>
+            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
+            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
+            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> 
+        <el-dropdown>          
+          <p>
+            <span class="svg-container">
+              <svg-icon icon-class="user-help" />
+            </span>
+            <span>帮助</span>
+          </p>
+          <el-dropdown-menu>
+            <el-dropdown-item>意见反馈</el-dropdown-item>
+            <el-dropdown-item>客服中心</el-dropdown-item>
+            <el-dropdown-item>帮助中心</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> 
+        <el-dropdown>          
+          <p>
+            <span class="svg-container">
+              <svg-icon icon-class="user-set" />
+            </span>
+            <span>设置</span>
+          </p>
+          <el-dropdown-menu @click.native="logout">
+            <el-dropdown-item><router-link to="/login">退出登录</router-link></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown> 
+      </div>
       <!-- <div class="right-menu">
       <el-dropdown class="avatar-container"
                    trigger="click">

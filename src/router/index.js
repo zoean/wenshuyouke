@@ -12,6 +12,16 @@ export const constantRoutes = [{
   component: () => import("@/views/login/index"),
   hidden: true
 }];
+// export const constantRoutes = [{
+//   path: "/login",
+//   component: () => import("@/views/login/index"),
+//   hidden: true
+// },{
+//   path: "/regester",
+//   component: () => import("@/views/regester/index"),
+//   hidden: true
+// }];
+
 const createRouter = () =>
   new Router({
     mode: 'history', // require service support
@@ -29,7 +39,8 @@ export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router
   router.routes({
-    path: '/login'
+    path: '/login',
+    name: 'login'
   })
 }
 
@@ -150,7 +161,7 @@ export const asyncRouterMap = [{
   {
     path: "/nested",
     component: Layout,
-    redirect: "/nested/menu1",
+    redirect: "/reach/callcenter/index",
     name: "Nested",
     meta: {
       title: "触达",
@@ -190,7 +201,7 @@ export const asyncRouterMap = [{
   {
     path: "/nested",
     component: Layout,
-    redirect: "/nested/menu1",
+    redirect: "/reach/callcenter/index",
     name: "Nested",
     meta: {
       title: "统计分析",

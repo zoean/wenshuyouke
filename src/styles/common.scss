@@ -6,8 +6,8 @@ a {
   color: #1170ff;
 }
 
-.btn-20048-general {
-  width: 200px !important;
+.btn-20048-general,
+.btn-54048-general {
   height: 48px;
   border-radius: 24px;
   font-size: 20px;
@@ -15,15 +15,27 @@ a {
   border: 0;
   background: linear-gradient(to bottom, #4088ff 0%, #406dff 100%);
   box-shadow: 0px 2px 4px rgba($color: #3366cc, $alpha: 0.5);
+  color: #fff;
 }
 
-.btn-20048-general:hover {
+.btn-20048-general {
+  width: 200px !important;
+}
+
+.btn-20048-general:hover,
+.btn-54048-general:hover {
   background: linear-gradient(to bottom, #4088ff 0%, #406dff 100%);
   box-shadow: 0px 4px 4px rgba($color: #3366cc, $alpha: 0.5);
+  color: #fff;
+}
+
+.btn-54048-general {
+  width: 540px !important;
+  color: #fff;
+
 }
 
 .btn-20048-grey {
-  width: 200px !important;
   height: 48px;
   border-radius: 24px;
   font-size: 20px;
@@ -32,6 +44,10 @@ a {
   border: 0;
   background: #ccc;
   box-shadow: 0px 2px 4px rgba($color: #999999, $alpha: 0.5);
+}
+
+.btn-20048-grey {
+  width: 200px !important;
 }
 
 .btn-20048-grey:hover {

@@ -59,7 +59,9 @@
                      @click.native.prevent="handleLogin">登陆</el-button>
         </el-col>
         <el-col :span="10">
-          <el-button class="btn-20048-grey">注册</el-button>
+          <router-link :to="{path:'/regester'}">
+            <el-button @click="handleRegester" class="btn-20048-grey">注册</el-button>
+          </router-link>
         </el-col>
       </el-row>
       <el-row type="flex"
@@ -143,6 +145,9 @@ export default {
       this.$nextTick(() => {
         this.$refs.password.focus();
       });
+    },
+    handleRegester(){      
+      this.$router.push(`/regester`)
     },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {

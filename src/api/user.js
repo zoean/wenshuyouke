@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function userLogin(data) {
+export function userLogin (data) {
   return request({
     url: '/user/auth/login',
     method: 'post',
@@ -8,16 +8,23 @@ export function userLogin(data) {
   })
 }
 
-export function getUserInfo() {
+export function getUserInfo () {
   return request({
     url: '/user/api/person/getDataById',
     method: 'get'
   })
 }
 
-export function logout() {
+export function logout () {
   return request({
     url: '/user/logout',
     method: 'post'
+  })
+}
+
+export function getVcode () {
+  return request({
+    url: '/user/auth/getCode',
+    method: 'get'
   })
 }

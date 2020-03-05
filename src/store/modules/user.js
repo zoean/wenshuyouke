@@ -59,7 +59,7 @@ const mutations = {
 
 const actions = {
   // user login
-  login({
+  login ({
     commit
   }, userInfo) {
     const {
@@ -85,7 +85,7 @@ const actions = {
   },
 
   // get user info
-  getInfo({
+  getInfo ({
     commit,
     state
   }) {
@@ -106,7 +106,7 @@ const actions = {
         const {
           nickName,
           userIcon,
-          roleType,
+          roleType
         } = obj
         if (obj.seatId) {
           commit('SET_SEATID', obj.seatId)
@@ -128,7 +128,7 @@ const actions = {
   },
 
   // user logout
-  logout({
+  logout ({
     commit
   }) {
     removeToken() // must remove  token  first
@@ -145,9 +145,21 @@ const actions = {
     //   })
     // })
   },
+  userGetVcode ({
+    commit
+  }) {
+    return new Promise((resolve, reject) => {
+      getVcode().then(response => {
+        console.log(response)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
 
   // remove token
-  resetToken({
+  resetToken ({
     commit
   }) {
     return new Promise(resolve => {
@@ -158,7 +170,7 @@ const actions = {
   },
 
   // dynamically modify permissions
-  changeRoles({
+  changeRoles ({
     commit,
     dispatch
   }, role) {
