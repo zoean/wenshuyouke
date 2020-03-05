@@ -3,27 +3,22 @@
     <div class="regester-wrap">
       <el-form>
         <el-form-item class="mb40">
-          <el-input placeholder="请输入手机号" value="136" class="input-with-select input-tel" type="tel">
-            <el-select slot="prepend" value="1" placeholder="+86">
-              <el-option label="+86" value="1" />
-              <el-option label="000" value="2" />
-              <el-option label="111" value="3" />
-            </el-select>
+          <el-input placeholder="请输入手机号" value="" v-model="form.tel" class="input-with-select input-tel" type="tel">
           </el-input>
         </el-form-item>
         <el-form-item class="mb40">
-          <el-input placeholder="请输入右侧验证码" value="887" />
-          <img src="@/assets/images/avater.png" />
+          <el-input v-model="form.vcode" placeholder="请输入右侧验证码" value="887" />
+          <img :src="codeImg" @click="changeCode" />
         </el-form-item>
-        <el-form-item>
+        <!-- <el-form-item>
           <el-input placeholder="请输入短信验证码" value="787" />
           <el-button class="btn-20048-general">获取验证码</el-button>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item>
-          <el-checkbox>我已阅读并接受《文投优客用户协议》</el-checkbox>
+          <el-checkbox v-model="form.accept">我已阅读并接受《文投优客用户协议》</el-checkbox>
         </el-form-item>
         <el-form-item class="mt80">
-          <el-button class="btn-54048-general">确认提交</el-button>
+          <el-button :disable="!form.accept" class="btn-54048-general">确认提交</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -34,11 +29,18 @@ export default {
   name: 'Regester',
   data () {
     return {
-
+      form:{
+        tel:'',
+        vcode:'',
+        accept:false
+      },
+      codeImg:'http://192.168.10.108:8000/user/auth/getCode'
     }
   },
-  created () {
-    this.$store.dispatch('user/userGetVcode')
+  methods:{
+    changeCode(){
+      this.codeImg = `${this.codeImg}?${Math.random()}`
+    }
   }
 }
 </script>

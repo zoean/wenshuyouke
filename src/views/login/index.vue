@@ -52,7 +52,7 @@
       <el-row type="flex"
               justify="space-between">
         <el-col :span="10">
-          <el-button class="btn-20048-general"
+          <el-button class="btn-md-general"
                      :loading="loading"
                      type="primary"
                      style="width:100%;margin-bottom:30px;"
@@ -60,7 +60,7 @@
         </el-col>
         <el-col :span="10">
           <router-link :to="{path:'/regester'}">
-            <el-button @click="handleRegester" class="btn-20048-grey">注册</el-button>
+            <el-button class="btn-md-grey">注册</el-button>
           </router-link>
         </el-col>
       </el-row>
@@ -147,7 +147,7 @@ export default {
       });
     },
     handleRegester(){      
-      this.$router.push(`/regester`)
+      this.$router.push({path:this.redirect})
     },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
@@ -226,17 +226,17 @@ $light_gray: #eee;
   .login-form {
     background: url("~@/assets/images/login.png") center 0 no-repeat;
     position: relative;
-    width: 1236px;
-    height: 836px;
+    width: 992px;
+    height: 672px;
     margin: 122px auto 0;
     overflow: hidden;
     .logo {
-      margin: 148px 0 200px 733px;
+      margin: 128px 0 120px 560px;
     }
     .el-form-item {
-      width: 457px;
+      width: 367px;
       height: 48px;
-      margin: 50px 0 10px 646px;
+      margin: 50px 0 10px 518px;
       color: #999;
       position: relative;
       .el-input {
@@ -244,8 +244,8 @@ $light_gray: #eee;
       }
     }
     .el-row {
-      width: 440px;
-      margin: 0 0 46px 656px;
+      width: 367px;
+      margin: 0 0 46px 518px;
       .forget-pw {
         text-align: right;
         color: #1170ff;

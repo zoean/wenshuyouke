@@ -105,7 +105,7 @@
         <img width="30"
              height="30"
              src="@/assets/images/avater.png" />
-        <span>李鲜花</span>
+        <span>优客小二</span>
       </div>
     </div>
 
@@ -194,11 +194,16 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
-
     &:focus {
       outline: none;
     }
-
+    .el-dropdown{
+      margin:8px 50px 0 0;
+      p{
+        margin: 0;
+        font-size: 16px;
+      }
+    }
     .right-menu-item {
       display: inline-block;
       padding: 0 8px;

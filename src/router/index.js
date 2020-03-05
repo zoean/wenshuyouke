@@ -11,16 +11,13 @@ export const constantRoutes = [{
   path: "/login",
   component: () => import("@/views/login/index"),
   hidden: true
-}];
-// export const constantRoutes = [{
-//   path: "/login",
-//   component: () => import("@/views/login/index"),
-//   hidden: true
-// },{
+}]
+
+// {
 //   path: "/regester",
 //   component: () => import("@/views/regester/index"),
 //   hidden: true
-// }];
+// }
 
 const createRouter = () =>
   new Router({
@@ -76,9 +73,9 @@ export const asyncRouterMap = [{
     }]
   },
   {
-    path: "/example",
+    path: "/foundclues",
     component: Layout,
-    redirect: "/example/table",
+    redirect: "/foundclues/newcompanysearch",
     name: "Example",
     meta: {
       title: "发现线索",
@@ -90,19 +87,9 @@ export const asyncRouterMap = [{
         name: "newcompanysearch",
         component: () => import("@/views/foundclues/newcompanysearch/index"),
         meta: {
-          title: "新企搜索",
+          title: "新企推荐",
           icon: "newcompany",
           roles: ['admin', 'super']
-        }
-      },
-      {
-        path: "advancefilter",
-        name: "advancefilter",
-        component: () => import("@/views/foundclues/advancefilter/index"),
-        meta: {
-          title: "高级筛选",
-          icon: "advancesearch",
-          roles: ['super', 'admin']
         }
       },
       {
@@ -118,19 +105,29 @@ export const asyncRouterMap = [{
     ]
   },
   {
-    path: "/form",
+    path: "/cluesmanagement",
     component: Layout,
     name: "Form",
+    redirect: "/cluesmanagement/listmanage",
     meta: {
       title: "线索管理",
       icon: "admin"
     },
     children: [{
+        path: "listmanage",
+        name: "listmanage",
+        component: () => import("@/views/cluesmanagement/listmanage/index"),
+        meta: {
+          title: "名单管理",
+          icon: "databag",
+          roles: ['super', 'admin', 'seat']
+        }
+      },{
         path: "databag",
         name: "databag",
         component: () => import("@/views/cluesmanagement/databag/index"),
         meta: {
-          title: "线索池",
+          title: "销售商机",
           icon: "databag",
           roles: ['super', 'admin', 'seat']
         }
@@ -140,7 +137,7 @@ export const asyncRouterMap = [{
         name: "privatesea",
         component: () => import("@/views/cluesmanagement/privatesea/index"),
         meta: {
-          title: "私海",
+          title: "我的线索",
           icon: "privatesea",
           roles: ['super']
         }
@@ -164,7 +161,7 @@ export const asyncRouterMap = [{
     redirect: "/reach/callcenter/index",
     name: "Nested",
     meta: {
-      title: "触达",
+      title: "触达管理",
       icon: "zhudongchuda"
     },
     children: [{
@@ -199,14 +196,32 @@ export const asyncRouterMap = [{
     ]
   },
   {
-    path: "/nested",
+    path: "/expenses",
     component: Layout,
     redirect: "/reach/callcenter/index",
-    name: "Nested",
+    name: "",
+    meta: {
+      title: "费用中心",
+      icon: "count"
+    },
+  },
+  {
+    path: "/analysis",
+    component: Layout,
+    redirect: "/reach/callcenter/index",
+    name: "",
     meta: {
       title: "统计分析",
       icon: "analysis"
     },
+  },
+  {
+    path: "/regester",
+    redirect:"/regester",
+    component: () => import("@/views/regester/index"),
+    name:'regester',
+    hidden: true,
+    alwaysShow: true,
   },
   // 404 page must be placed at the end !!!
   {

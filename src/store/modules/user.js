@@ -145,18 +145,6 @@ const actions = {
     //   })
     // })
   },
-  userGetVcode ({
-    commit
-  }) {
-    return new Promise((resolve, reject) => {
-      getVcode().then(response => {
-        console.log(response)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
-    })
-  },
 
   // remove token
   resetToken ({
