@@ -15,7 +15,7 @@ import router, {
 
 const getDefaultState = () => {
   return {
-    token: getToken(),
+    token: '',
     name: '',
     avatar: '',
     userId: '',
@@ -73,7 +73,7 @@ const actions = {
       }).then(response => {
         const {
           obj
-        } = response
+        } = response.data
         commit('SET_TOKEN', obj.token)
         commit('SET_USERID', obj.userId)
         setToken(obj.token)
@@ -93,7 +93,7 @@ const actions = {
       getUserInfo().then(response => {
         const {
           obj
-        } = response
+        } = response.data
 
         if (response.status !== 200) {
           removeToken()

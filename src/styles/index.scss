@@ -69,5 +69,15 @@ ul{
 .app-container {
   padding: 20px;
 }
-$defblue:#4084FF;
+.main-box{
+  background:rgba(255,255,255,1);
+  box-shadow:0px 2px 7px 1px rgba(211,229,255,1);
+  border-radius:12px;
+  margin-top:16px;
+  padding: 22px 32px;
+}
+.highred{
+  color: #FF4040;
+}
+.highblue{color:#4084FF};
 

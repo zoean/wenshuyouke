@@ -1,279 +1,17 @@
 <template>
-	<div class="list-wrap">
-		<div class="list-search">
-			<el-input type="text" name="" placeholder="请输入查询内容"></el-input>
-			<input class="btn-8032-general" type="button" name="" value="查询">
-		</div>
-		<div class="list-card">
-			<ul>
-				<li class="first-card">
-					<i class="el-icon-plus"></i>
-					<p>点击新建名单</p>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-		          <el-dropdown placement="top" @command="handleCommand">
-							  <span class="svg-container el-dropdown-link">
-		            <svg-icon icon-class="more" />
-		          </span>
-							  <el-dropdown-menu slot="dropdown">
-							    <el-dropdown-item command="1">修改名称</el-dropdown-item>
-							    <el-dropdown-item command="2">编辑规则</el-dropdown-item>
-							    <el-dropdown-item command="3">删除名单</el-dropdown-item>
-							  </el-dropdown-menu>
-							</el-dropdown>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-				<li>
-					<el-switch
-					  v-model="value1"
-					  inactive-text="按年付费">
-					</el-switch>
-					<h2>北京地区销售名单</h2>
-					<p>2020-11-01 11:10</p>
-					<template>
-					  <el-select v-model="value" placeholder="请添加子帐户">
-					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
-					    </el-option>
-					  </el-select>
-					</template>
-					<dl>
-						<dt><span>新增</span>/现存：<span>122</span>/1000</dt>
-						<dd>
-              <span class="svg-container">
-		            <svg-icon icon-class="more" />
-		          </span>
-		        </dd>
-					</dl>
-				</li>
-			</ul>
-			<!-- <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
-			  <el-form :model="form">
-			    <el-form-item label="活动名称" :label-width="formLabelWidth">
-			      <el-input v-model="form.name" autocomplete="off"></el-input>
-			    </el-form-item>
-			    <el-form-item label="活动区域" :label-width="formLabelWidth">
-			      <el-select v-model="form.region" placeholder="请选择活动区域">
-			        <el-option label="区域一" value="shanghai"></el-option>
-			        <el-option label="区域二" value="beijing"></el-option>
-			      </el-select>
-			    </el-form-item>
-			  </el-form>
-			  <div slot="footer" class="dialog-footer">
-			    <el-button @click="dialogFormVisible = false">取 消</el-button>
-			    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
-			  </div>
-			</el-dialog> -->
-		</div>
+	<div>
+		<!-- <cardList /> -->
+		<CompanyList /> 
 	</div>
 </template>
 <script>
+	// import CardList from './cardlist.vue'
+	import CompanyList from './companylist.vue'
 	export default{
+		components:{
+			// CardList,
+			CompanyList
+		},
 		data(){
 			return{
 				value1: true,
@@ -294,12 +32,24 @@
           label: '北京烤鸭'
         }],
         value: '',
-			// dialogFormVisible:false
+				dialogFormVisible: false,
+        form: {
+          name: '',
+          region: '',
+          date1: '',
+          date2: '',
+          delivery: false,
+          type: [],
+          resource: '',
+          desc: ''
+        },
+        formLabelWidth: '120px'
 			}
 		},
 		methods:{
 			handleCommand(command) {
         this.$message('click on item ' + command);
+        this.dialogFormVisible = true
         // if(command==2){
         // 	this.dialogFormVisible=true
         // }
@@ -362,7 +112,7 @@
 				}
 			}
 			li.first-card{
-				i{
+				i.el-icon-plus{
 					font-size: 40px;
 					color: #ccc;
 					margin: 160px 0 110px 165px;
@@ -370,7 +120,8 @@
 				}
 				p{
 					color: #4084FF;
-					text-align: center
+					text-align: center;
+					cursor: pointer;
 				}
 			}
 		}

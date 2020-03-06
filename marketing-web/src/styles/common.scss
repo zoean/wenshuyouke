@@ -1,0 +1,70 @@
+body {
+  color: #999;
+}
+
+a {
+  color: #1170ff;
+}
+/*
+btn-md-general 160*42
+*/
+
+.btn-md-general,
+.btn-54048-general,.btn-8032-general {
+  padding: 0;
+  border: 0;
+  background: linear-gradient(to bottom, #4088ff 0%, #406dff 100%);
+  box-shadow: 0px 2px 4px rgba($color: #3366cc, $alpha: 0.5);
+  color: #fff;
+}
+.btn-54048-general {
+  width: 540px !important;
+  height: 48px;
+  color: #fff;
+  border-radius: 24px;
+  font-size: 20px;
+}
+
+.btn-md-general {
+  width: 160px !important;
+  height: 42px;  
+  border-radius: 24px;
+  font-size: 20px;
+}
+.btn-8032-general,.btn-8032-grey{
+  width: 80px !important;
+  height: 32px;  
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.btn-md-general:hover,
+.btn-54048-general:hover,
+.btn-8032-general:hover
+ {
+  background: linear-gradient(to bottom, #4088ff 0%, #406dff 100%);
+  box-shadow: 0px 4px 4px rgba($color: #3366cc, $alpha: 0.5);
+  color: #fff;
+}
+
+.btn-md-grey,.btn-8032-grey{
+  color: #666;
+  padding: 0;
+  border: 0;
+  background: #ccc;
+  box-shadow: 0px 2px 4px rgba($color: #999999, $alpha: 0.5);
+}
+
+.btn-md-grey {
+  width: 160px !important;
+  height: 42px;
+  font-size: 20px;
+  border-radius: 24px;
+}
+
+
+.btn-md-grey:hover,.btn-8032-grey:hover {
+  background: #ccc;
+  color: #666;
+  box-shadow: 0px 4px 4px rgba($color: #999999, $alpha: 0.5);
+}

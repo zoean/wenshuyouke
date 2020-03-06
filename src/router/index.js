@@ -123,9 +123,9 @@ export const asyncRouterMap = [{
           roles: ['super', 'admin', 'seat']
         }
       },{
-        path: "databag",
-        name: "databag",
-        component: () => import("@/views/cluesmanagement/databag/index"),
+        path: "saleslead",
+        name: "saleslead",
+        component: () => import("@/views/cluesmanagement/saleslead/index"),
         meta: {
           title: "销售商机",
           icon: "databag",
