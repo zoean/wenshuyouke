@@ -122,7 +122,7 @@ export const asyncRouterMap = [{
           icon: "databag",
           roles: ['super', 'admin', 'seat']
         }
-      },{
+      }, {
         path: "saleslead",
         name: "saleslead",
         component: () => import("@/views/cluesmanagement/saleslead/index"),
@@ -139,7 +139,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "我的线索",
           icon: "privatesea",
-          roles: ['super']
+          roles: ['super', 'admin']
         }
       },
       {
@@ -217,9 +217,9 @@ export const asyncRouterMap = [{
   },
   {
     path: "/regester",
-    redirect:"/regester",
+    redirect: "/regester",
     component: () => import("@/views/regester/index"),
-    name:'regester',
+    name: 'regester',
     hidden: true,
     alwaysShow: true,
   },
