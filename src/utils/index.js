@@ -105,3 +105,12 @@ export function param2Obj(url) {
       '"}'
   )
 }
+export function setLocalStorage(itemKey, value){
+  return localStorage.setItem(itemKey,value)
+}
+export function getLocalStorage(itemKey){
+  return localStorage.getItem(itemKey)
+}
+export function removeLocalStorage(itemKey){
+  return localStorage.removeItem(itemKey)
+}

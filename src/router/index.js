@@ -57,21 +57,21 @@ export const asyncRouterMap = [{
       }
     }]
   },
-  {
-    path: "/dashboard",
-    component: Layout,
-    redirect: "/dashboard",
-    children: [{
-      path: "dashboard",
-      name: "Dashboard",
-      component: () => import("@/views/dashboard/index"),
-      meta: {
-        title: "工作台",
-        icon: "workbench",
-        roles: ['admin', 'super']
-      }
-    }]
-  },
+  // {
+  //   path: "/dashboard",
+  //   component: Layout,
+  //   redirect: "/dashboard",
+  //   children: [{
+  //     path: "dashboard",
+  //     name: "Dashboard",
+  //     component: () => import("@/views/dashboard/index"),
+  //     meta: {
+  //       title: "工作台",
+  //       icon: "workbench",
+  //       roles: ['admin', 'super']
+  //     }
+  //   }]
+  // },
   {
     path: "/foundclues",
     component: Layout,

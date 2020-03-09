@@ -7,8 +7,14 @@ import {
 import {
   getToken,
   setToken,
-  removeToken
+  removeToken,
+  getLocal
 } from '@/utils/auth'
+import {  
+  setLocalStorage,
+  getLocalStorage,
+  removeLocalStorage
+} from '@/utils/index'
 import router, {
   resetRouter
 } from '@/router'
@@ -77,6 +83,8 @@ const actions = {
         commit('SET_TOKEN', obj.token)
         commit('SET_USERID', obj.userId)
         setToken(obj.token)
+        setLocalStorage('userId',obj.userId)
+        setLocalStorage('userName',obj.realName)
         resolve()
       }).catch(error => {
         reject(error)
@@ -97,6 +105,8 @@ const actions = {
 
         if (response.status !== 200) {
           removeToken()
+          removeLocalStorage('userId')          
+          removeLocalStorage('userName')
           router.push(`/login?redirect=${this.$route.fullPath}`)
         }
         if (!obj) {
@@ -104,7 +114,7 @@ const actions = {
         }
 
         const {
-          nickName,
+          realName,
           userIcon,
           roleType
         } = obj
@@ -117,7 +127,7 @@ const actions = {
         if (obj.bindTel) {
           commit('SET_SEATID', obj.bindTel)
         }
-        commit('SET_NAME', nickName)
+        commit('SET_NAME', realName)
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
         resolve(obj)
@@ -131,7 +141,9 @@ const actions = {
   logout ({
     commit
   }) {
-    removeToken() // must remove  token  first
+    removeToken() // must remove  token  first    
+    removeLocalStorage('userId')    
+    removeLocalStorage('userName')
     // resetRouter()
     commit('RESET_STATE')
     // return new Promise((resolve, reject) => {
@@ -151,6 +163,8 @@ const actions = {
     commit
   }) {
     return new Promise(resolve => {
+      removeLocalStorage('userId')      
+      removeLocalStorage('userName')
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()

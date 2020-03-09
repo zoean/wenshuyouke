@@ -1,60 +1,33 @@
 <template>
 	<div>
-		<!-- <cardList /> -->
-		<CompanyList /> 
+		<CardList v-if="cardListComVisble" />
+		<CompanyList v-if="cardDetailComVisble" /> 
 	</div>
 </template>
 <script>
-	// import CardList from './cardlist.vue'
+	import CardList from './cardlist.vue'
 	import CompanyList from './companylist.vue'
 	export default{
 		components:{
-			// CardList,
+			CardList,
 			CompanyList
 		},
 		data(){
-			return{
-				value1: true,
-				options: [{
-          value: '选项1',
-          label: '黄金糕'
-        }, {
-          value: '选项2',
-          label: '双皮奶'
-        }, {
-          value: '选项3',
-          label: '蚵仔煎'
-        }, {
-          value: '选项4',
-          label: '龙须面'
-        }, {
-          value: '选项5',
-          label: '北京烤鸭'
-        }],
-        value: '',
-				dialogFormVisible: false,
-        form: {
-          name: '',
-          region: '',
-          date1: '',
-          date2: '',
-          delivery: false,
-          type: [],
-          resource: '',
-          desc: ''
-        },
-        formLabelWidth: '120px'
+			return{				
+				cardListComVisble:true,
+				cardDetailComVisble:false
 			}
 		},
 		methods:{
-			handleCommand(command) {
-        this.$message('click on item ' + command);
-        this.dialogFormVisible = true
-        // if(command==2){
-        // 	this.dialogFormVisible=true
-        // }
-      }
-		}
+			goToCardDetail(index){
+				this.cardListComVisble = false
+				this.cardDetailComVisble = true
+			},
+			goToCardList(index){
+				this.cardListComVisble = true
+				this.cardDetailComVisble = false
+			}
+		}		
 	}
 </script>
 <style lang="scss">
@@ -93,7 +66,7 @@
 					margin-top: 62px;
 				}
 				.el-select{
-					margin:80px 0 0 110px;
+					margin:0;
 					width: 160px;
 				}
 				p{
