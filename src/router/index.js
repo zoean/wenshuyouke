@@ -46,17 +46,31 @@ export function resetRouter() {
 export const asyncRouterMap = [{
     path: "/",
     component: Layout,
-    redirect: "/dashboard",
+    redirect: "/home",
     children: [{
-      path: "dashboard",
-      name: "Dashboard",
-      component: () => import("@/views/dashboard/index"),
+      path: "home",
+      name: "Home",
+      component: () => import("@/views/home/index"),
       meta: {
         title: "企业主页",
         icon: "dashboard"
       }
     }]
   },
+  {
+      path: "/",
+      component: Layout,
+      redirect: "/dashboard",
+      children: [{
+        path: "dashboard",
+        name: "Dashboard",
+        component: () => import("@/views/dashboard/index"),
+        meta: {
+          title: "企业主页",
+          icon: "dashboard"
+        }
+      }]
+    },
   // {
   //   path: "/dashboard",
   //   component: Layout,
