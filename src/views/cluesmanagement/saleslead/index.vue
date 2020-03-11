@@ -1,24 +1,26 @@
 <template>
   <div class="main-box">
-    <div class="search-area">
+    <div class="search-area">      
       <dl>
         <dt>商机来源：</dt>
         <dd>
-          <el-button>转线索</el-button>
-          <el-button>已触达</el-button>
-          <el-button>待触达</el-button>
+          <el-checkbox-group v-model="searchForm.businessStatus" @change="statusArray()">
+            <el-checkbox-button v-for="state in status" :label="state" :key="state">{{state}}</el-checkbox-button>
+          </el-checkbox-group>
         </dd>
       </dl>
       <dl>
         <dt>更新时间：</dt>
         <dd>
-          <el-date-picker v-model="value2"
+          <el-date-picker v-model="searchForm.updateTime"
                           type="datetimerange"
                           :picker-options="pickerOptions"
                           range-separator="至"
                           start-placeholder="开始日期"
                           end-placeholder="结束日期"
-                          align="right">
+                          align="right"
+                          value-format="yyyy-MM-dd HH:mm:ss"
+                          @change="pickerDate">
           </el-date-picker>
         </dd>
       </dl>
@@ -26,7 +28,7 @@
         <dt>查询条件：</dt>
         <dd>
           <template>
-            <el-select v-model="value"
+            <el-select v-model="subAccount"
                        placeholder="请选择">
               <el-option v-for="item in options"
                          :key="item.value"
@@ -38,7 +40,7 @@
         </dd>
         <dd>
           <template>
-            <el-select v-model="value"
+            <el-select v-model="subAccountList"
                        placeholder="请选择">
               <el-option v-for="item in options"
                          :key="item.value"
@@ -53,7 +55,7 @@
         <dt>内容搜索：</dt>
         <dd>
           <el-input placeholder="请输入内容"
-                    v-model="input3">
+                    v-model="searContent">
             <el-button slot="append"
                        icon="el-icon-search"></el-button>
           </el-input>
@@ -192,6 +194,14 @@ export default {
   name: 'CompanyList',
   data () {
     return {
+      status: ['转线索','已触达', '待触达'],
+      searchForm:{
+        businessStatus:[],//商机状态
+        updateTime:'',//更新时间
+        subAccount:'',// 查询条件-子帐户
+        subAccountList:'',//查询条件-子帐户名单
+        searContent:''//查询条件
+      },
       addCluesVisible: false,
       callDurationVisible: false,
       items: [
@@ -251,10 +261,24 @@ export default {
       items: []
     }
   },
+  watch:{//监听搜索条件变化，请求数据
+    searchForm:{
+      handler:function(val,oldval){//监听回调
+        console.log(this.searchForm)
+      },
+      deep: true //开启深度监听
+    }
+  },
   methods: {
     oneTouchCall () {
       this.addCluesVisible = true
       this.callDurationVisible = true
+    },
+    statusArray(){
+      console.log(this.searchForm.businessStatus)
+    },
+    pickerDate(value){
+      console.log(this.searchForm.updateTime)
     }
   }
 }

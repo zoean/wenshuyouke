@@ -5,126 +5,173 @@
     	<input type="button" class="btn-8032-grey" value="个体">
     </div> -->
     <div class="newcom-main">
-    	<p class="open-search">点击打开搜索条件</p>
-    	<div class="search-area">
-				<div class="if-all-cond">
-					<span>下列条件满足：</span>
-					<template>
-					  <el-radio v-model="radio" label="1">备选项</el-radio>
-					  <el-radio v-model="radio" label="2">备选项</el-radio>
-					</template>
-				</div>
-    	</div>
     	<div class="search-result">
-    		<span>文投优客今天为您推荐了<b>330</b>家符合条件的企业</span>
+    		<span>文投优客今天为您推荐了<b>{{newComList.total}}</b>家符合条件的企业</span>
     		<div class="get-data">
 	    		<template>
-					  <el-select v-model="value" placeholder="请选择">
+					  <el-select v-model="getNewComForm.listId" placeholder="请选择名单">
 					    <el-option
-					      v-for="item in options"
-					      :key="item.value"
-					      :label="item.label"
-					      :value="item.value">
+					      v-for="(item,index) in cardList"
+					      :key="index.id"
+					      :label="item.listName"
+					      :value="item.id">
 					    </el-option>
 					  </el-select>
 					</template>			
-	    		<input class="btn-8032-general" type="button" value="领取">
-	    	</div>
+	    		<input class="btn-8032-general" type="button" value="领取" @click="getNewComHandle">
+	    	</div>	    	
     	</div>
     	<div class="data-list">
     		<template>
 				  <el-table
 				    ref="multipleTable"
-				    :data="tableData"
+				    :data="newComList.list"
 				    tooltip-effect="dark"
 				    style="width: 100%"
-				    @selection-change="handleSelectionChange">
+				    @selection-change="handleSelectionChange" empty-text="数据正在加载……">
 				    <el-table-column
 				      type="selection"
 				      width="55">
 				    </el-table-column>
 				    <el-table-column
-				      label="日期"
-				      width="120">
-				      <template slot-scope="scope">{{ scope.row.date }}</template>
+				      label="状态">
+				      <template slot-scope="scope">{{ scope.row.entStatus }}</template>
 				    </el-table-column>
 				    <el-table-column
 				      prop="name"
-				      label="姓名"
-				      width="120">
+				      label="企业名称" ref="multipleTable">				      
+				      <template slot-scope="scope">{{ scope.row.entName }}</template>
+				    </el-table-column>
+				    <!-- <el-table-column
+				      prop="address"
+				      label="所在地区"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.address }}</template>
+				    </el-table-column> -->
+				    <el-table-column
+				      prop="address"
+				      label="所属行业"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.industryName }}</template>
+				    </el-table-column>
+				    <el-table-column
+				      prop="address"
+				      label="法人"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.legalName }}</template>
+				    </el-table-column>
+				    <el-table-column
+				      prop="address"
+				      label="注册资本"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.regCapital }}{{ scope.row.regCurrency }}</template>
+				    </el-table-column>
+				    <el-table-column
+				      prop="address"
+				      label="企业类型"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.entType }}</template>
+				    </el-table-column>
+				    <el-table-column
+				      prop="address"
+				      label="注册日期"
+				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.verifiedTime }}</template>
 				    </el-table-column>
 				    <el-table-column
 				      prop="address"
 				      label="地址"
 				      show-overflow-tooltip>
+				      <template slot-scope="scope">{{ scope.row.address }}</template>
 				    </el-table-column>
 				  </el-table>
-				  <!-- <div style="margin-top: 20px">
-				    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-				    <el-button @click="toggleSelection()">取消选择</el-button>
-				  </div> -->
 				</template>
     	</div>
     	<el-pagination
 			  background
 			  layout="prev, pager, next"
-			  :total="1000">
+			  :total="this.newComList.pages"
+			  @current-change="reloadNewComList">
 			</el-pagination>
     </div>
   </div>
 </template>
 <script>
+/*
+*@api requestNewComList 获取新企列表 post
+*@api getCurUserCard 获取当前用户名单列表 get
+*/
+import {requestNewComList,getCurUserCard,getNewComToCard} from '@/api/foundclues'
+import {getLocalStorage} from '@/utils/index'
 export default {
-    data() {
-      return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-08',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-06',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          date: '2016-05-07',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄'
-        }],
-        multipleSelection: []
-      }
-    },
-
-    methods: {
-      toggleSelection(rows) {
-        if (rows) {
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      }
+  data() {
+    return {
+    	searchForm:{
+    		pageNum:1,
+    		pageSize:10
+    	},
+    	getNewComForm:{//领取新企推荐数据
+    		dataSource:0,
+    		listId:'',//选中要分配的名单
+    		entId:[]//要领取到名单的企业id
+    	},
+    	newComList:{},//新企列表
+    	cardList:{},
+    	multipleSelection:[],//选中要领取到名单的新企
+    }
+  },
+  created(){
+  	this.getNewComList() //初始化获取第一页新企列表
+  	this.getCurUserCardHandle() //获取当前用户名单列表用于领取新企数据到名单
+  },
+  methods: {
+  	getNewComList(){//新企列表
+  		requestNewComList(this.searchForm).then(response=>{
+  			try{
+  				if(response.status==200){
+  					this.newComList = response.data.obj
+  				}
+  			}catch(e){
+  				console.log(e)
+  			}
+  		})
+  	},
+  	reloadNewComList(curPage){
+  		this.searchForm.pageNum = curPage
+  		this.getNewComList()
+  	},
+  	getCurUserCardHandle(){//获取当前用户的名单列表
+			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{					
+  			this.cardList = response.data.obj
+			})
+  	},
+  	getNewComHandle(){//领取企业到名单
+  		if(!this.getNewComForm.listId){
+				this.$message.error('请选择领取目标名单')
+			}else if(!this.getNewComForm.entId){
+  			this.$message.error('请在列表前选取要领取的企业')
+			}else{
+				getNewComToCard(this.getNewComForm).then(response=>{
+	  			try{
+	  				if(response.status==200){
+	  					this.reloadNewComList()
+	  					this.$message.success(`您已成功领取${this.getNewComForm.entId.length}条数据至名单`)
+	  					// 领取成功清空领取Form
+	  					this.getNewComForm.entId = []
+	  					this.getNewComForm.listId = ''
+	  				}
+	  			}catch(e){}
+	  		})
+  		}  		
+  	},
+    handleSelectionChange(val) {//监听selection选择事件
+    	this.getNewComForm.entId = []
+    	for(let i in val){
+    		this.getNewComForm.entId.push(val[i].id)    		
+    	}
     }
   }
+ }
 </script>
 <style lang="scss">
 	.newcom-wrap{

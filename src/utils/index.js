@@ -8,6 +8,13 @@
  * @param {string} cFormat
  * @returns {string | null}
  */
+ //将日期时间转换为时间戳
+export function parseToTimestamp(time,len){
+  return new Date(time).getTime(time).toString().substring(0,len)
+}
+export function enCodeURI(string){
+  return encodeURIComponent(string)
+}
 export function parseTime(time, cFormat) {
   if (arguments.length === 0) {
     return null

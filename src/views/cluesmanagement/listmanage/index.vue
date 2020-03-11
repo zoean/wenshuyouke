@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<CardList v-if="cardListComVisble" />
-		<CompanyList v-if="cardDetailComVisble" /> 
+		<CardList v-if="!showDetail" :changeCom="changeCom" :setCurListId="setCurListId" />
+		<CompanyList v-if="showDetail" :changeCom="changeCom" :setCurListId="setCurListId" /> 
 	</div>
 </template>
 <script>
@@ -14,18 +14,16 @@
 		},
 		data(){
 			return{				
-				cardListComVisble:true,
-				cardDetailComVisble:false
+				showDetail:false,
+				curCardId:''
 			}
 		},
 		methods:{
-			goToCardDetail(index){
-				this.cardListComVisble = false
-				this.cardDetailComVisble = true
+			changeCom(){
+				this.showDetail = !this.showDetail
 			},
-			goToCardList(index){
-				this.cardListComVisble = true
-				this.cardDetailComVisble = false
+			setCurListId(listId){
+				this.curCardId = listId
 			}
 		}		
 	}

@@ -194,6 +194,8 @@ export default {
     float: right;
     height: 100%;
     line-height: 50px;
+    display: flex;
+    justify-content: space-evenly;
     &:focus {
       outline: none;
     }
