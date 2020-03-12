@@ -18,7 +18,6 @@ import {
 import router, {
   resetRouter
 } from '@/router'
-
 const getDefaultState = () => {
   return {
     token: '',
@@ -26,9 +25,9 @@ const getDefaultState = () => {
     avatar: '',
     userId: '',
     roles: [],
-    seatId: '8001',
+    seatId: '6002',
     seatPw: '1234',
-    bindTel: '8001'
+    bindTel: '6002'
   }
 }
 
@@ -102,7 +101,6 @@ const actions = {
         const {
           obj
         } = response.data
-
         if (response.status !== 200) {
           removeToken()
           removeLocalStorage('userId')          
@@ -122,10 +120,10 @@ const actions = {
           commit('SET_SEATID', obj.seatId)
         }
         if (obj.seatPw) {
-          commit('SET_SEATID', obj.seatPw)
+          commit('SET_SEATPW', obj.seatPw)
         }
         if (obj.bindTel) {
-          commit('SET_SEATID', obj.bindTel)
+          commit('SET_BINDTEL', obj.bindTel)
         }
         commit('SET_NAME', realName)
         commit('SET_AVATAR', userIcon)

@@ -77,7 +77,7 @@ btn-md-general 160*42
 
 .label-blue,
 .label-dark-gray,
-.label-light-gray {
+.label-light-gray,.label-red {
   padding: 0 5px;
   border-radius: 4px;
 }
@@ -96,3 +96,7 @@ btn-md-general 160*42
   background-color: #F1F1F1;
   color: #666;
 }
+.label-red{
+  background-color: red;
+  color: #fff;
+  }

@@ -225,7 +225,7 @@ export default {
           return '待跟进'
       } 
     },
-    formatDate(row, column, cellValue){//表格时间列格式化
+    formatDate(row, column, cellValue){//表格时间列格式化时间
       // return cellValue
       return parseTime(cellValue)
     },

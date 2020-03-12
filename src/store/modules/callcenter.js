@@ -4,8 +4,11 @@ const state = {
   sendCheckin: '',
   sendCheckout: '',
   sendMakecall: '',
+  sendDropcall:'',
   userTel: '',
-  checkStatus: 0
+  checkStatus: 0,
+  callStatus:'',
+  hodeOn:false
 }
 
 const mutations = {
@@ -17,14 +20,18 @@ const mutations = {
     }
     //建立连接
     state.websocket = new WebSocket(wsUri)
-    state.websocket.onopen = evt => {
+    state.websocket.onopen = evt => {      
       console.log('onopen')
     }
     state.websocket.onclose = evt => {
       console.log('onclose')
     }
     state.websocket.onmessage = evt => {
-      console.log('onmessage')
+      if(JSON.parse(evt.data).state == 3){
+        state.hodeOn = true
+      }else{
+        state.hodeOn = false
+      }
     }
     state.websocket.onerror = evt => {
       console.log('onerror')
@@ -33,17 +40,20 @@ const mutations = {
   CHECK_IN(state, userInfo) {
     state.checkStatus = 1
     state.sendCheckin = `{"cmd":"1","seatno":"${userInfo.seatId}","telno":"${userInfo.bindTel}","para":"${userInfo.seatPw}"}`
-    state.websocket.send(state.sendCheckin)
+    state.websocket.send(state.sendCheckin) 
   },
   CHECK_OUT(state, userInfo) {
     state.checkStatus = 0
     state.sendCheckout = `{"cmd":"2","seatno":"${userInfo.seatId}","telno":"","para":""}`
     state.websocket.send(state.sendCheckout)
   },
-  MAKE_CALL(state, userInfo) {
+  MAKE_CALL(state, userInfo) {     
     state.sendMakecall = `{"cmd":"3","seatno":"${userInfo.seatId}","telno":"${state.userTel}","para":"1234567890-1234567890-1234567890-1234567890-ABCD"}`
-    console.log(state.sendMakecall)
     state.websocket.send(state.sendMakecall)
+  },
+  DROP_CALL(state,userInfo){
+    state.sendDropcall = `{"cmd":"4","seatno":"${userInfo.seatId}","telno":"","para":""}`
+    state.websocket.send(state.sendDropcall)
   },
   WEBSOCKET_OUT(state) {
     if (state.websocket != null) {
@@ -79,6 +89,11 @@ const actions = {
     rootGetters
   }) {
     commit('MAKE_CALL', rootGetters)
+  },
+  drop_call({
+    commit,rootGetters
+  }){
+    commit('DROP_CALL',rootGetters)
   },
   websocket_out({
     commit

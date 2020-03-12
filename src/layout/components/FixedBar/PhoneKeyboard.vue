@@ -71,17 +71,6 @@ export default {
         ["*", 0, "#"]
       ],
       callDisable: false,
-      wsUri: "ws://36.110.48.146:65006/",
-      cc: 0,
-      docheckin: 0, //签入状态 0 签出 1 签入
-      str: '{"cmd":"0","seatno":"1001","telno":"","para":""}',
-      websocket: null, //ws链接
-      heartbeat_timer: 0, //心跳包定时器
-      rev: "",
-      seatId: 8001, //坐席号
-      seatPassword: 1234,
-      bindTel: 8001,
-      calledTel: "13661190279"
     };
   },
   watch: {
@@ -89,9 +78,7 @@ export default {
       this.$store.commit('callcenter/SET_USERTEL', val)
     }
   },
-  created () {
-    // console.log(this.$store)
-    // console.log(store.dispatch)
+  created () {    
     this.$store.dispatch('callcenter/websocket_init')
   },
   methods: {
@@ -114,8 +101,8 @@ export default {
       //   this.callDisable = false;
       // }
     },
-    makeCall () {
-      this.$store.dispatch('SET_USERTEL', this.telNumber)
+    async makeCall () {
+      await this.$store.dispatch('SET_USERTEL', this.telNumber)
       this.$store.dispatch('callcenter/make_call')
     }
   },
