@@ -83,7 +83,6 @@ const actions = {
         commit('SET_USERID', obj.userId)
         setToken(obj.token)
         setLocalStorage('userId',obj.userId)
-        setLocalStorage('userName',obj.realName)
         resolve()
       }).catch(error => {
         reject(error)
@@ -102,6 +101,7 @@ const actions = {
           obj
         } = response.data
         if (response.status !== 200) {
+          debugger
           removeToken()
           removeLocalStorage('userId')          
           removeLocalStorage('userName')

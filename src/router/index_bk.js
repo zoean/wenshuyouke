@@ -60,14 +60,6 @@ export const asyncRouterMap = [{
         title: "部门用户设置",
         icon: "dashboard"
       }
-    },{
-      path: "department",
-      name: "department",
-      component: () => import("@/views/rolepermission/index"),
-      meta: {
-        title: "角色权限设置",
-        icon: "dashboard"
-      }
     }]
   },
   {
