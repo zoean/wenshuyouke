@@ -226,7 +226,7 @@
 */
 import {transforserClues} from '@/api/cardmanage'
 import {parseToTimestamp, parseTime} from '@/utils/index'
-import {getCluesList,postCluesToSelf,dropCallPost,updateClues} from '@/api/saleslead'
+import {getCluesList,postCluesToSelf,updateClues} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
 import {getLocalStorage} from '@/utils/index'
 export default {
@@ -277,7 +277,8 @@ export default {
   created(){
     // this.dropCall() //刷新挂断电话
     this.fetchCluesList()
-    this.fetchCardList()//当前登录用户名单列表
+    this.fetchCardList()//当前登录用户名单列表    
+    this.$store.dispatch('callcenter/check_in')
   },
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
@@ -289,11 +290,13 @@ export default {
     '$store.state.callcenter.hodeOn':function(val){
       if(val){
         this.holdOn = true
-        this.timerStart()        
+        this.timerStart() 
+        this.curCluesForm.callStatus = 2       
       }else{
         this.holdOn = false
         this.timerClear()
         this.countTime = ''
+        this.curCluesForm.callStatus = 1 
       }
     }
   },
@@ -327,7 +330,6 @@ export default {
         try{
           if(response.status==200){
             this.cluesListObj = response.data.obj
-            console.log(this.cluesListObj)
           }
         }catch(e){}
       })
@@ -377,7 +379,7 @@ export default {
     oneTouchCall (index,row) {//一键呼叫
       this.curCluesVisible = true
       this.callDurationVisible = true
-      this.$store.commit('callcenter/SET_USERTEL', row.telephone || '17610100629')//传入当前被叫用户手机号码
+      this.$store.commit('callcenter/SET_USERTEL', row.telePhone || '17610100629')//传入当前被叫用户手机号码
       this.curCluesForm = {
         id:row.id,//线索id
         entName:row.entName,//公司名称
@@ -390,17 +392,13 @@ export default {
         fllowupStatus:row.fllowupStatus || 0,//跟进状态
         dataSource:row.dataSource,//线索来源
         nextFllowupTime:row.nextFllowupTime,//下次跟进时间
-        remark:row.remark//备注
+        remark:row.remark,//备注        
+        callStatus:2
       }
-      this.dropCallForm={
-        clueId:row.id,//线索id
-        called:row.telephone || '17610100629',
-        extentionno:this.$store.getters.seatId
-      }
-      this.$store.dispatch('callcenter/check_in')
       this.$store.dispatch('callcenter/make_call')
     },
-    dropCall(){//挂断      
+    dropCall(){//挂断   
+      this.curCluesForm.lastCallTime = new Date().getTime()   
       this.$store.dispatch('callcenter/drop_call')
       this.callPanelVisible = false//隐藏通话计时
     },
@@ -411,15 +409,6 @@ export default {
       updateClues(this.curCluesForm).then(response=>{
         try{
           if(response.status == 200){
-            dropCallPost(this.dropCallForm).then(response=>{
-              try{
-                if(response.status == 200){
-                  console.log('挂断发送')
-                }
-              }catch(e){
-
-              }
-            })
             this.curCluesVisible =  false
             this.fetchCluesList()
             this.$message.success('当前线索更新成功')            

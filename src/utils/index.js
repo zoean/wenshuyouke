@@ -1,5 +1,5 @@
 /**
- * Created by PanJiaChen on 16/11/18.
+ * Created by ZOE on 20/02/22
  */
 
 /**
@@ -7,8 +7,8 @@
  * @param {(Object|string|number)} time
  * @param {string} cFormat
  * @returns {string | null}
+ * 将日期时间转换为时间戳
  */
- //将日期时间转换为时间戳
 export function parseToTimestamp(time,len){
   return new Date(time).getTime(time).toString().substring(0,len)
 }
@@ -93,6 +93,26 @@ export function formatTime(time, option) {
   }
 }
 
+/**
+* 今天起始时间戳-默认13位
+* @returns {Array}
+* 
+*/
+export function beforeToday(){
+  let nowStamp = new Date().getTime()
+  let beforeTodayTime = nowStamp-24*60*60*1000
+  return [nowStamp, beforeTodayTime]
+}
+/**
+* 本周起始时间戳-默认13位
+* @returns {Array}
+* 
+*/
+export function beforeAweek(){
+  let nowStamp = new Date().getTime()
+  let beforeAweekTime = (nowStamp-(24*60*60*1000))*7
+  return [nowStamp, beforeAweekTime]
+}
 /**
  * @param {string} url
  * @returns {Object}

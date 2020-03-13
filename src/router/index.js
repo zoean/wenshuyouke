@@ -46,46 +46,53 @@ export function resetRouter() {
 export const asyncRouterMap = [{
     path: "/",
     component: Layout,
-    redirect: "/home",
+    redirect:"/home",
+    name:'home',
+    meta:{
+      title:'企业主页',
+      icon: "dashboard"
+    },
     children: [{
       path: "home",
-      name: "Home",
+      name: "home",
       component: () => import("@/views/home/index"),
       meta: {
-        title: "企业主页",
-        icon: "dashboard"
-      }
+        title: "设置中心"
+      },
+      children:[{
+        path:"department",
+        name:"department",
+        component:() => import("@/views/home/department/index"),
+        meta:{
+          title:"部门用户设置",
+          roles: ['admin','seat','super']
+        }
+      },{
+        path:"rolepermission",
+        name:"rolepermission",
+        component:() => import("@/views/home/rolepermission/index"),
+        meta:{
+          title:"角色权限设置",          
+          roles: ['admin','seat','super']
+        }
+      }]
     }]
   },
   {
-      path: "/",
-      component: Layout,
-      redirect: "/dashboard",
-      children: [{
-        path: "dashboard",
-        name: "Dashboard",
-        component: () => import("@/views/dashboard/index"),
-        meta: {
-          title: "企业主页",
-          icon: "dashboard"
-        }
-      }]
-    },
-  // {
-  //   path: "/dashboard",
-  //   component: Layout,
-  //   redirect: "/dashboard",
-  //   children: [{
-  //     path: "dashboard",
-  //     name: "Dashboard",
-  //     component: () => import("@/views/dashboard/index"),
-  //     meta: {
-  //       title: "工作台",
-  //       icon: "workbench",
-  //       roles: ['admin', 'super']
-  //     }
-  //   }]
-  // },
+    path: "/home",
+    component: Layout,
+    redirect: "/home",
+    children: [{
+      path: "home",
+      name: "home",
+      component: () => import("@/views/home/index"),
+      meta: {
+        title: "工作台",
+        icon: "workbench",
+        roles: ['admin']
+      }
+    }]
+  },
   {
     path: "/foundclues",
     component: Layout,
@@ -94,7 +101,7 @@ export const asyncRouterMap = [{
     meta: {
       title: "发现线索",
       icon: "found",
-      roles: ['admin', 'super']
+      roles: ['admin', 'super','seat']
     },
     children: [{
         path: "newcompanysearch",
@@ -103,7 +110,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "新企推荐",
           icon: "newcompany",
-          roles: ['admin', 'super']
+          roles: ['admin', 'super','seat']
         }
       },
       {
@@ -113,7 +120,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "企业搜索",
           icon: "searchcompany",
-          roles: ['super', 'admin']
+          roles: ['super', 'admin','seat']
         }
       }
     ]
@@ -169,66 +176,76 @@ export const asyncRouterMap = [{
     ]
   },
 
+  // {
+  //   path: "/nested",
+  //   component: Layout,
+  //   redirect: "/reach/callcenter/index",
+  //   name: "Nested",
+  //   meta: {
+  //     title: "触达管理",
+  //     icon: "zhudongchuda"
+  //   },
+  //   children: [{
+  //       path: "menu1",
+  //       name: "Menu1",
+  //       component: () => import("@/views/reach/callcenter/index"), // Parent router-view
+  //       meta: {
+  //         title: "呼叫中心",
+  //         icon: "callcenter",
+  //         roles: ['super', 'seat']
+  //       },
+  //     },
+  //     {
+  //       path: "menu2",
+  //       component: () => import("@/views/reach/message/index"),
+  //       meta: {
+  //         title: "短信",
+  //         icon: "message",
+  //         roles: ['super', 'seat']
+  //       }
+  //     },
+  //     {
+  //       path: "menu3",
+  //       component: () => import("@/views/reach/ai/index"),
+  //       meta: {
+  //         title: "AI机器人",
+  //         icon: "ai",
+  //         roles: ['super', 'seat']
+  //       }
+  //     }
+  //   ]
+  // },
   {
-    path: "/nested",
+    path: "/expensecenter",
     component: Layout,
-    redirect: "/reach/callcenter/index",
-    name: "Nested",
+    name: "expensecenter",
+    redirect: "/expensecenter/calldetails",
     meta: {
-      title: "触达管理",
-      icon: "zhudongchuda"
+      title: "费用中心",
+      icon: "admin"
     },
     children: [{
-        path: "menu1",
-        name: "Menu1",
-        component: () => import("@/views/reach/callcenter/index"), // Parent router-view
+        path: "calldetails",
+        name: "calldetails",
+        component: () => import("@/views/expensecenter/calldetails/index"),
         meta: {
-          title: "呼叫中心",
-          icon: "callcenter",
-          roles: ['super', 'seat']
-        },
-      },
-      {
-        path: "menu2",
-        component: () => import("@/views/reach/message/index"),
-        meta: {
-          title: "短信",
-          icon: "message",
-          roles: ['super', 'seat']
-        }
-      },
-
-      {
-        path: "menu3",
-        component: () => import("@/views/reach/ai/index"),
-        meta: {
-          title: "AI机器人",
-          icon: "ai",
-          roles: ['super', 'seat']
+          title: "通话详情",
+          icon: "databag",
+          roles: ['super', 'admin', 'seat']
         }
       }
     ]
   },
-  {
-    path: "/expenses",
-    component: Layout,
-    redirect: "/reach/callcenter/index",
-    name: "",
-    meta: {
-      title: "费用中心",
-      icon: "count"
-    },
-  },
-  {
-    path: "/analysis",
-    component: Layout,
-    redirect: "/reach/callcenter/index",
-    name: "",
-    meta: {
-      title: "统计分析",
-      icon: "analysis"
-    },
-  },
+  // {
+  //   path: "/analysis",
+  //   component: Layout,
+  //   redirect: "/reach/callcenter/index",
+  //   name: "",
+  //   meta: {
+  //     title: "统计分析",
+  //     icon: "analysis"
+  //   }
+  // },
   {
     path: "/regester",
     redirect: "/regester",
