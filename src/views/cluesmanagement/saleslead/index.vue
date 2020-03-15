@@ -277,8 +277,7 @@ export default {
   created(){
     // this.dropCall() //刷新挂断电话
     this.fetchCluesList()
-    this.fetchCardList()//当前登录用户名单列表    
-    this.$store.dispatch('callcenter/check_in')
+    this.fetchCardList()//当前登录用户名单列表  
   },
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
@@ -395,6 +394,8 @@ export default {
         remark:row.remark,//备注        
         callStatus:2
       }
+
+      this.$store.dispatch('callcenter/check_in')
       this.$store.dispatch('callcenter/make_call')
     },
     dropCall(){//挂断   

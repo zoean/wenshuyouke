@@ -44,33 +44,6 @@ export function resetRouter() {
 //异步挂载的路由
 //动态需要根据权限加载的路由表
 export const asyncRouterMap = [{
-    path: "/",
-    component: Layout,
-    redirect: "/home",
-    alwaysShow: true,
-    meta:{
-      title: "企业主页",
-      icon: "dashboard"
-    },
-    children: [{
-      path: "department",
-      name: "department",
-      component: () => import("@/views/department/index"),
-      meta: {
-        title: "部门用户设置",
-        icon: "dashboard"
-      }
-    },{
-      path: "department",
-      name: "department",
-      component: () => import("@/views/rolepermission/index"),
-      meta: {
-        title: "角色权限设置",
-        icon: "dashboard"
-      }
-    }]
-  },
-  {
       path: "/",
       component: Layout,
       redirect: "/home",
@@ -80,10 +53,11 @@ export const asyncRouterMap = [{
         component: () => import("@/views/home/index"),
         meta: {
           title: "企业主页",
-          icon: "dashboard"
+          icon: "dashboard",
+          roles:['admin']
         }
       }]
-    },
+    },  
   // {
   //   path: "/dashboard",
   //   component: Layout,
@@ -147,7 +121,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "名单管理",
           icon: "databag",
-          roles: ['super', 'admin', 'seat']
+          roles: ['super', 'admin']
         }
       }, {
         path: "saleslead",
@@ -156,7 +130,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "销售商机",
           icon: "databag",
-          roles: ['super', 'admin', 'seat']
+          roles: ['super', 'seat']
         }
       },
       {
@@ -166,7 +140,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "我的线索",
           icon: "privatesea",
-          roles: ['super', 'admin']
+          roles: ['super', 'seat']
         }
       },
       {
@@ -176,71 +150,110 @@ export const asyncRouterMap = [{
         meta: {
           title: "回收站",
           icon: "recycle",
-          roles: ['super', 'admin']
-        }
-      }
-    ]
-  },
-
-  {
-    path: "/nested",
-    component: Layout,
-    redirect: "/reach/callcenter/index",
-    name: "Nested",
-    meta: {
-      title: "触达管理",
-      icon: "zhudongchuda"
-    },
-    children: [{
-        path: "menu1",
-        name: "Menu1",
-        component: () => import("@/views/reach/callcenter/index"), // Parent router-view
-        meta: {
-          title: "呼叫中心",
-          icon: "callcenter",
-          roles: ['super', 'seat']
-        },
-      },
-      {
-        path: "menu2",
-        component: () => import("@/views/reach/message/index"),
-        meta: {
-          title: "短信",
-          icon: "message",
-          roles: ['super', 'seat']
-        }
-      },
-
-      {
-        path: "menu3",
-        component: () => import("@/views/reach/ai/index"),
-        meta: {
-          title: "AI机器人",
-          icon: "ai",
           roles: ['super', 'seat']
         }
       }
     ]
   },
+
+  // {
+  //   path: "/nested",
+  //   component: Layout,
+  //   redirect: "/reach/callcenter/index",
+  //   name: "Nested",
+  //   meta: {
+  //     title: "触达管理",
+  //     icon: "zhudongchuda"
+  //   },
+  //   children: [{
+  //       path: "menu1",
+  //       name: "Menu1",
+  //       component: () => import("@/views/reach/callcenter/index"), // Parent router-view
+  //       meta: {
+  //         title: "呼叫中心",
+  //         icon: "callcenter",
+  //         roles: ['super', 'seat']
+  //       },
+  //     },
+  //     {
+  //       path: "menu2",
+  //       component: () => import("@/views/reach/message/index"),
+  //       meta: {
+  //         title: "短信",
+  //         icon: "message",
+  //         roles: ['super', 'seat']
+  //       }
+  //     },
+
+  //     {
+  //       path: "menu3",
+  //       component: () => import("@/views/reach/ai/index"),
+  //       meta: {
+  //         title: "AI机器人",
+  //         icon: "ai",
+  //         roles: ['super', 'seat']
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: "/expenses",
     component: Layout,
     redirect: "/reach/callcenter/index",
-    name: "",
+    name: "expensecenter",
     meta: {
       title: "费用中心",
       icon: "count"
     },
+    alwaysShow: true,
+    children:[{
+      path:'/expenses',
+      component:() => import("@/views/expensecenter/calldetails/index"),
+      name:'calldetails',
+      meta:{
+        title:'通话详情',
+        icon:'phone'
+      }
+    }]
   },
+  // {
+  //   path: "/analysis",
+  //   component: Layout,
+  //   redirect: "/reach/callcenter/index",
+  //   name: "",
+  //   meta: {
+  //     title: "统计分析",
+  //     icon: "analysis"
+  //   }
+  // },
   {
-    path: "/analysis",
+    path: "/",
     component: Layout,
-    redirect: "/reach/callcenter/index",
-    name: "",
-    meta: {
-      title: "统计分析",
-      icon: "analysis"
+    redirect: "/home",
+    alwaysShow: true,
+    meta:{
+      title: "设置中心",
+      icon: "dashboard"
     },
+    children: [{
+      path: "department",
+      name: "department",
+      component: () => import("@/views/department/index"),
+      meta: {
+        title: "部门用户设置",
+        icon: "dashboard",
+        roles:['admin']
+      }
+    },{
+      path: "rolepermission",
+      name: "rolepermission",
+      component: () => import("@/views/rolepermission/index"),
+      meta: {
+        title: "角色权限设置",
+        icon: "dashboard",
+        roles:['admin']
+      }
+    }]
   },
   {
     path: "/regester",

@@ -7,141 +7,223 @@
     <div class="newcom-main">
       <div class="search-area">
         <dl>
-          <dt>线索来源：</dt>
-          <dd>
-            <el-button>商机推荐</el-button>
-            <el-button>企业查询</el-button>
-          </dd>
-        </dl>
-        <dl>
-          <dt>所在地区：</dt>
-          <dd>
-            <template>
-              <el-select v-model="value"
-                         placeholder="请选择">
-                <el-option v-for="item in options"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </template>
-          </dd>
-        </dl>
-        <dl>
           <dt>企业名称：</dt>
           <dd>
-            <el-input placeholder="请输入内容"
-                      v-model="input3">
-              <el-button slot="append"
-                         icon="el-icon-search"></el-button>
-            </el-input>
+            <el-input
+              v-model="entName"
+              placeholder="请输入内容"
+              @change="changeEntName()"
+              @keyup.enter.native="changeEntName()"
+            />
+          </dd>
+          </dl>
+          <dl>
+          <dt>线索来源：</dt>
+          <dd>
+            <template>
+              <el-select
+                v-model="value1"
+                placeholder="请选择"
+                @change="changeEntName()"
+              >
+                <el-option>全部</el-option>
+                <el-option
+                  v-for="item in options"
+                  :key="item.id"
+                  :label="item.listName"
+                  :value="item.id"
+                />
+              </el-select>
+            </template>
           </dd>
         </dl>
         <div class="search-result">
           <div class="get-data">
             <template>
-              <el-select v-model="value"
-                         placeholder="请选择">
-                <el-option v-for="item in options"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
+              <el-select
+                v-model="value2"
+                placeholder="请选择"
+              >
+                <el-option
+                  v-for="item in options"
+                  :key="item.id"
+                  :label="item.listName"
+                  :value="item.id"
+                />
               </el-select>
             </template>
-            <input class="btn-8032-general"
-                   type="button"
-                   value="领取">
+            <input
+              class="btn-8032-general"
+              type="button"
+              value="领取"
+              @click="receive()"
+            >
           </div>
         </div>
       </div>
 
       <div class="data-list">
         <template>
-          <el-table ref="multipleTable"
-                    :data="tableData"
-                    tooltip-effect="dark"
-                    style="width: 100%"
-                    @selection-change="handleSelectionChange">
-            <el-table-column type="selection"
-                             width="55">
-            </el-table-column>
-            <el-table-column label="日期"
-                             width="120">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
-            </el-table-column>
-            <el-table-column prop="name"
-                             label="姓名"
-                             width="120">
-            </el-table-column>
-            <el-table-column prop="address"
-                             label="地址"
-                             show-overflow-tooltip>
-            </el-table-column>
+          <el-table
+            ref="multipleTable"
+            :data="tableData"
+            tooltip-effect="dark"
+            :header-cell-style="{background:'#F2F2F2',color:'#666',fontWeight:'400'}"
+            style="margin-top: 20px;"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column
+              type="selection"
+              width="55"
+            />
+            <el-table-column
+              prop="updateTime"
+              :formatter="formatDate"
+              label="收藏时间"
+            />
+            <el-table-column
+              prop="entName"
+              label="企业名称"
+              show-overflow-tooltip
+            />
+            <el-table-column
+              prop="contact"
+              label="电话"
+            />
+            <el-table-column
+              prop="chargeMan"
+              label="负责人"
+            />
+            <el-table-column
+              prop="regDate"
+              label="成立时间"
+            />
+            <el-table-column
+              prop="dataSource"
+              label="线索来源"
+            />
+            <el-table-column
+              prop="lastFollowTime"
+              :formatter="formatDate"
+              label="最后跟进时间"
+            />
+            <el-table-column
+              prop="fllowupStatus"
+              label="跟进状态"
+            />
+            <el-table-column
+              prop="remark"
+              label="备注"
+            />
           </el-table>
           <!-- <div style="margin-top: 20px">
-				    <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
-				    <el-button @click="toggleSelection()">取消选择</el-button>
-				  </div> -->
+            <el-button @click="toggleSelection([tableData[1], tableData[2]])">切换第二、第三行的选中状态</el-button>
+            <el-button @click="toggleSelection()">取消选择</el-button>
+          </div> -->
         </template>
       </div>
-      <el-pagination background
-                     layout="prev, pager, next"
-                     :total="1000">
-      </el-pagination>
+      <el-pagination
+        layout="total,prev, pager, next,jumper"
+        :current-page="pageNum"
+        :page-size="pageSize"
+        :total="total"
+        @current-change="handleCurrentChange"
+      />
     </div>
   </div>
 </template>
 <script>
+import { getLocalStorage, parseTime } from '@/utils/index'
 export default {
-  data () {
+  data() {
     return {
-      tableData: [{
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-08',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-06',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-07',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }],
-      multipleSelection: []
+      options: [],
+      tableData: [],
+      multipleSelection: [],
+      pageNum: 1,
+      pageSize: 10,
+      total: 0,
+      value1: null,
+      value2: null,
+      entName: ''
     }
   },
-
+  created() {
+    this.searchclue()
+    this.searchlist()
+  },
   methods: {
-    toggleSelection (rows) {
+    searchclue(data) {
+      if (data) {
+        data.pageNum = this.pageNum
+        data.pageSize = this.pageSize
+      } else {
+        data = { 'pageNum': this.pageNum, 'pageSize': this.pageSize }
+      }
+      this.$store.dispatch('recycle/select', data)
+        .then((res) => {
+          this.tableData = res.obj.list
+          this.total = res.obj.total
+          // console.log(res.obj.list)
+        })
+        .catch(() => {
+        })
+    },
+    searchlist() {
+      // this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
+      this.$store.dispatch('recycle/selectList', { 'entUserId': 1 })
+        .then((res) => {
+          this.options = res.obj
+          console.log(res.obj)
+        })
+        .catch(() => {
+        })
+    },
+    receive() {
+      if (!this.value2) {
+        this.$message.success('请选择名单')
+        return
+      }
+      var idArr = this.multipleSelection
+      var ids = ''
+      for (var i = 0; i < idArr.length; i++) {
+        ids += idArr[i].id + ','
+      }
+      if (ids.length > 0) {
+        ids = ids.substr(0, ids.length - 1)
+      }
+      this.$store.dispatch('recycle/receive', { 'ids': ids, 'listId': this.value2 })
+        .then((res) => {
+          if (res.message == 'success') {
+            this.$message.success('领取成功')
+          } else {
+            this.$message.success('领取失败')
+          }
+        })
+        .catch(() => {
+        })
+    },
+    toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
+          this.$refs.multipleTable.toggleRowSelection(row)
+        })
       } else {
-        this.$refs.multipleTable.clearSelection();
+        this.$refs.multipleTable.clearSelection()
       }
     },
-    handleSelectionChange (val) {
-      this.multipleSelection = val;
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    handleCurrentChange(pageNum) {
+      this.pageNum = pageNum
+      this.searchclue()
+    },
+    changeEntName() {
+      this.searchclue({ 'entName': this.entName, 'listId': this.value1 })
+    },
+    formatDate(row, column, cellValue) { // 表格时间列格式化
+      return parseTime(cellValue)
     }
   }
 }
@@ -160,7 +242,7 @@ export default {
       flex-direction: row;
       align-items: center;
       dd {
-        margin-left: 10px;
+        margin:0 20px 0 10px;
       }
     }
     div.companyHandle {

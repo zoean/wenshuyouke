@@ -18,7 +18,7 @@ export function addOrganize (data) {
 //删除部门
 export function delOrganize (data) {
   return request({
-    url: 'user/api/organize/select',
+    url: 'user/api/organize/delete',
     method: 'post',
     data
   })
@@ -26,7 +26,7 @@ export function delOrganize (data) {
 //编辑部门
 export function editOrganize (data) {
   return request({
-    url: 'user/api/organize/edit',
+    url: 'user/api/organize/update',
     method: 'post',
     data
   })

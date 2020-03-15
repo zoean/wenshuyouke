@@ -101,10 +101,10 @@ const actions = {
           obj
         } = response.data
         if (response.status !== 200) {
-          debugger
           removeToken()
           removeLocalStorage('userId')          
           removeLocalStorage('userName')
+          removeLocalStorage('enterpriseName')
           router.push(`/login?redirect=${this.$route.fullPath}`)
         }
         if (!obj) {
@@ -125,9 +125,13 @@ const actions = {
         if (obj.bindTel) {
           commit('SET_BINDTEL', obj.bindTel)
         }
+        if(obj.enterprise && obj.enterprise.enterpriseName){
+          setLocalStorage('enterpriseName',obj.enterprise.enterpriseName)
+        }
         commit('SET_NAME', realName)
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
+        // debugger
         resolve(obj)
       }).catch(error => {
         reject(error)
@@ -142,6 +146,7 @@ const actions = {
     removeToken() // must remove  token  first    
     removeLocalStorage('userId')    
     removeLocalStorage('userName')
+    removeLocalStorage('enterpriseName')
     // resetRouter()
     commit('RESET_STATE')
     // return new Promise((resolve, reject) => {
@@ -162,7 +167,8 @@ const actions = {
   }) {
     return new Promise(resolve => {
       removeLocalStorage('userId')      
-      removeLocalStorage('userName')
+      removeLocalStorage('userName')      
+      removeLocalStorage('enterpriseName')
       removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()

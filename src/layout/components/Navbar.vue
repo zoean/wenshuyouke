@@ -105,7 +105,7 @@
         <img width="30"
              height="30"
              src="@/assets/images/avater.png" />
-        <span>优客小二</span>
+        <span>{{name}}</span>
       </div>
     </div>
 
@@ -125,7 +125,8 @@ export default {
   computed: {
     ...mapGetters([
       'sidebar',
-      'avatar'
+      'avatar',
+      'name'
     ])
   },
   methods: {
@@ -173,38 +174,30 @@ export default {
     }
   }
 
-  // .hamburger-container {
-  //   line-height: 46px;
-  //   height: 100%;
-  //   float: left;
-  //   cursor: pointer;
-  //   transition: background 0.3s;
-  //   -webkit-tap-highlight-color: transparent;
-
-  //   &:hover {
-  //     background: rgba(0, 0, 0, 0.025);
-  //   }
-  // }
-
-  // .breadcrumb-container {
-  //   float: left;
-  // }
-
   .right-menu {
     float: right;
-    height: 100%;
-    line-height: 50px;
+    width: 300px;
+    height: 64px;
+    line-height: 64px;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 10px;
     &:focus {
       outline: none;
     }
     .el-dropdown{
-      margin:8px 50px 0 0;
+      width: 33.3%;
+      text-align: center;
       p{
         margin: 0;
         font-size: 16px;
       }
+    }
+    .el-dropdown:hover{
+      background: #4088FF;
+      color: #fff;
     }
     .right-menu-item {
       display: inline-block;

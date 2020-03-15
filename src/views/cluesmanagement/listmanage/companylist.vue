@@ -79,16 +79,14 @@
         <el-table-column type="selection"
                          width="55">
         </el-table-column>
-        <el-table-column label="企业名称" prop="name">
+        <el-table-column label="企业名称" prop="name" show-overflow-tooltip>
           <template slot-scope="scope">{{ scope.row.entName }}</template>
         </el-table-column>
         <el-table-column prop="storageTime"
                          label="领取时间" :formatter="formatDate">
         </el-table-column>
         <el-table-column prop="updateTime"
-                         label="最后跟进时间"
-                         show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.lastFollowTime }}</template>
+                         label="最后跟进时间" :formatter="formatDate">
         </el-table-column>
         <el-table-column prop="callStatus"
                          label="线索状态" :formatter="matchClueStatus">
@@ -101,7 +99,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="address"
-                         label="地区">
+                         label="地区"  show-overflow-tooltip>
           <template slot-scope="scope">{{ scope.row.entName }}</template>
         </el-table-column>
         <el-table-column prop="remark"

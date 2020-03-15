@@ -8,6 +8,8 @@ import permission from './modules/permission' //路由拦截
 import callcenter from './modules/callcenter' //呼叫中心
 import cluesmanage from './modules/cluesmanage' // 发现线索
 import company from './modules/company' //企业主页
+import myclue from './modules/myclue' //我的线索
+import recycle from './modules/recycle' //回收站
 
 
 Vue.use(Vuex)
@@ -20,7 +22,9 @@ const store = new Vuex.Store({
     permission,
     callcenter,
     cluesmanage,
-    company
+    company,
+    myclue,
+    recycle
   },
   getters
 })

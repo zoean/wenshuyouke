@@ -2,7 +2,7 @@
 	<div class="main-box">
 		<div class="role-panel">
 			<div class="role-handle">
-				<h3>公司角色</h3>
+				<h3>{{entUserName}}</h3>
 				<p>
 					<el-button type="primary" icon="el-icon-plus" circle @click="addRoleHandle"></el-button>
 						<el-button type="primary" icon="el-icon-edit" circle @click="editRoleHandle"></el-button>
@@ -10,68 +10,83 @@
 				</p>
 			</div>
 			<div class="role-list">
-				<el-tabs :tab-position="tabPosition" style="height: 200px;" :tab-click="roleSelection">
-			    <el-tab-pane label="用户管理">用户管理</el-tab-pane>
-			    <el-tab-pane label="配置管理">配置管理</el-tab-pane>
-			    <el-tab-pane label="角色管理">角色管理</el-tab-pane>
-			    <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+				<el-tabs :tab-position="tabPosition" @tab-click="roleSelection">
+			    <el-tab-pane v-for="(item,index) in roleList" :label="item.roleName"></el-tab-pane>
 			  </el-tabs>
 			</div>
 		</div>
+		<div class="gutter-line"></div>
 		<div class="role-set">
-			<h2>权限设置-最高管理员</h2>
+			<h2>权限设置</h2>
+			<el-tree
+			  :data="menuTree"
+			  show-checkbox
+			  node-key="id"
+			  default-expand-all
+			  :default-checked-keys="curUserRoleList"
+			  :props="defaultProps"
+			  ref="roleTree">
+			</el-tree>
+			<el-row type="flex" justify="end">
+				<el-col :span="4">
+					<el-button type="primary" @click="saveRoleSet">保存</el-button>
+				</el-col>
+			</el-row>
 		</div>
-		<el-dialog title="增加角色" ：visible.sync="addRoleVisible">
-			<el-form ref="addRoleForm">
-				<el-form-item prop="">
-					<el-input></el-input>
+		 <el-dialog :title="addEditRoleType" :visible.sync="addEditRoleVisible" width="30%">
+			<el-form :model="addEditRoleForm" ref="addEditRoleForm" :rules="addEditRoleRule">
+				<el-form-item label="角色名称：" inline :label-width="formLabelWidth" prop="roleName">
+					<el-input v-model="addEditRoleForm.roleName" autocomplete="off"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-		    <el-button @click="cancleHandle('addRoleVisible','addRoleForm')">取 消</el-button>
-		    <el-button type="primary" @click="addRoleHandle">确 定</el-button>
+		    <el-button @click="cancleHandle('addEditRoleVisible','addEditRoleForm')">取 消</el-button>
+		    <el-button type="primary" @click="addEditRoleSubmit">确 定</el-button>
 		  </div>
 		</el-dialog>
-		<el-dialog title="编辑角色名称" ：visible.sync="editRoleVisible">
-			<el-form ref="editRoleForm">
-				<el-form-item prop="">
-					<el-input disabled></el-input>
-				</el-form-item>
-				<el-form-item prop="">
-					<el-input></el-input>
-				</el-form-item>
-			</el-form>
-			<div slot="footer" class="dialog-footer">
-		    <el-button @click="cancleHandle('editRoleVisible','editRoleForm')">取 消</el-button>
-		    <el-button type="primary" @click="editRoleHandle">确 定</el-button>
-		  </div>
-		</el-dialog>
-
-		<el-dialog title="删除角色确认" ：visible.sync="delRoleVisible">
-			<p>正在删除【管理员】角色</p>
+		<el-dialog title="删除角色确认" :visible.sync="delRoleVisibel" width="30%">
+			<p>正在删除【{{addEditRoleForm.roleName}}】角色</p>
 			<p>该角色删除后无法恢复</p>
-		</el-dialog>
-		<div slot="footer" class="dialog-footer">
-	    <el-button @click="cancleHandle('delRoleVisible')">取 消</el-button>
-	    <el-button type="primary" @click="delRoleHandle">确 定</el-button>
-	  </div>
+			<div slot="footer" class="dialog-footer">
+		    <el-button @click="cancleHandle('delRoleVisibel')">取 消</el-button>
+		    <el-button type="primary" @click="delRoleSubmit">确 定</el-button>
+		  </div>
+		</el-dialog>		
 	</div>
 </template>
 <script>
-import {loadRoleList} from '@/api/roleset'
+import {loadRoleList,addRole,editRole,delRole,getRoleTree,setRoleTree} from '@/api/roleset'
 import {getLocalStorage} from '@/utils/index'
 export default{
 	data(){
 		return {
+			entUserName:getLocalStorage('enterpriseName'),
+			formLabelWidth:"100px",
+			tabPosition:'left',
 			roleList:[],
-			roleForm:{
-				ids:[]
+			roleId:'',
+			menuTree:[],
+			addEditRoleType:'',
+			addEditRoleVisible:false,
+			delRoleVisibel:false,
+			addEditRoleForm:{
+				entUserId: getLocalStorage('userId'),
+				id: '0',
+				roleName: ''
 			},
-			addRoleVisible:false,
-			editRoleVisible:false,
-			delRoleVisible:false,
-			addRoleForm:{},
-			editRoleForm:{}
+			addEditRoleRule:{
+				roleName:[{
+					required:true,
+					message:'请输入角色名称',
+					trigger:'blur'
+				}]
+			},
+			curUserRoleList:[],
+			defaultProps: {
+        children: 'children',
+        label: 'label'
+      },
+      setCurRoleTreeForm:{}
 		}
 	},
 	created(){
@@ -82,35 +97,150 @@ export default{
 			loadRoleList({entUserId:getLocalStorage('userId')}).then(response=>{
 				try{
 					if(response.status==200){
-						this.roleList = response.data.obj.list
+						this.roleList = response.data.obj		
+						this.roleId = this.roleList[0].id
+						this.loadRoleTree()
 					}
 				}catch(e){}
 			})
 		},
-		roleSelection(data){
-			this.roleForm.ids=[]
-			for(let i in data){
-				this.roleForm.ids.push(data[i].id)
-			}
+		loadRoleTree(){	
+			getRoleTree({roleId: this.roleId}).then(response => {
+				this.menuTree = response.data.obj.menus				
+				this.curUserRoleList = response.data.obj.keys	
+				console.log(this.curUserRoleList)
+			})
 		},
-		addRoleHandle(){},
-		delRoleHandle(){},
-
+		roleSelection(tab,event){
+			this.addEditRoleForm.roleName = tab.label
+			this.addEditRoleForm.id = this.roleList[tab.index].id
+			this.roleId = this.roleList[tab.index].id
+			this.loadRoleTree()
+		},
+		addRoleHandle(){
+			this.addEditRoleType="添加角色"
+			this.addEditRoleVisible = true
+			this.addEditRoleForm.roleName=""
+			this.addEditRoleForm.id=""
+		},
+		editRoleHandle(){
+			this.addEditRoleType="编辑角色"
+			this.addEditRoleVisible = true
+			if(!this.addEditRoleForm.roleName){
+				this.addEditRoleForm.roleName = this.roleList[0].roleName
+				this.addEditRoleForm.id = this.roleList[0].id
+			}
+		},		
+		delRoleHandle(){
+			if(!this.addEditRoleForm.roleName){
+				this.addEditRoleForm.roleName = this.roleList[0].roleName
+				this.addEditRoleForm.id = this.roleList[0].id
+			}
+			this.delRoleVisibel = true
+		},
+		delRoleSubmit(){
+			delRole(this.addEditRoleForm).then(response =>{
+				if(response.status == 200){
+    			this.$message.success('角色删除成功')
+    			this.loadRoleList()
+    			this.delRoleVisibel = false
+    		}
+			})
+		},
+		addEditRoleSubmit(){
+			this.$refs['addEditRoleForm'].validate((valid) => {
+        if (valid) {
+          if(this.addEditRoleType=="添加角色"){
+          	addRole(this.addEditRoleForm).then(response => {
+          		if(response.status == 200){
+          			this.$message.success('添加角色成功')
+          			this.loadRoleList()
+          			this.cancleHandle('addEditRoleVisible','addEditRoleForm')
+          		}
+          	})
+          }else{
+          	editRole(this.addEditRoleForm).then(response => {
+          		if(response.status == 200){
+          			this.$message.success('角色编辑成功')
+          			this.loadRoleList()  
+          			this.cancleHandle('addEditRoleVisible','addEditRoleForm')
+          		}
+          	})
+          }
+        } else {
+          this.$message.error('请输入角色名称')
+          return false;
+        }
+      });
+		},
 		// 取消操作 1、隐藏dialog 2、重置表单
 		cancleHandle(visiblePro, formObj){//
 			this[visiblePro] = false
 			if(formObj){
-				this.resetForm(formObj)
+				this.$refs[formObj].resetFields()
 			}			
+		},
+		saveRoleSet(){
+			let curKeys = this.$refs.roleTree.getCheckedKeys()
+			if(!curKeys || curKeys.length <=0){
+				this.$message.error('请为该角色选择权限菜单')
+			}else{
+				this.setCurRoleTreeForm.roleId = this.roleId
+				this.setCurRoleTreeForm.ids = curKeys
+				setRoleTree(this.setCurRoleTreeForm).then(response=>{
+					if(response.status == 200){
+						this.$message.success('权限设置成功')
+					}
+				})
+			}
 		}
-
 	}
 }	
 </script>
 <style lang="scss">
+.role-list{
+	.el-tabs{
+		div.el-tabs__header{
+			width:100% !important;
+			.el-tabs__item{
+				text-align:center;					
+			}
+			div.is-active{
+				background:#409EFF;
+				color:#fff;
+			}
+		}
+	}
+}
+</style>
+<style lang="scss" scoped>
 .main-box{
 	display: flex;
 	flex-direction: row;
-
+	.role-panel{
+		width:22vw;
+		.role-handle{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+			align-items: center;
+		}
+		
+		
+	}
+	.gutter-line{
+		border-right:1px solid #ccc;
+		margin:0 2vw;
+	}
+	.role-set{
+		display: flex;
+		flex-grow:1;
+		flex-direction: column;
+		.result-handle{
+			display: flex;
+			flex-direction: row;
+			justify-content: space-between;
+		}
+	}
 }
 </style>

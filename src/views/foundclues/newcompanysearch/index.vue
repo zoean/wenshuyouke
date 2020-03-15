@@ -62,9 +62,9 @@
 				    </el-table-column>
 				    <el-table-column
 				      prop="address"
-				      label="注册资本"
+				      label="注册资本(万元)"
 				      show-overflow-tooltip>
-				      <template slot-scope="scope">{{ scope.row.regCapital }}{{ scope.row.regCurrency }}</template>
+				      <template slot-scope="scope">{{ Math.floor(scope.row.regCapital) }}</template>
 				    </el-table-column>
 				    <el-table-column
 				      prop="address"
