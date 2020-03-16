@@ -113,7 +113,7 @@
 </template>
 
 <script>
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 // import Breadcrumb from '@/components/Breadcrumb'
 // import Hamburger from '@/components/Hamburger'
 
@@ -122,13 +122,13 @@ export default {
   //   Breadcrumb,
   //   Hamburger
   // },
-  // computed: {
-  //   ...mapGetters([
-  //     'sidebar',
-  //     'avatar',
-  //     'name'
-  //   ])
-  // },
+  computed: {
+    ...mapGetters([
+      'sidebar',
+      'avatar',
+      'name'
+    ])
+  },
   methods: {
     toggleSideBar () {
       this.$store.dispatch('app/toggleSideBar')

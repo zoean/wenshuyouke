@@ -95,7 +95,6 @@ export default {
   name: "Login",
   data () {
     const validateUsername = (rule, value, callback) => {
-      // if (!validUsername(value)) {
       if (validUsername(value)) {
         callback(new Error("Please enter the correct user name"));
       } else {
@@ -111,7 +110,7 @@ export default {
     };
     return {
       loginForm: {
-        username: "thomas",
+        username: "zzt",
         password: "1"
       },
       loginRules: {

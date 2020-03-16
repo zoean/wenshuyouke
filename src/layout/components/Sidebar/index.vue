@@ -11,8 +11,8 @@
                :active-text-color="variables.menuActiveText"
                :collapse-transition="false"
                mode="vertical">
-        <sidebar-item v-for="route in routes"
-                      :key="route.path"
+        <sidebar-item v-for="(route, index) in routes"
+                      :key="route.index"
                       :item="route"
                       :base-path="route.path" />
       </el-menu>

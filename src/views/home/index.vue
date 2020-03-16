@@ -45,7 +45,7 @@
       </el-row>
     </div>
     <!--编辑企业信息-->
-    <div v-show="this.show" class="editbg" @click="show=false" />
+    <div v-show="this.show" class="editbg" @click="show=false"></div>
     <div v-show="this.show" class="editcompany">
       <p>编辑企业信息</p>
      <el-form ref="upload" :model="upload" label-width="90px" :rules="uploadrules" >
@@ -90,7 +90,7 @@ export default {
       companyinfo:[],
       blackcolor: false,
       show: false,
-      upload:[],
+      upload:{},
       uploadrules: {
         enterpriseScale: [
           { required: true, message: '请选择企业规模', trigger: 'change' }

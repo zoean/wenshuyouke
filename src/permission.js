@@ -25,39 +25,20 @@ router.beforeEach(async (to, from, next) => {
   document.title = getPageTitle(to.meta.title)
   // determine whether the user has logged in
   const hasToken = getToken()
+  let roles = store.getters.roles
   if (hasToken) { 
-    // const hasGetUserInfo = store.getters.name
-    //   if (!hasGetUserInfo) {
-    //     await store.dispatch('user/getInfo')
-    //     const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
-    //     // dynamically add accessible routes
-    //     router.addRoutes(accessRoutes)
-    //     router.options.routes.push(accessRoutes)
-    //   }
-    // if (to.path === '/login' || to.path === '/' || to.path === '/cluesmanagement/saleslead') {
-    //   // if is logged in, redirect to the home page
-    //   let roles = store.getters.roles
-    //   if(roles.indexOf('admin') >=0){
-    //     next({
-    //       path: '/'
-    //     })
-    //   }else if(roles.indexOf('seat') >=0){
-    //     if(to.path == '/cluesmanagement/saleslead'){
-    //       next()
-    //       NProgress.done()
-    //     }else{
-    //       next({ path: '/cluesmanagement/saleslead'})
-    //       NProgress.done()
-    //     }
-    //   }
-    if (to.path === '/login') {
+    console.log(roles)
+    if (to.path === '/login' || to.path === '/home' && roles.length > 0) {
+      console.log('去登录有权限')
       // if is logged in, redirect to the home page
-      let roles = store.getters.roles
-        console.log(to)
       if(roles.indexOf('admin') >=0){
-        next({
-          path: '/'
-        })
+        if(to.path == '/home'){
+          next()
+        }else{
+          next({
+            path: '/home'
+          })
+        }        
       }else if(roles.indexOf('seat') >=0){
         if(to.path == '/cluesmanagement/saleslead'){
           next()
@@ -81,10 +62,19 @@ router.beforeEach(async (to, from, next) => {
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
           router.options.routes.push(accessRoutes)
-          next({
-            ...to,
-            replace: true
-          })
+          if(store.getters.roles.indexOf('seat') >= 0){
+            if(to.path == '/cluesmanagement/saleslea'){
+              next()
+            }else{
+              next({
+                path: '/cluesmanagement/saleslea'
+              })
+            }
+          }
+          // next({
+          //   ...to,
+          //   replace: true
+          // })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
