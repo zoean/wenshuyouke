@@ -515,8 +515,8 @@ export default {
             height: 100%;
         }
         .el-scrollbar__wrap {
-            width: calc("100% + 17px");
-            height: calc("100% + 17px");
+            width: calc(100% + 17px);
+            height: calc(100% + 17px);
             overflow-y: scroll;
             overflow-x: hidden;
         }

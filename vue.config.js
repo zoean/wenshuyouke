@@ -38,7 +38,7 @@ module.exports = {
     },
     proxy: {
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://192.168.10.108`, // 这个链接是要代理到的api地址
+        target: `http://192.168.10.108`, // 
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
@@ -76,8 +76,7 @@ module.exports = {
       .options({
         symbolId: "icon-[name]"
       })
-      .end();
-
+      .end();    
     // set preserveWhitespace
     config.module
       .rule("vue")
