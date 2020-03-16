@@ -92,17 +92,22 @@
         </el-table-column>
         <el-table-column prop="cluesListObj.list"
                          label="名片">
+                         
           <template slot-scope="scope">
             <el-row>
-              <el-col :span="12">
+              <el-col :span="18">
                 <h2 class="highblue">{{scope.row.entName}}</h2>
               </el-col>
-              <el-col :span="12">{{scope.row.legalName}} | {{scope.row.regDateTimestamp}} | {{scope.row.regCapital}}</el-col>
+              <el-col :span="6" class="com-tips">
+                <span>{{scope.row.legalName}}</span>|
+                <span>{{scope.row.regDateTimestamp}}</span>|
+                <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
+              </el-col>
             </el-row>
             <div class="com-lable">
               <span>
-                <span class="label-blue">地址</span>
-                <span>{{scope.row.address}}</span>
+                <span class="label-blue" >地址</span>
+                <span :title="scope.row.address">{{scope.row.address | ellipsis}}</span>
               </span>
               <span class="label-dark-gray" v-show="scope.row.callStatus==0 || !scope.row.callStatus">未拨打</span>
               <span class="label-blue" v-show="scope.row.callStatus==1">已接通</span>
@@ -133,12 +138,12 @@
                :model="curCluesForm"          
                width="600px">
        <div class="call-duration" v-show="callPanelVisible">
-         <h2 class="call-company highblue">北京文投大数据</h2>
+         <h2 class="call-company highblue">{{curCluesForm.entName}}</h2>
         <p class="call-company-duration">{{countTime}}</p>        
         <el-button type="danger"
                    round @click="dropCall">挂断</el-button>
        </div>
-      <el-form label-width="120px">
+      <el-form label-width="120px" :class="moreForm ?'heightAuto':'heightShort'">
         <el-form-item label="公司名称：" prop="entName">
           <el-input v-model="curCluesForm.entName"
                     placeholder="请输入公司名称" disabled></el-input>
@@ -189,6 +194,9 @@
                     placeholder="请输入内容"></el-input>
         </el-form-item>
       </el-form>
+      <el-row type="flex" justify="end">
+        <el-col :span="4" class="moreForm highblue"><span @click="toggleHeight">展开更多信息</span></el-col>
+      </el-row>
       <el-row type="flex"
               justify="end" class="add-clues-handle">
         <el-col :span="6">
@@ -228,11 +236,36 @@ import {transforserClues} from '@/api/cardmanage'
 import {parseToTimestamp, parseTime} from '@/utils/index'
 import {getCluesList,postCluesToSelf,updateClues} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
-import {getLocalStorage} from '@/utils/index'
+import {getLocalStorage,cutString} from '@/utils/index'
 export default {
   name: 'CompanyList',
+  filters: {
+    ellipsis (str) {
+      if(str.length*2 <= 22) {
+        return str
+    }
+    var strlen = 0
+    var s = ""
+    for(var i = 0;i < str.length; i++) {
+        s = s + str.charAt(i)
+        if (str.charCodeAt(i) > 128) {
+            strlen = strlen + 2
+            if(strlen >= 22){
+                return s.substring(0,s.length-1) + "..."
+            }
+        } else {
+            strlen = strlen + 1
+            if(strlen >= 22){
+                return s.substring(0,s.length-2) + "..."
+            }
+        }
+    }
+    return s
+    }
+  },
   data () {
     return {
+      moreForm:false,
       cluesSource: ['新企推荐','企业查询', '转线索','回收站'],
       clueStatus:['已拔通','未拔通','空号'],
       sortType:['注册资本-升序','注册资本-降序','成立时间-升序','成立时间-降序'],
@@ -274,6 +307,11 @@ export default {
       countTime:'正在呼叫中...'
     }
   },
+  mounted(){
+    if(this.holdOn){
+      console.log('已经刷新但通话在继续')
+    }
+  },
   created(){
     // this.dropCall() //刷新挂断电话
     this.fetchCluesList()
@@ -300,6 +338,9 @@ export default {
     }
   },
   methods: {
+    toggleHeight(){
+      this.moreForm = !this.moreForm
+    },
     timerStart(){      
       this.timer = setInterval(()=>{
         ++this.time
@@ -377,8 +418,10 @@ export default {
     },
     oneTouchCall (index,row) {//一键呼叫
       this.curCluesVisible = true
+      this.callPanelVisible = true
       this.callDurationVisible = true
-      this.$store.commit('callcenter/SET_USERTEL', row.telePhone || '17610100629')//传入当前被叫用户手机号码
+      // this.$store.commit('callcenter/SET_USERTEL', row.telePhone || '17610100629')//传入当前被叫用户手机号码
+      this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
       this.curCluesForm = {
         id:row.id,//线索id
         entName:row.entName,//公司名称
@@ -459,20 +502,26 @@ export default {
         font-weight: 100;
       }
     }
+    .com-tips{
+      span{
+        padding: 0 10px;
+      }
+    }
   }
   .com-lable {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    span{
+      min-width:52px;
+    }
   }
 }
 .add-clues{
-  z-index: 2006 !important;
   .el-dialog{
     border-radius: 10px;
     .el-dialog__body{
       z-index: 2006;
-      height: 50vh;
       overflow-y: scroll;
       overflow-x:hidden; 
     } 
@@ -483,6 +532,17 @@ export default {
         }
       }
     } 
+    .heightAuto{ 
+      height: auto;
+    }
+    .heightShort{     
+      height: 19vh;
+      overflow: hidden;
+    }
+    .moreForm{
+      padding: 10px 0;
+      cursor: pointer;
+    }
     .el-tips{
       margin-top: 5px;
     }

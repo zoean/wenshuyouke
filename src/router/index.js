@@ -108,7 +108,7 @@ export const asyncRouterMap = [{
   {
     path: "/cluesmanagement",
     component: Layout,
-    name: "Form",
+    name: "cluesmanagement",
     redirect: "/cluesmanagement/listmanage",
     meta: {
       title: "线索管理",
@@ -230,7 +230,6 @@ export const asyncRouterMap = [{
     path: "/",
     component: Layout,
     redirect: "/home",
-    alwaysShow: true,
     meta:{
       title: "设置中心",
       icon: "dashboard"

@@ -26,10 +26,17 @@ router.beforeEach(async (to, from, next) => {
   // determine whether the user has logged in
   const hasToken = getToken()
   if (hasToken) { 
-    if (to.path === '/login') {
+    const hasGetUserInfo = store.getters.name
+      if (!hasGetUserInfo) {
+        await store.dispatch('user/getInfo')
+        const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
+        // dynamically add accessible routes
+        router.addRoutes(accessRoutes)
+        router.options.routes.push(accessRoutes)
+      }
+    if (to.path === '/login' || to.path === '/' || to.path === '/cluesmanagement/saleslead') {
       // if is logged in, redirect to the home page
       let roles = store.getters.roles
-        console.log(to)
       if(roles.indexOf('admin') >=0){
         next({
           path: '/'

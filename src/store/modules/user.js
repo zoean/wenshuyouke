@@ -131,9 +131,9 @@ const actions = {
         commit('SET_NAME', realName)
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
-        // debugger
         resolve(obj)
       }).catch(error => {
+        console.log(9)
         reject(error)
       })
     })
