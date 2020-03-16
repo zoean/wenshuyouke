@@ -133,7 +133,6 @@ const actions = {
         commit('SET_ROLES', roleType)
         resolve(obj)
       }).catch(error => {
-        console.log(9)
         reject(error)
       })
     })
@@ -166,10 +165,10 @@ const actions = {
     commit
   }) {
     return new Promise(resolve => {
+      removeToken() // must remove  token  first
       removeLocalStorage('userId')      
       removeLocalStorage('userName')      
       removeLocalStorage('enterpriseName')
-      removeToken() // must remove  token  first
       commit('RESET_STATE')
       resolve()
     })

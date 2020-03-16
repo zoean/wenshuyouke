@@ -2,9 +2,9 @@
   <div class="navbar">
     <!-- <hamburger :is-active="sidebar.opened"
                class="hamburger-container"
-               @toggleClick="toggleSideBar" /> -->
+               @toggleClick="toggleSideBar" />
 
-    <!-- <breadcrumb class="breadcrumb-container" /> -->
+    <breadcrumb class="breadcrumb-container" /> -->
     <img width="134"
          height="29"
          class="logo"
@@ -113,22 +113,22 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+// import { mapGetters } from 'vuex'
+// import Breadcrumb from '@/components/Breadcrumb'
+// import Hamburger from '@/components/Hamburger'
 
 export default {
-  components: {
-    Breadcrumb,
-    Hamburger
-  },
-  computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'name'
-    ])
-  },
+  // components: {
+  //   Breadcrumb,
+  //   Hamburger
+  // },
+  // computed: {
+  //   ...mapGetters([
+  //     'sidebar',
+  //     'avatar',
+  //     'name'
+  //   ])
+  // },
   methods: {
     toggleSideBar () {
       this.$store.dispatch('app/toggleSideBar')

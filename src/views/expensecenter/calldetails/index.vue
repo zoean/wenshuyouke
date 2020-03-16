@@ -4,12 +4,12 @@
 			<dl>
 				<dt>统计范围：</dt>
 				<dd>
-					<el-select v-model="searchForm.userId" placeholder="请选择名单">
+					<el-select v-model="searchForm.extentionno" placeholder="请选择名单">
             <el-option
               v-for="(item,index) in subAccount"
               :key="index.id"
-              :label="item.listName"
-              :value="item.id">
+              :label="item.realName"
+              :value="item.extentionno">{{item.realName}}
             </el-option>
           </el-select>
 				</dd>
@@ -35,38 +35,31 @@
                 :data="orderDetailList.list"
                 tooltip-effect="dark"
                 style="width: 100%">        
-        <el-table-column label="呼叫时间" prop="name">
-          <template slot-scope="scope">{{ scope.row.entName }}</template>
+        <el-table-column label="呼叫时间" prop="starttime" :formatter="formatDate" width="160px">
         </el-table-column>
         <el-table-column prop="storageTime"
-                         label="领取时间" :formatter="formatDate">
+                         label="帐号" width="100px">
+                         <template slot-scope="scope">{{ scope.row.workno }}</template>
         </el-table-column>
         <el-table-column prop="updateTime"
-                         label="最后跟进时间"
-                         show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.lastFollowTime }}</template>
+                         label="被呼叫号码" width="120px">
+          <template slot-scope="scope">{{ scope.row.called }}</template>
         </el-table-column>
-        <el-table-column prop="callStatus"
-                         label="线索状态" :formatter="matchClueStatus">
-          <template slot-scope="scope">
-            <span v-if="scope.row.fllowupStatus == 0">待跟进</span>
-            <span v-if="scope.row.fllowupStatus == 1">有意向</span>
-            <span v-if="scope.row.fllowupStatus == 2">无意向</span>
-            <span v-if="scope.row.fllowupStatus == 3">已成交</span>
-            <span v-if="scope.row.fllowupStatus == 4">未成交</span>
-          </template>
+        <el-table-column prop="connecttime"
+                         label="接通呼叫时间" :formatter="formatDate" width="160px">
+        </el-table-column>
+        <el-table-column prop="endtime"
+                         label="结束呼叫时间" :formatter="formatDate" width="160px">
         </el-table-column>
         <el-table-column prop="address"
-                         label="地区">
-          <template slot-scope="scope">{{ scope.row.entName }}</template>
+                         label="通话时长" width="120px">
+          <template slot-scope="scope">{{ scope.row.timelen }}s</template>
         </el-table-column>
-        <el-table-column prop="remark"
-                         label="备注">
-          <template slot-scope="scope">{{ scope.row.reMark || '--' }}</template>
-        </el-table-column>
-        <el-table-column prop="clueStatus"
-                         label="提醒">
-          <template slot-scope="scope">添加提醒</template>
+        <el-table-column prop="address"
+                         label="通话录音">
+          <template slot-scope="scope">
+            <audio width="100" :src="scope.row.recordfilename" controls="controls"></audio>
+          </template>
         </el-table-column>
       </el-table>
       <el-pagination @size-change="handleSizeChange"
@@ -83,14 +76,14 @@
 <script>
 import {getSubAccounts} from '@/api/cardmanage'
 import {getCallList} from '@/api/orderdetail'
-import {getLocalStorage,parseToTimestamp,beforeToday,beforeAweek} from '@/utils/index'
+import {getLocalStorage,parseToTimestamp,beforeToday,beforeAweek,parseTime} from '@/utils/index'
 export default {
 	data(){
 		return {
 			subAccount:[],//当前用户下属子帐户
 			choseTime:[],//搜索时间选择
 			searchForm:{
-				extentionno:'6001',
+				extentionno:'6002',
 				pageNum:1,
 				pageSize:10
 			},
@@ -104,24 +97,30 @@ export default {
         this.fetchOrderList()
       },
       deep: true //开启深度监听
-    },
-    test:{
-    	handler:function(val,oldval){
-    		console.log(val)
-    	}
     }
   },
-	created(){		
+	created(){	
 		getSubAccounts({parentId:getLocalStorage('userId')}).then(response=>{//获取子帐户列表
 			try{
 				this.subAccount = response.data.obj
 			}catch(e){}
 		})
+    this.fetchOrderList()
 	},
 	methods:{
+    formatDate(row, column, cellValue){//表格时间列格式化时间
+      // return cellValue
+      if(cellValue){
+        return parseTime(cellValue)
+      }else{
+        return '--'
+      }
+    },
 		fetchOrderList(){
 			getCallList(this.searchForm).then(response => {
-				console.log(response)
+				try{
+          this.orderDetailList = response.data.obj
+        }catch(e){}
 			})
 		},
 		pickerDate(val){//时间处理-转时间戳并截取前十位
@@ -130,13 +129,15 @@ export default {
     	this.fetchOrderList()
 		},
 		pickerToday(){
-			this.searchForm.startTime = parseToTimestamp(beforeToday()[0],10)
-    	this.searchForm.endTime = parseToTimestamp(beforeToday()[1],10)
+			this.searchForm.endTime = parseToTimestamp(beforeToday()[0],10)
+    	this.searchForm.startTime = parseToTimestamp(beforeToday()[1],10)
     	this.fetchOrderList()
 		},
 		pickerThisWeek(){
-			this.searchForm.startTime = parseToTimestamp(beforeAweek()[0],10)
-    	this.searchForm.endTime = parseToTimestamp(beforeAweek()[1],10)
+      console.log(parseTime(parseToTimestamp(beforeAweek()[0],10)))
+      console.log(parseTime(parseToTimestamp(beforeAweek()[1],10)))
+			this.searchForm.endTime = parseToTimestamp(beforeAweek()[0],10)
+    	this.searchForm.startTime = parseToTimestamp(beforeAweek()[1],10)
     	this.fetchOrderList()
 		},
     handleSizeChange(pageSize){

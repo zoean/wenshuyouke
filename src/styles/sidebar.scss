@@ -2,8 +2,8 @@
   background: #edf1f7;
   .main-container {
     min-height: 100%;
-    // transition: margin-left .28s;
-    // margin-left: $sideBarWidth;
+    transition: margin-left .28s;
+    margin-left: $sideBarWidth;
     position: relative;
   }
 
@@ -12,9 +12,9 @@
     width: $sideBarWidth !important;
     background-color: $menuBg;
     height: 100%;
-    position: absolute;
+    position: fixed;
     font-size: 0px;
-    top: 10px;
+    top: 80px;
     bottom: 0;
     left: 0;
     z-index: 11;

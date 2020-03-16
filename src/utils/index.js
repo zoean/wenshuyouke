@@ -110,7 +110,7 @@ export function beforeToday(){
 */
 export function beforeAweek(){
   let nowStamp = new Date().getTime()
-  let beforeAweekTime = (nowStamp-(24*60*60*1000))*7
+  let beforeAweekTime = nowStamp-(24*60*60*1000*7)
   return [nowStamp, beforeAweekTime]
 }
 /**

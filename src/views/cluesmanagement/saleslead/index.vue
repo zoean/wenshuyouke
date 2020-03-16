@@ -338,6 +338,14 @@ export default {
     }
   },
   methods: {
+    formatDate(row, column, cellValue){//表格时间列格式化时间
+      // return cellValue
+      if(cellValue){
+        return parseTime(cellValue)
+      }else{
+        return '--'
+      }
+    },
     toggleHeight(){
       this.moreForm = !this.moreForm
     },
@@ -503,6 +511,7 @@ export default {
       }
     }
     .com-tips{
+      text-align: right;
       span{
         padding: 0 10px;
       }

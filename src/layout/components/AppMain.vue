@@ -1,5 +1,12 @@
 <template>
   <section class="app-main">
+    <div class="common-bar">
+      <hamburger :is-active="sidebar.opened"
+               class="hamburger-container highblue"
+               @toggleClick="toggleSideBar" />
+
+    <breadcrumb class="breadcrumb-container highblue" />
+    </div>
     <transition name="fade-transform"
                 mode="out-in">
       <router-view :key="key" />
@@ -8,11 +15,28 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+import Breadcrumb from '@/components/Breadcrumb'
+import Hamburger from '@/components/Hamburger'
 export default {
   name: 'AppMain',
+  components: {
+    Breadcrumb,
+    Hamburger
+  },
   computed: {
+    ...mapGetters([
+      'sidebar',
+      'avatar',
+      'name'
+    ]),
     key () {
       return this.$route.path
+    }
+  },
+  methods:{
+    toggleSideBar () {
+      this.$store.dispatch('app/toggleSideBar')
     }
   }
 }
@@ -26,7 +50,7 @@ export default {
   position: relative;
   overflow: hidden;
   margin-left: 0rem;
-  margin-left: 210px;
+  /* margin-left: 210px; */
   padding: 24px;
 }
 .fixed-header + .app-main {
@@ -39,6 +63,20 @@ export default {
 .el-popup-parent--hidden {
   .fixed-header {
     padding-right: 15px;
+  }
+}
+.common-bar{
+  display: flex;
+  justify-content: flex-start;
+  color:rgb(102, 102, 102);
+  .hamburger-container{
+    line-height:30px;
+    cursor:pointer;
+  }
+  .breadcrumb-container{
+    .el-breadcrumb__item{
+      line-height:30px;
+    }
   }
 }
 </style>
