@@ -102,6 +102,11 @@ export const asyncRouterMap = [{
           icon: "searchcompany",
           roles: ['super', 'admin']
         }
+      },
+      {
+        path: "details",
+        name: "details",
+        component: () => import("@/views/cluesmanagement/privatesea/details"),
       }
     ]
   },
@@ -142,6 +147,11 @@ export const asyncRouterMap = [{
           icon: "privatesea",
           roles: ['super', 'seat']
         }
+       },
+       {
+        path: "details",
+        name: "details",
+        component: () => import("@/views/cluesmanagement/privatesea/details"),
       },
       {
         path: "recycle",

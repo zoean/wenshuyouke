@@ -81,7 +81,7 @@
 </template>
 <script>
 import { validUsername } from '@/utils/validate'
-
+import { getLocalStorage } from '@/utils/index'
 export default {
   name: 'TestTracking',
   data() {
@@ -127,20 +127,19 @@ export default {
     },
     infoshow(){
       this.$store.dispatch('user/getInfo')
-        .then((res) => {
-          this.upload = this.companyinfo = res.enterprise
-          console.log(this.companyinfo)
-          window.localStorage.setItem('companyid', res.id)
-          this.companyinfo.id=window.localStorage.getItem('companyid')
-          if(res.enterprise.enterpriseLogo){
-            this.companyinfo.enterpriseLogo = res.enterprise.enterpriseLogo
-          }else{
-            this.companyinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
-          }
+      .then((res) => {
+        this.upload = this.companyinfo = res.enterprise
+        // window.localStorage.setItem('companyid', res.id)
+        this.companyinfo.id=window.localStorage.getItem('userId')
+        if(res.enterprise.enterpriseLogo){
+          this.companyinfo.enterpriseLogo = res.enterprise.enterpriseLogo
+        }else{
+          this.companyinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
+        }
 
-        })
-        .catch(() => {
-        })
+      })
+      .catch(() => {
+      })
     },
     black() {
       this.blackcolor = true
