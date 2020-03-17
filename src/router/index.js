@@ -54,7 +54,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "企业主页",
           icon: "dashboard",
-          roles:['admin']
+          role:['admin']
         }
       }]
     },  
@@ -69,7 +69,7 @@ export const asyncRouterMap = [{
   //     meta: {
   //       title: "工作台",
   //       icon: "workbench",
-  //       roles: ['admin', 'super']
+  //       role: ['admin', 'super']
   //     }
   //   }]
   // },
@@ -90,7 +90,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "新企推荐",
           icon: "newcompany",
-          roles: ['admin', 'super']
+          role: ['admin', 'super']
         }
       },
       {
@@ -126,7 +126,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "名单管理",
           icon: "databag",
-          roles: ['super', 'admin']
+          role: ['super', 'admin']
         }
       }, {
         path: "saleslead",
@@ -135,7 +135,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "销售商机",
           icon: "databag",
-          roles: ['super', 'seat']
+          role: ['super', 'seat']
         }
       },
       {
@@ -251,7 +251,7 @@ export const asyncRouterMap = [{
       meta: {
         title: "部门用户设置",
         icon: "dashboard",
-        roles:['admin']
+        role:['admin']
       }
     },{
       path: "rolepermission",
@@ -260,7 +260,7 @@ export const asyncRouterMap = [{
       meta: {
         title: "角色权限设置",
         icon: "dashboard",
-        roles:['admin']
+        role:['admin']
       }
     }]
   },

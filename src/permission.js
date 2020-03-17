@@ -25,20 +25,15 @@ router.beforeEach(async (to, from, next) => {
   document.title = getPageTitle(to.meta.title)
   // determine whether the user has logged in
   const hasToken = getToken()
-  let roles = store.getters.roles
-  if (hasToken) { 
-    console.log(roles)
-    if (to.path === '/login' || to.path === '/home' && roles.length > 0) {
-      console.log('去登录有权限')
+  if (hasToken) {
+    if (to.path === '/login') {
       // if is logged in, redirect to the home page
+      let roles = store.getters.roles
+        console.log(to)
       if(roles.indexOf('admin') >=0){
-        if(to.path == '/home'){
-          next()
-        }else{
-          next({
-            path: '/home'
-          })
-        }        
+        next({
+          path: '/'
+        })
       }else if(roles.indexOf('seat') >=0){
         if(to.path == '/cluesmanagement/saleslead'){
           next()
@@ -62,19 +57,10 @@ router.beforeEach(async (to, from, next) => {
           // dynamically add accessible routes
           router.addRoutes(accessRoutes)
           router.options.routes.push(accessRoutes)
-          if(store.getters.roles.indexOf('seat') >= 0){
-            if(to.path == '/cluesmanagement/saleslea'){
-              next()
-            }else{
-              next({
-                path: '/cluesmanagement/saleslea'
-              })
-            }
-          }
-          // next({
-          //   ...to,
-          //   replace: true
-          // })
+          next({
+            ...to,
+            replace: true
+          })
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
