@@ -103,10 +103,6 @@
 				      width="55">
 				    </el-table-column>
 				    <el-table-column
-				      label="状态">
-				      <template slot-scope="scope">{{ scope.row.entStatus }}</template>
-				    </el-table-column>
-				    <el-table-column
 				      prop="name"
 				      label="企业名称" ref="multipleTable">				      
 				      <template slot-scope="scope">{{ scope.row.entName }}</template>
@@ -157,10 +153,13 @@
 				</template>
     	</div>
     	<el-pagination
-			  background
-			  layout="prev, pager, next"
-			  :total="this.newComList.pages"
-			  @current-change="reloadNewComList">
+			  @size-change="handleSizeChange"
+	      @current-change="handleCurrentChange"
+	      :current-page="searchForm.pageNum"
+	      :page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]"
+	      :page-size="searchForm.pageSize"
+	      layout="total, sizes, prev, pager, next, jumper"
+	      :total="newComList.total">
 			</el-pagination>
     </div>
   </div>
@@ -193,6 +192,15 @@ export default {
   	this.getNewComList() //初始化获取第一页新企列表
   	this.getCurUserCardHandle() //获取当前用户名单列表用于领取新企数据到名单
   },
+  watch:{//监听搜索条件变化，请求数据
+    searchForm:{
+      handler:function(val,oldval){//监听回调
+        this.getNewComList()
+      },
+      deep: true //开启深度监听
+    }
+  },
+
   methods: {
   	getNewComList(){//新企列表
   		requestNewComList(this.searchForm).then(response=>{
@@ -238,6 +246,12 @@ export default {
     	for(let i in val){
     		this.getNewComForm.entId.push(val[i].id)    		
     	}
+    },
+    handleSizeChange(pageSize){
+      this.searchForm.pageSize = pageSize
+    },
+    handleCurrentChange(pageNum){
+      this.searchForm.pageNum = pageNum
     }
   }
  }

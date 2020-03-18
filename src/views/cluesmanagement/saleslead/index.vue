@@ -95,12 +95,12 @@
                          
           <template slot-scope="scope">
             <el-row>
-              <el-col :span="18">
+              <el-col :span="12">
                 <h2 class="highblue">{{scope.row.entName}}</h2>
               </el-col>
-              <el-col :span="6" class="com-tips">
+              <el-col :span="12" class="com-tips">
                 <span>{{scope.row.legalName}}</span>|
-                <span>{{scope.row.regDateTimestamp | transDate}}</span>|
+                <span>{{scope.row.regDateTimestamp | transDateSub}}</span>|
                 <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
@@ -267,8 +267,14 @@ export default {
         return parseTime(val)
       }else{
         return '--'
-      }
-      
+      }      
+    },
+    transDateSub(val){
+      if(val){
+        return parseTime(val).substring(0, 10)
+      }else{
+        return '--'
+      } 
     }
   },
   data () {

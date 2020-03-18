@@ -55,11 +55,11 @@ service.interceptors.response.use(
         location.reload()
       })
     }
-    Message({
-      message: '登录过期，请重新登录',
-      type: 'error',
-      duration: 5 * 1000
-    })
+    // Message({ //升级用户体验，暂不显示报错
+    //   message: '登录过期，请重新登录',
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
     return Promise.reject(error)
   }
 )

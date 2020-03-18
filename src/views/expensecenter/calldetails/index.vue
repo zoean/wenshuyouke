@@ -34,16 +34,20 @@
 			<el-table ref="listDetailTable"
                 :data="orderDetailList.list"
                 tooltip-effect="dark"
-                style="width: 100%">        
-        <el-table-column label="呼叫时间" prop="starttime" :formatter="formatDate" width="160px">
-        </el-table-column>
+                style="width: 100%" align="center">
         <el-table-column prop="storageTime"
-                         label="帐号" width="100px">
+                         label="坐席名称" width="100px">
                          <template slot-scope="scope">{{ scope.row.workno }}</template>
-        </el-table-column>
+        </el-table-column>   
+        <el-table-column prop="storageTime"
+                         label="坐席号码" width="100px">
+                         <template slot-scope="scope">{{ scope.row.extentionno }}</template>
+        </el-table-column>     
         <el-table-column prop="updateTime"
-                         label="被呼叫号码" width="120px">
-          <template slot-scope="scope">{{ scope.row.called }}</template>
+                         label="主呼叫号码" width="120px">
+          <template slot-scope="scope">{{ scope.row.caller }}</template>
+        </el-table-column>
+        <el-table-column label="呼叫时间" prop="starttime" :formatter="formatDate" width="160px">
         </el-table-column>
         <el-table-column prop="connecttime"
                          label="接通呼叫时间" :formatter="formatDate" width="160px">
@@ -58,7 +62,8 @@
         <el-table-column prop="address"
                          label="通话录音">
           <template slot-scope="scope">
-            <audio width="100" :src="scope.row.recordfilename" controls="controls"></audio>
+            <audio v-if="scope.row.recordfilename" width="100" :src="scope.row.recordfilename" controls="controls"></audio>
+            <span v-else>--</span>
           </template>
         </el-table-column>
       </el-table>
@@ -76,7 +81,7 @@
 <script>
 import {getSubAccounts} from '@/api/cardmanage'
 import {getCallList} from '@/api/orderdetail'
-import {getLocalStorage,parseToTimestamp,beforeToday,beforeAweek,parseTime} from '@/utils/index'
+import {getLocalStorage,parseToTimestamp,beforeToday,beforeAweek,parseTime,parseDateTime} from '@/utils/index'
 export default {
 	data(){
 		return {
@@ -111,7 +116,7 @@ export default {
     formatDate(row, column, cellValue){//表格时间列格式化时间
       // return cellValue
       if(cellValue){
-        return parseTime(cellValue)
+        return parseDateTime(cellValue)
       }else{
         return '--'
       }

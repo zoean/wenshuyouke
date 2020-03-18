@@ -24,7 +24,7 @@ export function parseTime(time, cFormat) {
   if (typeof time === 'object') {
     date = time
   } else {
-    if ((typeof time === 'string') && (/^[0-9]+$/.test(time))) {
+    if ((typeof time === 'string') || (/^[0-9]+$/.test(time))) {
       time = parseInt(time)
     }
     if ((typeof time === 'number') && (time.toString().length === 10)) {
@@ -48,6 +48,9 @@ export function parseTime(time, cFormat) {
     return value.toString().padStart(2, '0')
   })
   return time_str
+}
+export function parseDateTime(time, cFormat){
+  return time.replace(/T/g, " ").substring(0, 19)
 }
 
 /**
