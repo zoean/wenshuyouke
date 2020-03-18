@@ -66,3 +66,11 @@ export function transforserClues(data){
 		data
 	})
 }
+
+export function changeFollowStatus(data){
+	return request({
+		url:'marketing/list_manage/detail/edit',
+		method:'post',
+		data
+	})
+}

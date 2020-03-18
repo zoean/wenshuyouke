@@ -1,78 +1,5 @@
 <template>
   <div class="newcom-wrap">
-    <!-- <div class="search-area">      
-      <dl>
-        <dt>所在地区：</dt>
-        <dd>
-          <el-checkbox-group v-model="searchForm.dataSource" @change="selectSource">
-            <!-- 监听取label的值 模板语法里为显示内容 -->
-            <!--<el-checkbox-button v-for="(source,index) in cluesSource" :label="index" :key="source" :value="index">{{source}}</el-checkbox-button>
-          </el-checkbox-group>
-        </dd>
-      </dl>
-      <dl>
-        <dt>成立时间：</dt>
-        <dd>
-          <el-date-picker v-model="datePicker" type="datetimerange"
-                          range-separator="至"
-                          start-placeholder="开始日期"
-                          end-placeholder="结束日期"
-                          align="right"
-                          value-format="timestamp"
-                          @change="pickerDate">
-          </el-date-picker>
-        </dd>
-      </dl>
-      <dl>
-        <dt>查询条件：</dt>
-        <dd>
-          <template>
-            <el-select v-model="searchForm.clueStatus"
-                       placeholder="请选择">
-              <el-option v-for="(item,index) in clueStatus"
-                         :key="index"
-                         :label="item"
-                         :value="index">
-              </el-option>
-            </el-select>
-          </template>
-        </dd>
-        <dd>
-          <template>
-            <el-select v-model="searchForm.order"
-                       placeholder="请选择">
-              <el-option v-for="(item,index) in sortType"
-                         :key="item"
-                         :label="item"
-                         :value="index">
-              </el-option>
-            </el-select>
-          </template>
-        </dd>
-        <dd>
-          <el-input v-model="searchForm.entName"></el-input>
-        </dd>
-      </dl>
-      <div class="companyHandle">
-        <p>本次更新<span class="highred">{{cluesListObj.total || 0}}</span>条，更新时间为12-02</p>
-        <div class="move-clue-to-card">
-          <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
-            <el-option
-              v-for="(item,index) in curUserCardList"
-              :key="index.id"
-              :label="item.listName"
-              :value="item.id">
-            </el-option>
-          </el-select>
-          <el-button slot="reference"
-                   type="primary"
-                   round @click="moveClueToCardHandle">转移</el-button>
-          <el-button slot="reference"
-                   type="primary"
-                   round @click="moveClueToSelfHandle">线索转移</el-button>
-        </div> 
-      </div>
-    </div> -->
     <div class="newcom-main">
     	<div class="search-result">
     		<span>文投优客今天为您推荐了<b>{{newComList.total}}</b>家符合条件的企业</span>
@@ -96,7 +23,6 @@
 				    ref="multipleTable"
 				    :data="newComList.list"
 				    tooltip-effect="dark"
-				    style="width: 100%"
 				    @selection-change="handleSelectionChange" empty-text="数据正在加载……">
 				    <el-table-column
 				      type="selection"
@@ -104,15 +30,9 @@
 				    </el-table-column>
 				    <el-table-column
 				      prop="name"
-				      label="企业名称" ref="multipleTable">				      
+				      label="企业名称" ref="multipleTable" width="320px" show-overflow-tooltip>				      
 				      <template slot-scope="scope">{{ scope.row.entName }}</template>
 				    </el-table-column>
-				    <!-- <el-table-column
-				      prop="address"
-				      label="所在地区"
-				      show-overflow-tooltip>
-				      <template slot-scope="scope">{{ scope.row.address }}</template>
-				    </el-table-column> -->
 				    <el-table-column
 				      prop="address"
 				      label="所属行业"

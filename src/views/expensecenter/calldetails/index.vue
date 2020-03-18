@@ -35,6 +35,9 @@
                 :data="orderDetailList.list"
                 tooltip-effect="dark"
                 style="width: 100%" align="center">
+        <el-table-column
+                type="index"
+                width="50" label="序号"></el-table-column>
         <el-table-column prop="storageTime"
                          label="坐席名称" width="100px">
                          <template slot-scope="scope">{{ scope.row.workno }}</template>

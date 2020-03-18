@@ -39,9 +39,9 @@
             <span>消息</span>
           </p>
           <el-dropdown-menu>
-            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
-            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
-            <el-dropdown-item>2020-02-02 【更新】不为人有中在有</el-dropdown-item>
+            <el-dropdown-item>2020-03-18 【帐户】坐席6001已开通帐号,请...</el-dropdown-item>
+            <el-dropdown-item>2020-03-16 【充值】您已成功充值200000元...</el-dropdown-item>
+            <el-dropdown-item>2020-03-12 【通话】您的通话时长已不足100...</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> 
         <el-dropdown>          
@@ -197,7 +197,7 @@ export default {
         font-size: 16px;
       }
     }
-    .el-dropdown:hover{
+    .el-dropdown.isactive{
       background: #4088FF;
       color: #fff;
     }

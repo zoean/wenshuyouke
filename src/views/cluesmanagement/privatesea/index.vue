@@ -5,7 +5,7 @@
         <dt>商机状态：</dt>
         <dd>
           <el-radio-group v-model="radiostatus" @change="changeselect">
-            <el-radio label="0" border size="medium">转跟进</el-radio>
+            <el-radio label="0" border size="medium">待跟进</el-radio>
             <el-radio label="1" border size="medium">有意向</el-radio>
             <el-radio label="2" border size="medium">无意向</el-radio>
             <el-radio label="3" border size="medium">已成交</el-radio>
@@ -25,14 +25,12 @@
       <dl>
         <dt>内容搜索：</dt>
         <dd>
-          <el-input v-model="input3" placeholder="请输入内容">
-            <el-select slot="prepend" v-model="typeselect" placeholder="请选择">
+            <el-select slot="prepend" v-model="typeselect" @change="changeselect()" placeholder="请选择">
               <el-option label="公司名称" value="1" />
               <el-option label="注册地址" value="2" />
               <el-option label="注册资金" value="3" />
             </el-select>
-            <el-button slot="append" circle icon="el-icon-search" @click="changeselect()" />
-          </el-input>
+            <el-input v-model="input3" placeholder="请输入内容"></el-input>
         </dd>
       </dl>
       <el-popover
@@ -112,20 +110,43 @@
       >
         <el-table-column type="selection" width="55" />
         <!-- <el-table-column prop="id" label="id" width="50" /> -->
-        <el-table-column prop="name" label="联系人" sortable />
-        <el-table-column prop="address" label="地址" show-overflow-tooltip />
-        <el-table-column prop="wechat" label="微信" show-overflow-tooltip />
-        <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
-        <el-table-column prop="lastFollowTime" label="最后跟进时间" show-overflow-tooltip sortable />
-        <el-table-column prop="updateTime" label="收藏时间" show-overflow-tooltip sortable />
-        <el-table-column prop="entName" label="企业名称" show-overflow-tooltip sortable @click="a" />
-        <el-table-column prop="telePhone" label="电话" show-overflow-tooltip />
-        <el-table-column prop="regDate" label="成立时间" show-overflow-tooltip sortable />
-        <el-table-column prop="regCapital" label="注册资本" show-overflow-tooltip sortable />
-        <el-table-column prop="dataSource" label="线索来源" show-overflow-tooltip />
+        <el-table-column prop="entName" label="企业名称" show-overflow-tooltip @click="a" />
+        <el-table-column prop="address" label="地址" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="regDate" label="成立时间" show-overflow-tooltip />
+        <el-table-column prop="regCapital" label="注册资本(万元)" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{Math.floor(scope.row.regCapital)}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="name" label="联系人">
+          <template slot-scope="scope">{{scope.row.name || '--'}}</template>
+        </el-table-column>
+        <el-table-column prop="contact" label="联系方式" show-overflow-tooltip>
+          <template slot-scope="scope">{{scope.row.contact || '--'}}</template>
+        </el-table-column>
+        <el-table-column prop="lastFollowTime" label="最后跟进时间" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.lastFollowTime | parseDateTime}}
+          </template>
+        </el-table-column>
+        <el-table-column prop="updateTime" label="收藏时间" show-overflow-tooltip>
+          <template slot-scope="scope">
+            {{scope.row.updateTime | parseDateTime}}
+          </template>
+        </el-table-column>
+        
+        
+        <el-table-column prop="dataSource" label="线索来源" show-overflow-tooltip>
+          <template slot-scope="scope">
+            <span v-show="scope.row.dataSource == 0">新企推荐</span>
+            <span v-show="scope.row.dataSource == 1">企业搜索</span>
+            <span v-show="scope.row.dataSource == 2">转线索</span>
+            <span v-show="scope.row.dataSource == 3">回收站</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="clueStatus" property="clueStatus" label="线索状态" show-overflow-tooltip>
           <template slot-scope="status">
-            <span v-if="status.row.clueStatus == 0">转跟进</span>
+            <span v-if="status.row.clueStatus == 0">待跟进</span>
             <span v-if="status.row.clueStatus == 1">有意向</span>
             <span v-if="status.row.clueStatus == 2">无意向</span>
             <span v-if="status.row.clueStatus == 3">已成交</span>
@@ -133,20 +154,25 @@
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="备注" show-overflow-tooltip />
+        <el-table-column prop="wechat" label="微信" show-overflow-tooltip />
+        <el-table-column prop="email" label="邮箱" show-overflow-tooltip />
       </el-table>
       <el-pagination
-        layout="total,prev, pager, next"
-        :current-page="pageNum"
-        :page-size="pageSize"
-        :total="total"
+        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
+        :current-page="pageNum"
+        :page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
       />
     </div>
   </div>
 </template>
 <script>
+import Vue from 'vue'
 import { getLocalStorage } from '@/utils/index'
-
+let parseDateTime = Vue.filter('parseDateTime')
 export default {
   name: 'CompanyList',
   data() {
@@ -158,6 +184,7 @@ export default {
       formLabelWidth: '120px',
       value3: null,
       entName: '',
+      input3:'',
       pickerOptions: {
         shortcuts: [{
           text: '最近一天',
@@ -211,6 +238,14 @@ export default {
     this.searchlist()
   },
   methods: {
+    handleSizeChange(pageSize){
+      this.pageSize = pageSize
+      this.searchclue()
+    },
+    handleCurrentChange(pageNum){
+      this.pageNum = pageNum
+      this.searchclue()
+    },
     godetails(val) {
       let thisdata = this
       thisdata = val
@@ -319,7 +354,7 @@ export default {
     },
 
     changeselect() {
-      this.searchclue({ 'clueStatus': this.radiostatus, 'type': this.typeselect, 'content': this.input3, 'startTime': this.value2[0], 'endTime': this.value2[1] })
+      this.searchclue({ 'clueStatus': this.radiostatus, 'type': this.typeselect, 'content': this.input3, 'startTime': this.value2[0]/1000, 'endTime': this.value2[1]/1000 })
     }
   }
 }
@@ -347,6 +382,8 @@ export default {
     align-items: center;
     dd {
       margin-left: 10px;
+      display: flex;
+      justify-content: flex-start
     }
   }
   div.companyHandle {

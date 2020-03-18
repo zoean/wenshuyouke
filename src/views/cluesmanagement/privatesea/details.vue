@@ -14,7 +14,7 @@
         </el-select>
       </el-row>
       <el-row>
-        {{ cluesinfo.legalName }}<span> | </span>{{ cluesinfo.regDate }}<span> | </span>{{ cluesinfo.regCapital }}{{ cluesinfo.regCurrency }}
+        {{ cluesinfo.legalName }}<span> | </span>{{ cluesinfo.regDate }}<span> | </span>{{ parseInt(cluesinfo.regCapital) }} 万元
       </el-row>
       <el-row>
         <el-col :span="10" type="flex" justify="space-between"><div><span>地址</span>{{ cluesinfo.address }}</div><div>{{ cluesinfo.callStatus }}</div></el-col>
@@ -23,8 +23,8 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button type="text" @click="lastshow">上一条</el-button>
-          <el-button type="text" @click="nextshow">下一条</el-button>
+          <el-button type="primary" @click="lastshow">上一条</el-button>
+          <el-button type="primary" @click="nextshow">下一条</el-button>
           <el-dialog title="线索转移" :visible.sync="dialogFormVisible">
             <p>将选择的线索转移到其他用户的线索中</p>
             <el-form-item label="用户名">
@@ -43,15 +43,27 @@
             </div>
           </el-dialog>
         </el-col>
-        <el-col :span="12" style="text-align: right;">
+        <el-col :span="12" style="text-align: right;" class="clue-handle">
+          <div class="move-clue-to-card">
+          <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
+            <el-option
+              v-for="(item,index) in curUserCardList"
+              :key="index.id"
+              :label="item.listName"
+              :value="item.id">
+            </el-option>
+          </el-select>
+          <el-button slot="reference"
+                   type="primary"
+                   round @click="moveClueToCardHandle">转移</el-button>
           <el-button type="info" round @click="cluedel">删除</el-button>
-          <el-button type="info" round @click="dialogFormVisible = true">转移</el-button>
+        </div>
         </el-col>
       </el-row>
     </div>
     <!-- 左下信息展示编辑 -->
     <div>
-      <el-row :gutter="10">
+      <el-row :gutter="10" class="con-wrap">
         <el-col :span="8">
           <div class="main-box">
             <h5 style="display: inline-block;">基本信息</h5><svg-icon icon-class="edit" @click="dialogFormVisible = true" />
@@ -114,7 +126,6 @@
                 <el-dialog
                 title="写跟进"
                   :visible.sync="dialogVisible"
-                 :before-close="handleClose"
                   width="400"
                   customClass="customWidth"
                 >
@@ -145,7 +156,6 @@
                     <el-form-item class="btns">
                       <el-button @click="dialogVisible = false">取消</el-button>
                       <el-button class="surebtn" type="primary" @click="cluefollowadd">保存</el-button>
-
                     </el-form-item>
                   </el-form>
                 </el-dialog>
@@ -169,7 +179,8 @@
 </template>
 <script>
 import { getLocalStorage } from '@/utils/index'
-
+import {getCurUserCard} from '@/api/foundclues'
+import {transforserClues} from '@/api/cardmanage'
 export default {
   name: 'CompanyList',
   data() {
@@ -204,18 +215,40 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       followinfos: [],
-      formLabelWidth: '100px'
+      formLabelWidth: '100px',
+      moveClueToCardForm:{
+        dataSource:2,
+        listId:'',
+      },
+      curUserCardList:[]
     }
   },
   created() {
     this.detailsinfo()
     this.searchlist()
     this.cluefollowselect()
+    this.fetchCardList()
   },
   methods: {
+    moveClueToCardHandle(){
+      this.moveClueToCardForm.listId = new Array(this.moveClueToCardForm.listId)
+      transforserClues(this.moveClueToCardForm).then(response=>{
+        try{
+          if(response.status == 200){
+            this.$message.success('线索已转移成功')
+            this.nextshow()
+            this.moveClueToCardForm.listId = ''
+          }
+        }catch(e){}
+      })
+    },
+    fetchCardList(){//获取当前用户名单列表用于线索转移
+      getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{
+        this.curUserCardList = response.data.obj
+      })
+    },
     a(cluesinfo) {
       this.followinfos = cluesinfo
-      console.log(cluesinfo)
     },
     detailsinfo() {
       this.id = { id: this.$route.query.id }
@@ -386,6 +419,16 @@ export default {
     justify-content: flex-end;
   }
 }
+.clue-handle{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  .move-clue-to-card{
+    display: flex;
+    flex-direction: row;
+  }
+}
+
 .header-box{
   .el-row{
     margin-bottom: 35px;
@@ -415,6 +458,10 @@ export default {
 }
 .el-pagination {
   margin-top: 20px;
+}
+.con-wrap{
+  display: flex;
+  flex-flow:row wrap;
 }
 .main-box{
   padding:30px;
@@ -522,7 +569,7 @@ export default {
         }
     }
     .infinite-list{
-      height: 360px;
+      height: 330px;
       li{
         background: #F7F7F7;
         padding:10px 30px 4px;

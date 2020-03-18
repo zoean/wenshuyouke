@@ -1,14 +1,6 @@
 <template>
   <div class="main-box">    
-    <div class="search-area"> <!--      
-      <dl>
-        <dt>商机状态：</dt>
-        <dd>
-          <el-checkbox-group v-model="searchForm.businessStatus">
-            <el-checkbox-button v-for="state in status" :label="state" :key="state">{{state}}</el-checkbox-button>
-          </el-checkbox-group>
-        </dd>
-      </dl>       -->
+    <div class="search-area">
       <dl>
         <dt>线索状态：</dt>
         <dd class="search-bar">
@@ -100,8 +92,8 @@
           </template>
         </el-table-column>
         <el-table-column prop="address"
-                         label="地区"  show-overflow-tooltip>
-          <template slot-scope="scope">{{ scope.row.entName }}</template>
+                         label="地区" show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.entAddress }}</template>
         </el-table-column>
         <el-table-column prop="remark"
                          label="备注">
@@ -109,7 +101,37 @@
         </el-table-column>
         <el-table-column prop="clueStatus"
                          label="提醒">
-          <template slot-scope="scope">添加提醒</template>
+          <template slot-scope="scope">
+            <el-dropdown v-show="scope.row.clueRemind == 2" class="tip-sales" @command="handleCommand" @click.native="beforeHandleCommand(scope.row.id)">
+              <span class="el-dropdown-link">
+                提醒销售<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="2">提醒销售</el-dropdown-item>
+                <el-dropdown-item command="1" class="follow-up">保持跟进</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown v-show="scope.row.clueRemind == 1" class="highblue" @command="handleCommand" @click.native="beforeHandleCommand(scope.row.id)">
+              <span class="el-dropdown-link">
+                保持跟进<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="2">提醒销售</el-dropdown-item>
+                <el-dropdown-item command="1">保持跟进</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            <el-dropdown v-show="!scope.row.clueRemind" @command="handleCommand" @click.native="beforeHandleCommand(scope.row.id)">
+              <span class="el-dropdown-link">
+                待添加<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="2">提醒销售</el-dropdown-item>
+                <el-dropdown-item command="1" class="follow-up">保持跟进</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+            
+
+        </template>
         </el-table-column>
       </el-table>
       <el-pagination @size-change="handleSizeChange"
@@ -129,9 +151,9 @@
 *searchGetListDetail-请求名单详情列表
 *transforserClues 转移线索请求
 */
-import {searchGetListDetail,transforserClues} from '@/api/cardmanage'
+import {searchGetListDetail,transforserClues,changeFollowStatus} from '@/api/cardmanage'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
-import {parseToTimestamp,parseTime} from '@/utils/index'
+import {parseToTimestamp,parseTime,parseDateTime} from '@/utils/index'
 import {getLocalStorage} from '@/utils/index'
 export default {
   name: 'CompanyList',  
@@ -180,7 +202,8 @@ export default {
         dataSource:0,
         listId:this.$store.state.cluesmanage.curCardId,
         entId:[]//选取的线索列表
-      }
+      },
+      changeTipStatus:{}
     }
   },
   methods:{
@@ -232,7 +255,7 @@ export default {
     },
     formatDate(row, column, cellValue){//表格时间列格式化时间
       // return cellValue
-      return parseTime(cellValue)
+      return parseDateTime(cellValue)
     },
     changeClueHandle(val){//将搜索条件线索状态的文字状态转换为对应id
       let cluesArray = []
@@ -268,6 +291,18 @@ export default {
       this.searchForm.endTime = parseToTimestamp(val[1],10)
       this.searchForm.fllowupStatus = this.searchForm.fllowupStatus
     },
+    beforeHandleCommand(id){
+      this.changeTipStatus.id = id
+    },
+    handleCommand(command){
+      this.changeTipStatus.clueRemind = command
+      changeFollowStatus(this.changeTipStatus).then(response => {
+        if(response.status == 200){
+          this.$message.success('提醒成功')
+          this.fetchListDetail()
+        }
+      })
+    },
     handleSizeChange(pageSize){
       this.searchForm.pageSize = pageSize
     },
@@ -302,6 +337,17 @@ export default {
   div.companyHandle {
     display: flex;
     justify-content: space-between;
+  }
+}
+.company-data{
+  .tip-sales{
+    color: #33CC99
+  }
+  .follow-up{
+    color:#000;
+  }
+  .el-dropdown-link{
+    cursor: pointer;
   }
 }
 .el-pagination {

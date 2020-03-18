@@ -11,6 +11,7 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+import filters from './utils/filter'//引入全局filter
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -34,7 +35,7 @@ import '@/permission' // permission control
 // })
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
-
+filters(Vue)//注册全局filter
 
 new Vue({
   el: '#app',

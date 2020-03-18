@@ -54,7 +54,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "企业主页",
           icon: "dashboard",
-          role:['admin']
+          role:['admin', 'seat']
         }
       }]
     },  
@@ -101,12 +101,6 @@ export const asyncRouterMap = [{
           icon: "searchcompany"
         }
       }
-      // },
-      // {
-      //   path: "details",
-      //   name: "details",
-      //   component: () => import("@/views/cluesmanagement/privatesea/details"),
-      // }
     ]
   },
   {

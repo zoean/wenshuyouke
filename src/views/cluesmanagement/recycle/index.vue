@@ -18,7 +18,7 @@
           </dd>
           </dl>
           <dl>
-          <dt>线索来源：</dt>
+          <dt>来源名单：</dt>
           <dd>
             <template>
               <el-select
@@ -77,30 +77,26 @@
               width="55"
             />
             <el-table-column
-              prop="updateTime"
-              :formatter="formatDate"
-              label="收藏时间"
-            />
-            <el-table-column
               prop="entName"
               label="企业名称"
               show-overflow-tooltip
-            />
-            <el-table-column
-              prop="contact"
-              label="电话"
-            />
-            <el-table-column
-              prop="chargeMan"
-              label="负责人"
             />
             <el-table-column
               prop="regDate"
               label="成立时间"
             />
             <el-table-column
+              prop="chargeMan"
+              label="负责人"
+            />
+            </el-table-column>
+            <el-table-column
+              prop="contact"
+              label="电话"
+            />
+            <el-table-column
               prop="dataSource"
-              label="线索来源"
+              label="线索来源" :formatter="dataSource"
             />
             <el-table-column
               prop="lastFollowTime"
@@ -109,7 +105,12 @@
             />
             <el-table-column
               prop="fllowupStatus"
-              label="跟进状态"
+              label="跟进状态" :formatter="followStatus"
+            />
+            <el-table-column
+              prop="updateTime"
+              :formatter="formatDate"
+              label="收藏时间"
             />
             <el-table-column
               prop="remark"
@@ -132,8 +133,9 @@
     </div>
   </div>
 </template>
-<script>
-import { getLocalStorage, parseTime } from '@/utils/index'
+<script>  
+import Vue from 'vue'
+import { getLocalStorage, parseTime,parseDateTime } from '@/utils/index'
 export default {
   data() {
     return {
@@ -153,6 +155,41 @@ export default {
     this.searchlist()
   },
   methods: {
+    dataSource(row, column, cellValue){
+      switch (cellValue) {
+        case 1:
+          return '企业搜索'
+          break
+        case 2:
+          return '转线索'
+          break
+        case 3:
+          return '回收站'
+          break
+        default:
+          return '新企推荐'
+          break
+      }
+    },
+    followStatus(row, column, cellValue){
+      switch (cellValue) {
+        case 1:
+          return '有意向'
+          break
+        case 2:
+          return '无意向'
+          break
+        case 3:
+          return '已成交'
+          break
+        case 4:
+          return '未成交'
+          break
+        default:
+          return '待跟进'
+          break
+      }
+    },
     searchclue(data) {
       if (data) {
         data.pageNum = this.pageNum
@@ -174,7 +211,6 @@ export default {
       // this.$store.dispatch('recycle/selectList', { 'entUserId': 1 })
         .then((res) => {
           this.options = res.obj
-          console.log(res.obj)
         })
         .catch(() => {
         })
@@ -223,7 +259,7 @@ export default {
       this.searchclue({ 'entName': this.entName, 'listId': this.value1 })
     },
     formatDate(row, column, cellValue) { // 表格时间列格式化
-      return parseTime(cellValue)
+      return parseDateTime(cellValue)
     }
   }
 }

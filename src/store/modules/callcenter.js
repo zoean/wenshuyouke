@@ -20,7 +20,7 @@ const mutations = {
     }
     //建立连接
     state.websocket = new WebSocket(wsUri)
-    state.websocket.onopen = evt => {      
+    state.websocket.onopen = evt => { 
       console.log('onopen')
     }
     state.websocket.onclose = evt => {

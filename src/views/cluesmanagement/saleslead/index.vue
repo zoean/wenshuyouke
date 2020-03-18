@@ -54,7 +54,7 @@
         </dd>
       </dl>
       <div class="companyHandle">
-        <p>本次更新<span class="highred">{{cluesListObj.total || 0}}</span>条，更新时间为12-02</p>
+        <p>本次更新<span class="highred">{{cluesListObj.total || 0}}</span>条</p>
         <div class="move-clue-to-card">
           <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
             <el-option
@@ -85,9 +85,10 @@
         <el-table-column label="号码"
                          width="180" prop="telephone">
           <template slot-scope="scope">
-            <el-button type="success"
+            <svg-icon class="onthouch-outbound highblue" icon-class="outbound" @click="oneTouchCall(scope.$index, scope.row)" />
+            <!-- <el-button type="success"
                        round
-                       @click="oneTouchCall(scope.$index, scope.row)">一键呼叫</el-button>
+                       >一键呼叫</el-button> -->
           </template>
         </el-table-column>
         <el-table-column prop="cluesListObj.list"
@@ -104,18 +105,27 @@
                 <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
-            <div class="com-lable">
-              <span>
+             <el-row class="com-lable">
+              <el-col :span="6">
                 <span class="label-blue" >地址</span>
-                <span :title="scope.row.address">{{scope.row.address | ellipsis}}</span>
-              </span>
-              <span class="label-dark-gray" v-show="scope.row.callStatus==0 || !scope.row.callStatus">未拨打</span>
-              <span class="label-blue" v-show="scope.row.callStatus==1">已接通</span>
-              <span class="label-red" v-show="scope.row.callStatus==2">未接通</span>
-              <span class="label-light-gray">拨打记录：{{scope.row.lastCallTime | transDate}}</span>
-              <span class="label-light-gray">来源：新企推荐</span>
-              <span class="label-light-gray">备注：这里是备注</span>
-            </div>
+                <span :title="scope.row.address">{{scope.row.address | ellipsis(32)}}</span>
+              </el-col>
+              <el-col :span="3">
+                <span class="label-dark-gray">{{scope.row.callStatus | callStatus}}</span>
+              </el-col>
+              <el-col :span="6">
+                <span class="label-light-gray">拨打记录：{{scope.row.lastCallTime | parseDateTime}}</span>
+              </el-col>
+              <el-col :span="3">
+                <span v-show="scope.row.dataSource == 0">新企推荐</span>
+                <span v-show="scope.row.dataSource == 1">企业搜索</span>
+                <span v-show="scope.row.dataSource == 2">转线索</span>
+                <span v-show="scope.row.dataSource == 3">回收站</span>
+              </el-col>
+              <el-col :span="6">
+                <span class="label-light-gray" :title="scope.row.remark">备注：{{scope.row.remark | ellipsis(32)}}</span>
+              </el-col>
+            </el-row> 
           </template>
         </el-table-column>
       </el-table>
@@ -195,7 +205,7 @@
         </el-form-item>
       </el-form>
       <el-row type="flex" justify="end">
-        <el-col :span="4" class="moreForm highblue"><span @click="toggleHeight">展开更多信息</span></el-col>
+        <el-col :span="4" class="moreForm highblue"><span @click="toggleHeight">{{formTip}}</span></el-col>
       </el-row>
       <el-row type="flex"
               justify="end" class="add-clues-handle">
@@ -209,7 +219,7 @@
         <el-col :span="4">
           <el-button size="middle"
                      type="primary"
-                     round @click="saveCluseForm">保存</el-button>
+                     round  :disabled="callPanelVisible" @click="saveCluseForm">保存</el-button>
         </el-col>
       </el-row>        
       <el-row type="flex" justify="end" class="el-tips">
@@ -232,36 +242,17 @@
 @api-fetchCluesList 请求
 @api-postCluesToSelf 转移线索给自己
 */
+import Vue from 'vue'
 import {transforserClues} from '@/api/cardmanage'
 import {parseToTimestamp, parseTime} from '@/utils/index'
 import {getCluesList,postCluesToSelf,updateClues} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
 import {getLocalStorage,cutString} from '@/utils/index'
+let ellipsis = Vue.filter('ellipsis')//引入全局filter
+let parseDateTime = Vue.filter('parseDateTime')
 export default {
   name: 'CompanyList',
-  filters: {
-    ellipsis (str) {
-      if(str.length*2 <= 22) {
-        return str
-      }
-      var strlen = 0
-      var s = ""
-      for(var i = 0;i < str.length; i++) {
-          s = s + str.charAt(i)
-          if (str.charCodeAt(i) > 128) {
-              strlen = strlen + 2
-              if(strlen >= 22){
-                  return s.substring(0,s.length-1) + "..."
-              }
-          } else {
-              strlen = strlen + 1
-              if(strlen >= 22){
-                  return s.substring(0,s.length-2) + "..."
-              }
-          }
-      }
-      return s
-    },
+  filters: {    
     transDate(val){
       if(val){
         return parseTime(val)
@@ -269,12 +260,17 @@ export default {
         return '--'
       }      
     },
-    transDateSub(val){
-      if(val){
-        return parseTime(val).substring(0, 10)
-      }else{
-        return '--'
-      } 
+    callStatus(status){
+      switch(status){
+        case 1:
+          return '已接通'
+          break
+        case 2:
+          return '未接通'
+          break
+        default:
+          return '未拨打'
+      }
     }
   },
   data () {
@@ -318,7 +314,8 @@ export default {
       holdOn:false,//电话是否接通
       time:0,
       timer:null,
-      countTime:'正在呼叫中...'
+      countTime:'正在呼叫中...',
+      formTip:'展开更多信息'
     }
   },
   mounted(){
@@ -329,7 +326,7 @@ export default {
   created(){
     // this.dropCall() //刷新挂断电话
     this.fetchCluesList()
-    this.fetchCardList()//当前登录用户名单列表  
+    this.fetchCardList()//当前登录用户名单列表 
   },
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
@@ -349,6 +346,7 @@ export default {
         this.countTime = ''
         this.curCluesForm.callStatus = 1 
       }
+
     }
   },
   methods: {
@@ -362,6 +360,7 @@ export default {
     },
     toggleHeight(){
       this.moreForm = !this.moreForm
+      this.formTip = this.moreForm ? '收起' : '展示更多信息'
     },
     timerStart(){      
       this.timer = setInterval(()=>{
@@ -470,6 +469,17 @@ export default {
     },
     cancleEditForm(){ //
       this.curCluesVisible = false
+      updateClues({id: this.curCluesForm.id, callStatus: this.curCluesForm.callStatus,  lastCallTime:new Date().getTime()}).then(response => {
+        try{
+          if(response.status == 200){
+            this.curCluesVisible =  false
+            this.fetchCluesList()
+            this.$message.success('当前线索更新成功') 
+          }
+        }catch(e){
+          this.$message.success('线索更新失败')
+        }
+      })
     },
     saveCluseForm(){//保存当前线索信息      
       updateClues(this.curCluesForm).then(response=>{
@@ -510,11 +520,16 @@ export default {
     }
   }
   .companyHandle {
+    height: 44px;
     display: flex;
     justify-content: space-between;
   }
 }
 .saleslead-data {  
+  .onthouch-outbound{
+    font-size: 40px;
+    cursor: pointer;
+  }
   .el-row {
     display: flex;
     align-items: center;
@@ -565,6 +580,7 @@ export default {
     .moreForm{
       padding: 10px 0;
       cursor: pointer;
+      text-align: right;
     }
     .el-tips{
       margin-top: 5px;

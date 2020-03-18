@@ -1,8 +1,7 @@
 <template>
   <div style="padding:30px;">
-    <h2>企业搜索</h2>
-    <el-alert :closable="false" type="success">
-      <router-view />
-    </el-alert>
+  	<div class="main-box">
+    	<h2>企业搜索功能正在研发中……</h2>
+    </div>
   </div>
 </template>

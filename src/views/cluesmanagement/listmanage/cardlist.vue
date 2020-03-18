@@ -41,7 +41,7 @@
             inactive-text="按年付费">
           </el-switch> -->
           <h2 @click="goToCardDetail(item.id)">{{item.listName}}</h2>
-          <p>{{item.storageTime | transDate}}</p>
+          <p>{{item.storageTime | parseDateTime}}</p>
           <div class="to-subaccount">
           	<h3 :class="item.userName ? 'highblue': ''" style="font-weight:100">{{item.userName || '未指派'}}</h3>
 	          <!--  -->
@@ -87,13 +87,13 @@
 </template>
 <script>
 	import {getSubAccounts,addCardPost,requestCardList,distributionPost,renameCardPost,delCardPost} from '@/api/cardmanage'
-	import {getLocalStorage,parseTime} from '@/utils/index'
+	import {getLocalStorage,parseTime, parseDateTime} from '@/utils/index'
 	export default{
 		name:'CardList',
 		filters: {
-	    transDate(val){
+	    parseDateTime(val){
 	      if(val){
-	        return parseTime(val)
+	        return parseDateTime(val)
 	      }else{
 	        return '--'
 	      }      

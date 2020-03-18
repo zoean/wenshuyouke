@@ -28,26 +28,12 @@ router.beforeEach(async (to, from, next) => {
   if (hasToken) {
     if (to.path === '/login') {
       // if is logged in, redirect to the home page
-      next()
-      let roles = store.getters.roles
-      if(roles.indexOf('admin') >=0){
-        next({
-          path: '/'
-        })
-      }else if(roles.indexOf('seat') >=0){
-        if(to.path == '/cluesmanagement/saleslead'){
-          next()
-          NProgress.done()
-        }else{
-          next({ path: '/cluesmanagement/saleslead'})
-          NProgress.done()
-        }
-      }
       
+      next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
-      if (hasGetUserInfo) {
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      if (hasRoles) {
         next()
       } else {
         try {
