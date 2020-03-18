@@ -41,17 +41,17 @@
             inactive-text="按年付费">
           </el-switch> -->
           <h2 @click="goToCardDetail(item.id)">{{item.listName}}</h2>
-          <p>{{item.storageTime}}</p>
+          <p>{{item.storageTime | transDate}}</p>
           <div class="to-subaccount">
           	<h3 :class="item.userName ? 'highblue': ''" style="font-weight:100">{{item.userName || '未指派'}}</h3>
 	          <!--  -->
           </div>
           <dl>
-            <dt><span>新增</span>/现存：<span>{{item.receiveToday||0}}</span>/1000</dt>
+            <dt><span>新增</span>/现存：<span>{{item.receiveToday||0}}</span>/{{item.receiveCount || 0}}</dt>
             <dd>
             	<span class="svg-container" slot="reference">
             		<i title="编辑" class="el-icon-edit" @click="renameCard(item.id, item.listName)"></i>
-            		<i title="指派" class="el-icon-thumb" @click="distributionList(item.id, item.userId)"></i>
+            		<i title="指派" class="el-icon-thumb" @click="distributionList(item.id, item.userId, item.userName)"></i>
             		<i title="删除" class="el-icon-delete" @click="delList(item.id)"></i>
               </span>
             </dd>
@@ -59,10 +59,11 @@
         </li>
     	</ul>
     </div> 
-    <el-dialog :visible="distributionVisible" width="30%">
+    <!-- 分配子帐户 -->
+    <el-dialog :visible.sync="distributionVisible" width="30%">
     	<el-form>
     		<el-form-item label="分配给：" :label-width="addCardLableWidth">
-          <el-select v-model="addCardForm.userId" placeholder="请选择子帐户">
+          <el-select v-model="distributionForm.userId" placeholder="请选择子帐户">
             <el-option v-for="item in subAccount" :label="item.realName" :key="item.id" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -75,8 +76,7 @@
 		<el-dialog
 		  title="删除名单"
 		  :visible.sync="delVerifyVisible"
-		  width="30%"
-		  :before-close="delVerifyVisible = false">
+		  width="30%">
 		  <span>是否确认删除该名单？</span>
 		  <span slot="footer" class="dialog-footer">
 		    <el-button @click="delVerifyVisible = false">取 消</el-button>
@@ -87,9 +87,18 @@
 </template>
 <script>
 	import {getSubAccounts,addCardPost,requestCardList,distributionPost,renameCardPost,delCardPost} from '@/api/cardmanage'
-	import {getLocalStorage} from '@/utils/index'
+	import {getLocalStorage,parseTime} from '@/utils/index'
 	export default{
 		name:'CardList',
+		filters: {
+	    transDate(val){
+	      if(val){
+	        return parseTime(val)
+	      }else{
+	        return '--'
+	      }      
+	    }
+	  },
 		props:{
 			changeCom:{
 				type:Function,
@@ -172,25 +181,29 @@
 			addCard(){
 				this.addCardVisible = true
 			},
-			distributionList(id, userId){
+			distributionList(id, userId, userName){ //名单指派
 				this.distributionVisible = true
-				this.distributionForm.userId = userId
+				this.distributionForm.id = id
+				this.distributionForm.userId = userId				
+				this.distributionForm.userName = userName
 			},
 			distrubutionSubmit(){
 				this.distributionVisible = false // 被指派人id
+				let curUser = this.subAccount.find(item => {
+					return item.id === this.distributionForm.userId
+				})
+				this.distributionForm.userName = curUser.realName
 				distributionPost(this.distributionForm).then(response=>{
 					try{
 						this.$message.success('名单分配成功')
+						this.getCardList()
 					}catch(e){
 						this.$message.error('名单分配失败，请重试')
 					}
-				})
+				})				
 			},
 			cancleDistribution(){
 				this.distributionVisible = false
-			},
-			distributionVisible(id){
-				this.distributionForm.id = id
 			},
 			cancleAddCardSubmit(){
 				this.resetForm('addCardForm');
@@ -203,6 +216,7 @@
 			delList(id){//删除名单
 				this.delVerifyVisible = true	
 				this.delListForm.id = id			
+				console.log(this.delVerifyVisible)
 			},
 			delListVerify(){
 				this.delVerifyVisible = false
@@ -277,10 +291,11 @@
 		}
 	}
 </script>
-<style lang="scss" scoped="">
+<style lang="scss" scoped>
 	.list-search{
     display: flex;
     align-items: center;
+    margin-top:10px;
     .el-input{
       width:200px;
       margin-right: 20px;

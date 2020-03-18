@@ -136,7 +136,6 @@ export default {
     async logout () {
       this.$store.dispatch('user/logout')
       location.reload()
-      console.log(this.$router)
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

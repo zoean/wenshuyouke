@@ -1,5 +1,5 @@
 <template>
-  <div class="main-box">
+  <div class="main-box">    
     <div class="search-area"> <!--      
       <dl>
         <dt>商机状态：</dt>
@@ -11,10 +11,11 @@
       </dl>       -->
       <dl>
         <dt>线索状态：</dt>
-        <dd>
+        <dd class="search-bar">
           <el-checkbox-group v-model="vModelStatus" @change="changeClueHandle">
             <el-checkbox-button v-for="state in fllowupsStatus" :label="state" :key="state">{{state}}</el-checkbox-button>
           </el-checkbox-group>
+          <p class="back-list highblue" @click="backToList">返回名单列表</p>
         </dd>
       </dl>
       <dl>
@@ -145,6 +146,12 @@ export default {
         this.fetchListDetail()
       },
       deep: true //开启深度监听
+    }
+  },
+  props:{
+    changeCom:{
+      type:Function,
+      default:null
     }
   },
   data () {
@@ -281,11 +288,17 @@ export default {
     dd {
       margin-left: 10px;
     }
-  }
-  dl.backToList{
-    text-align: center;
-    cursor: pointer;
-  }
+    dd.search-bar{      
+      display:flex;
+      flex-grow:1;
+      flex-direction:row;
+      justify-content:space-between;
+      p.back-list{
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }  
   div.companyHandle {
     display: flex;
     justify-content: space-between;

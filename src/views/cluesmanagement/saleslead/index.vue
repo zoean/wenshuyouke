@@ -436,8 +436,8 @@ export default {
       this.curCluesVisible = true
       this.callPanelVisible = true
       this.callDurationVisible = true
-      this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
-      // this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
+      // this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
+      this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
       this.curCluesForm = {
         id:row.id,//线索id
         entName:row.entName,//公司名称
