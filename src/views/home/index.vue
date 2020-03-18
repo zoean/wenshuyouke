@@ -131,11 +131,11 @@ export default {
         this.upload = this.companyinfo = res.enterprise
         // window.localStorage.setItem('companyid', res.id)
         this.companyinfo.id=window.localStorage.getItem('userId')
-        if(res.enterprise && res.enterprise.enterpriseLogo){
-          this.companyinfo.enterpriseLogo = res.enterprise.enterpriseLogo
-        }else{
-          this.companyinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
-        }
+        // if(res.enterprise && res.enterprise.enterpriseLogo){
+        //   this.companyinfo.enterpriseLogo = res.enterprise.enterpriseLogo
+        // }else{
+          // this.companyinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
+        // }
 
       })
       .catch(() => {

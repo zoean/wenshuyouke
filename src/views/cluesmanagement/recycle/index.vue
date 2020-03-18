@@ -170,8 +170,8 @@ export default {
         })
     },
     searchlist() {
-      // this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
-      this.$store.dispatch('recycle/selectList', { 'entUserId': 1 })
+      this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
+      // this.$store.dispatch('recycle/selectList', { 'entUserId': 1 })
         .then((res) => {
           this.options = res.obj
           console.log(res.obj)

@@ -89,8 +89,7 @@ export const asyncRouterMap = [{
         component: () => import("@/views/foundclues/newcompanysearch/index"),
         meta: {
           title: "新企推荐",
-          icon: "newcompany",
-          role: ['admin', 'super']
+          icon: "newcompany"
         }
       },
       {
@@ -99,15 +98,15 @@ export const asyncRouterMap = [{
         component: () => import("@/views/foundclues/companysearch/index"),
         meta: {
           title: "企业搜索",
-          icon: "searchcompany",
-          roles: ['super', 'admin']
+          icon: "searchcompany"
         }
-      },
-      {
-        path: "details",
-        name: "details",
-        component: () => import("@/views/cluesmanagement/privatesea/details"),
       }
+      // },
+      // {
+      //   path: "details",
+      //   name: "details",
+      //   component: () => import("@/views/cluesmanagement/privatesea/details"),
+      // }
     ]
   },
   {
@@ -126,7 +125,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "名单管理",
           icon: "databag",
-          role: ['super', 'admin']
+          roles: ['super', 'admin']
         }
       }, {
         path: "saleslead",
@@ -135,7 +134,7 @@ export const asyncRouterMap = [{
         meta: {
           title: "销售商机",
           icon: "databag",
-          role: ['super', 'seat']
+          roles: ['super', 'seat']
         }
       },
       {
@@ -213,7 +212,8 @@ export const asyncRouterMap = [{
     name: "expensecenter",
     meta: {
       title: "费用中心",
-      icon: "count"
+      icon: "count",
+      roles:['admin']
     },
     alwaysShow: true,
     children:[{
@@ -237,12 +237,13 @@ export const asyncRouterMap = [{
   //   }
   // },
   {
-    path: "/",
+    path: "/set",
     component: Layout,
     redirect: "/home",
     meta:{
       title: "设置中心",
-      icon: "dashboard"
+      icon: "dashboard",
+      roles:['admin']
     },
     children: [{
       path: "department",

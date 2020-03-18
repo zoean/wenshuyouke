@@ -100,7 +100,7 @@
               </el-col>
               <el-col :span="6" class="com-tips">
                 <span>{{scope.row.legalName}}</span>|
-                <span>{{scope.row.regDateTimestamp}}</span>|
+                <span>{{scope.row.regDateTimestamp | transDate}}</span>|
                 <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
@@ -112,7 +112,7 @@
               <span class="label-dark-gray" v-show="scope.row.callStatus==0 || !scope.row.callStatus">未拨打</span>
               <span class="label-blue" v-show="scope.row.callStatus==1">已接通</span>
               <span class="label-red" v-show="scope.row.callStatus==2">未接通</span>
-              <span class="label-light-gray">拨打记录：{{scope.row.lastCallTime || '--'}}</span>
+              <span class="label-light-gray">拨打记录：{{scope.row.lastCallTime | transDate}}</span>
               <span class="label-light-gray">来源：新企推荐</span>
               <span class="label-light-gray">备注：这里是备注</span>
             </div>
@@ -243,24 +243,32 @@ export default {
     ellipsis (str) {
       if(str.length*2 <= 22) {
         return str
-    }
-    var strlen = 0
-    var s = ""
-    for(var i = 0;i < str.length; i++) {
-        s = s + str.charAt(i)
-        if (str.charCodeAt(i) > 128) {
-            strlen = strlen + 2
-            if(strlen >= 22){
-                return s.substring(0,s.length-1) + "..."
-            }
-        } else {
-            strlen = strlen + 1
-            if(strlen >= 22){
-                return s.substring(0,s.length-2) + "..."
-            }
-        }
-    }
-    return s
+      }
+      var strlen = 0
+      var s = ""
+      for(var i = 0;i < str.length; i++) {
+          s = s + str.charAt(i)
+          if (str.charCodeAt(i) > 128) {
+              strlen = strlen + 2
+              if(strlen >= 22){
+                  return s.substring(0,s.length-1) + "..."
+              }
+          } else {
+              strlen = strlen + 1
+              if(strlen >= 22){
+                  return s.substring(0,s.length-2) + "..."
+              }
+          }
+      }
+      return s
+    },
+    transDate(val){
+      if(val){
+        return parseTime(val)
+      }else{
+        return '--'
+      }
+      
     }
   },
   data () {
@@ -428,8 +436,8 @@ export default {
       this.curCluesVisible = true
       this.callPanelVisible = true
       this.callDurationVisible = true
-      // this.$store.commit('callcenter/SET_USERTEL', row.telePhone || '17610100629')//传入当前被叫用户手机号码
-      this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
+      this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
+      // this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
       this.curCluesForm = {
         id:row.id,//线索id
         entName:row.entName,//公司名称

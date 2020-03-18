@@ -142,12 +142,15 @@ const actions = {
   logout ({
     commit
   }) {
-    removeToken() // must remove  token  first    
-    removeLocalStorage('userId')    
-    removeLocalStorage('userName')
-    removeLocalStorage('enterpriseName')
-    // resetRouter()
-    commit('RESET_STATE')
+    return new Promise((resolve, reject)=>{
+      removeToken() // must remove  token  first    
+      removeLocalStorage('userId')    
+      removeLocalStorage('userName')
+      removeLocalStorage('enterpriseName')
+      commit('RESET_STATE')
+      resetRouter()
+    })
+    
     // return new Promise((resolve, reject) => {
     //   logout(state.token).then(() => {
     //     removeToken() // must remove  token  first

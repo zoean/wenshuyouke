@@ -65,7 +65,7 @@
             <span>设置</span>
           </p>
           <el-dropdown-menu @click.native="logout">
-            <el-dropdown-item><router-link to="/login">退出登录</router-link></el-dropdown-item>
+            <el-dropdown-item>退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> 
       </div>
@@ -135,7 +135,9 @@ export default {
     },
     async logout () {
       this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      location.reload()
+      console.log(this.$router)
+      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }
 }

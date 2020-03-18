@@ -87,6 +87,17 @@ module.exports = {
         return options;
       })
       .end();
+    config.module
+      .rule("img")      
+      .test(/\.(jpg|png|gif|bmp|jpeg)$/)
+      .use("url-loader")
+      .loader("url-loader")
+      .options({
+        esModule: false,
+        limit:3000000,
+        name:'[name].[hash:8].[ext]'
+      })
+      .end()
     config
       // https://webpack.js.org/configuration/devtool/#development
       .when(process.env.NODE_ENV === "development", config =>

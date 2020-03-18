@@ -23,3 +23,12 @@ export function getNewComToCard(data){
 		data
 	})
 }
+
+// 新企推荐-获取查询条件
+export function getSearchOption(data){
+	return request({
+		url:'',
+		method:'post',
+		data
+	})
+}

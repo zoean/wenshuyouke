@@ -13,10 +13,10 @@
 		          <el-input autocomplete="off" placeholder="请输入名单名称" v-model="renameForm.listName"></el-input>
 		        </el-form-item>
 		      </el-form>
-		      <p>
-		      	<el-button @click="cancleRename">取消</el-button>
-		      	<el-button @click="renameSubmit()" type="primary">确定</el-button>
-		      </p>
+		      <el-row type="flex" justify="end" :gutter="5">
+		      	<el-col :span="5"><el-button @click="cancleRename">取消</el-button></el-col>
+		      	<el-col :span="5"><el-button @click="renameSubmit()" type="primary">确定</el-button></el-col>
+		      </el-row>
 		    </el-dialog>
     	</template>			
     	<ul>
@@ -27,12 +27,7 @@
 			      <el-form ref="addCardForm" :ruels="addCardRules" :model="addCardForm">
 			        <el-form-item label="名单名称：" :label-width="addCardLableWidth">
 			          <el-input v-model="addCardForm.listName" autocomplete="off" placeholder="请输入名单名称"></el-input>
-			        </el-form-item>
-			        <el-form-item label="分配给：" :label-width="addCardLableWidth">
-			          <el-select v-model="addCardForm.userId" placeholder="请选择子帐户">
-			            <el-option v-for="item in subAccount" :label="item.realName" :key="item.id" :value="item.id"></el-option>
-			          </el-select>
-			        </el-form-item>	
+			        </el-form-item>			        	
 			      </el-form>
 			      <div slot="footer" class="dialog-footer">
 			        <el-button @click="cancleAddCardSubmit()">取 消</el-button>
@@ -48,39 +43,46 @@
           <h2 @click="goToCardDetail(item.id)">{{item.listName}}</h2>
           <p>{{item.storageTime}}</p>
           <div class="to-subaccount">
-	          <template>
-	          	<!-- 监听切换分配名单 -->
-	            <el-select v-model="item.userName" @change="distributionList" @focus="distributionVisible(item.id)">
-	              <el-option
-	                v-for="person in subAccount"
-	                :key="person.id"
-	                :label="person.realName"
-	                :value="person.id">
-	              </el-option>
-	            </el-select>
-	          </template>
+          	<h3 :class="item.userName ? 'highblue': ''" style="font-weight:100">{{item.userName || '未指派'}}</h3>
+	          <!--  -->
           </div>
           <dl>
             <dt><span>新增</span>/现存：<span>{{item.receiveToday||0}}</span>/1000</dt>
             <dd>
-              <template>              
-              	<el-popover
-							    placement="bottom"
-							    width="50"
-							    trigger="click">
-							    <span class="svg-container" slot="reference">
-		                <svg-icon icon-class="more" />                
-		              </span>
-	              	<p @click="renameCard(item.id, item.listName)">修改名称</p>
-	              	<!-- <p @click="distributionList(item.id, item.userId)">指派</p> -->
-	              	<p @click="delList(item.id)">删除名单</p>	              				    
-							  </el-popover>
-							</template>
+            	<span class="svg-container" slot="reference">
+            		<i title="编辑" class="el-icon-edit" @click="renameCard(item.id, item.listName)"></i>
+            		<i title="指派" class="el-icon-thumb" @click="distributionList(item.id, item.userId)"></i>
+            		<i title="删除" class="el-icon-delete" @click="delList(item.id)"></i>
+              </span>
             </dd>
           </dl>
         </li>
     	</ul>
-    </div>    
+    </div> 
+    <el-dialog :visible="distributionVisible" width="30%">
+    	<el-form>
+    		<el-form-item label="分配给：" :label-width="addCardLableWidth">
+          <el-select v-model="addCardForm.userId" placeholder="请选择子帐户">
+            <el-option v-for="item in subAccount" :label="item.realName" :key="item.id" :value="item.id"></el-option>
+          </el-select>
+        </el-form-item>
+    	</el-form>
+    	<el-row type="flex" justify="end" :gutter="5">
+      	<el-col :span="5"><el-button @click="cancleDistribution">取消</el-button></el-col>
+      	<el-col :span="5"><el-button @click="distrubutionSubmit()" type="primary">确定</el-button></el-col>
+      </el-row>
+    </el-dialog>   
+		<el-dialog
+		  title="删除名单"
+		  :visible.sync="delVerifyVisible"
+		  width="30%"
+		  :before-close="delVerifyVisible = false">
+		  <span>是否确认删除该名单？</span>
+		  <span slot="footer" class="dialog-footer">
+		    <el-button @click="delVerifyVisible = false">取 消</el-button>
+		    <el-button type="primary" @click="delListVerify">确 定</el-button>
+		  </span>
+		</el-dialog>
 	</div>
 </template>
 <script>
@@ -100,6 +102,8 @@
 		},
 		data(){
 			return {
+				distributionVisible:false,//名单指派
+				delVerifyVisible:false,//删除名单确认
 				searchCardForm:{//搜索名单列表
 					listName:'',
 					entUserId: getLocalStorage('userId')
@@ -116,6 +120,9 @@
 					id:'',
 					userId:'',//要指派的子帐户
 					entUserId: getLocalStorage('userId')
+				},
+				delListForm:{
+					entUserId:getLocalStorage('userId')
 				},
 				originCardName:'',
 				realName:'',
@@ -165,8 +172,12 @@
 			addCard(){
 				this.addCardVisible = true
 			},
-			distributionList(e){
-				this.distributionForm.userId = e // 被指派人id
+			distributionList(id, userId){
+				this.distributionVisible = true
+				this.distributionForm.userId = userId
+			},
+			distrubutionSubmit(){
+				this.distributionVisible = false // 被指派人id
 				distributionPost(this.distributionForm).then(response=>{
 					try{
 						this.$message.success('名单分配成功')
@@ -174,6 +185,9 @@
 						this.$message.error('名单分配失败，请重试')
 					}
 				})
+			},
+			cancleDistribution(){
+				this.distributionVisible = false
 			},
 			distributionVisible(id){
 				this.distributionForm.id = id
@@ -187,7 +201,12 @@
 				this.renameVisible = false;
 			},
 			delList(id){//删除名单
-				delCardPost({id,entUserId:getLocalStorage('userId')}).then(response=>{
+				this.delVerifyVisible = true	
+				this.delListForm.id = id			
+			},
+			delListVerify(){
+				this.delVerifyVisible = false
+				delCardPost(this.delListForm).then(response=>{
 					try{
 						if(response.data.status==200){
 							this.getCardList()
@@ -347,9 +366,18 @@
       	.to-subaccount{
       		display: flex;
       		justify-content: center;
-      		margin-top: 90px;
+      		margin-top: 60px;      		
       	}
       }
+      dd{
+  			span{
+  				i{
+  					font-weight: 600;
+  					font-size: 20px;
+  					margin-left: 10px;
+  				}
+  			}
+  		}
     }
   }
 </style>
