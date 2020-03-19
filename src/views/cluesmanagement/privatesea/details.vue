@@ -61,120 +61,118 @@
         </el-col>
       </el-row>
     </div>
+    <el-row :gutter="10" class="con-wrap" type="flex" justify="space-between">
     <!-- 左下信息展示编辑 -->
-    <div>
-      <el-row :gutter="10" class="con-wrap">
-        <el-col :span="8">
-          <div class="main-box">
-            <h5 style="display: inline-block;">基本信息</h5><svg-icon icon-class="edit" @click="dialogFormVisible = true" />
-            <div class="editinfo">
-              <div><span>姓名：</span><p>{{ cluesinfo.name }}</p></div>
-              <div><span>部门：</span><p>{{ cluesinfo.department }}</p></div>
-              <div><span>职务：</span><p>{{ cluesinfo.duties }}</p></div>
-            </div>
-            <h5>联系方式</h5>
-            <div class="editinfo">
-              <div><span>联系方式：</span><p>{{ cluesinfo.telePhone }}</p></div>
-              <div><span>微信号：</span><p>{{ cluesinfo.wechat }}</p></div>
-              <div><span>邮箱：</span><p>{{ cluesinfo.email }}</p></div>
-              <div><span>联系地址：</span><p>{{ cluesinfo.entAddress }}</p></div>
-            </div>
-            <el-dialog class="editcont" title="修改信息" :visible.sync="dialogFormVisible" @close='closeDialog'>
-              <el-form ref="cluesinfo" :model="cluesinfo">
-                <el-form-item label="姓名" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.name" />
-                </el-form-item>
-                <el-form-item label="部门" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.department" />
-                </el-form-item>
-                <el-form-item label="职务" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.duties" />
-                </el-form-item>
-                <el-form-item label="联系方式" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.telePhone" />
-                </el-form-item>
-                <el-form-item label="微信号" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.wechat" />
-                </el-form-item>
-                <el-form-item label="邮箱" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.email" />
-                </el-form-item>
-                <el-form-item label="联系地址" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.entAddress" />
-                </el-form-item>
-              </el-form>
-              <div slot="footer" class="dialog-footer btns">
-                <el-button @click="closeDialog">取 消</el-button>
-                <el-button class="surebtn" type="primary" @click="clueedit">确 定</el-button>
-              </div>
-            </el-dialog>
+      <el-col :span="8">
+        <div class="main-box">
+          <h5 style="display: inline-block;">基本信息</h5><svg-icon icon-class="edit" @click="dialogFormVisible = true" />
+          <div class="editinfo">
+            <div><span>姓名：</span><p>{{ cluesinfo.name }}</p></div>
+            <div><span>部门：</span><p>{{ cluesinfo.department }}</p></div>
+            <div><span>职务：</span><p>{{ cluesinfo.duties }}</p></div>
           </div>
-        </el-col>
-        <!-- 右下跟进 -->
-        <el-col :span="16">
-          <div class="main-box">
-            <el-radio-group v-model="followtype" @change="statusselect">
-              <el-radio label="" border size="medium">全部</el-radio>
-              <el-radio label="0" border size="medium">电话</el-radio>
-              <el-radio label="1" border size="medium">拜访</el-radio>
-              <el-radio label="2" border size="medium">短信</el-radio>
-              <el-radio label="3" border size="medium">邮件</el-radio>
-              <el-radio label="4" border size="medium">微信</el-radio>
-            </el-radio-group>
-            <div class="followcont">
-              <div>
-                <el-dialog
-                title="写跟进"
-                  :visible.sync="dialogVisible"
-                  width="400"
-                  customClass="customWidth"
-                >
-                  <el-form ref="followadd" label-width="120px">
-                    <el-form-item label="跟进方式">
-                      <el-select v-model="followadd.followType" placeholder="类型">
-                        <el-option label="电话" value="0" />
-                        <el-option label="短信" value="1" />
-                        <el-option label="邮件" value="2" />
-                        <el-option label="微信" value="3" />
-                        <el-option label="QQ" value="4" />
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="跟进状态">
-                      <el-select v-model="followadd.followStatus" placeholder="类型">
-                        <el-option label="未回复" value="0" />
-                        <el-option label="回复拒绝" value="1" />
-                        <el-option label="回复预约" value="1" />
-                        <el-option label="未接通" value="1" />
-                      </el-select>
-                    </el-form-item>
-                    <el-form-item label="备注">
-                      <el-input v-model="followadd.followContent" type="textarea" />
-                    </el-form-item>
-                    <el-form-item label="下次跟进时间">
-                      <el-date-picker v-model="followadd.nextFollowTime" type="date" placeholder="选择日期" style="width: 100%;" value-format="timestamp" />
-                    </el-form-item>
-                    <el-form-item class="btns">
-                      <el-button @click="dialogVisible = false">取消</el-button>
-                      <el-button class="surebtn" type="primary" @click="cluefollowadd">保存</el-button>
-                    </el-form-item>
-                  </el-form>
-                </el-dialog>
-                 <el-button  @click="dialogVisible = true" slot="reference" type="text" class="add">+<br>点击添加动态</el-button>
-              </div>
-              <div class="infinite-list beauty-Scroll" style="overflow-y:auto;overflow-x:hidden">
-                <el-scrollbar>
-                  <ul>
-                    <li v-for="(clue,i) in followinfos" class="infinite-list-item"><h6>{{ clue.followTime }}</h6><div>{{ clue.followContent }}</div><p>{{ clue.nextFollowTime }}</p></li>
-                  </ul>
-                </el-scrollbar>
-              </div>
-
-            </div>
+          <h5>联系方式</h5>
+          <div class="editinfo">
+            <div><span>联系方式：</span><p>{{ cluesinfo.telePhone }}</p></div>
+            <div><span>微信号：</span><p>{{ cluesinfo.wechat }}</p></div>
+            <div><span>邮箱：</span><p>{{ cluesinfo.email }}</p></div>
+            <div><span>联系地址：</span><p>{{ cluesinfo.entAddress }}</p></div>
           </div>
+          <el-dialog class="editcont" title="修改信息" :visible.sync="dialogFormVisible" @close='closeDialog'>
+            <el-form ref="cluesinfo" :model="cluesinfo">
+              <el-form-item label="姓名" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.name" />
+              </el-form-item>
+              <el-form-item label="部门" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.department" />
+              </el-form-item>
+              <el-form-item label="职务" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.duties" />
+              </el-form-item>
+              <el-form-item label="联系方式" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.telePhone" />
+              </el-form-item>
+              <el-form-item label="微信号" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.wechat" />
+              </el-form-item>
+              <el-form-item label="邮箱" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.email" />
+              </el-form-item>
+              <el-form-item label="联系地址" :label-width="formLabelWidth">
+                <el-input v-model="cluesinfo.entAddress" />
+              </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer btns">
+              <el-button @click="closeDialog">取 消</el-button>
+              <el-button class="surebtn" type="primary" @click="clueedit">确 定</el-button>
+            </div>
+          </el-dialog>
+        </div>
+      </el-col>
+      <!-- 右下跟进 -->
+      <el-col :span="16">
+        <div class="main-box">
+          <el-radio-group v-model="followtype" @change="statusselect">
+            <el-radio label="" border size="medium">全部</el-radio>
+            <el-radio label="0" border size="medium">电话</el-radio>
+            <el-radio label="1" border size="medium">拜访</el-radio>
+            <el-radio label="2" border size="medium">短信</el-radio>
+            <el-radio label="3" border size="medium">邮件</el-radio>
+            <el-radio label="4" border size="medium">微信</el-radio>
+          </el-radio-group>
+          <div class="followcont">
+            <div>
+              <el-dialog
+              title="写跟进"
+                :visible.sync="dialogVisible"
+                width="400"
+                customClass="customWidth"
+              >
+                <el-form ref="followadd" label-width="120px">
+                  <el-form-item label="跟进方式">
+                    <el-select v-model="followadd.followType" placeholder="类型">
+                      <el-option label="电话" value="0" />
+                      <el-option label="短信" value="1" />
+                      <el-option label="邮件" value="2" />
+                      <el-option label="微信" value="3" />
+                      <el-option label="QQ" value="4" />
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="跟进状态">
+                    <el-select v-model="followadd.followStatus" placeholder="类型">
+                      <el-option label="未回复" value="0" />
+                      <el-option label="回复拒绝" value="1" />
+                      <el-option label="回复预约" value="1" />
+                      <el-option label="未接通" value="1" />
+                    </el-select>
+                  </el-form-item>
+                  <el-form-item label="备注">
+                    <el-input v-model="followadd.followContent" type="textarea" />
+                  </el-form-item>
+                  <el-form-item label="下次跟进时间">
+                    <el-date-picker v-model="followadd.nextFollowTime" type="date" placeholder="选择日期" style="width: 100%;" value-format="timestamp" />
+                  </el-form-item>
+                  <el-form-item class="btns">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button class="surebtn" type="primary" @click="cluefollowadd">保存</el-button>
+                  </el-form-item>
+                </el-form>
+              </el-dialog>
+               <el-button  @click="dialogVisible = true" slot="reference" type="text" class="add">+<br>点击添加动态</el-button>
+            </div>
+            <div class="infinite-list beauty-Scroll" style="overflow-y:auto;overflow-x:hidden">
+              <el-scrollbar>
+                <ul>
+                  <li v-for="(clue,i) in followinfos" class="infinite-list-item"><h6>{{ clue.followTime }}</h6><div>{{ clue.followContent }}</div><p>{{ clue.nextFollowTime }}</p></li>
+                </ul>
+              </el-scrollbar>
+            </div>
 
-        </el-col>
-      </el-row>
-    </div>
+          </div>
+        </div>
+
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -461,7 +459,8 @@ export default {
 }
 .con-wrap{
   display: flex;
-  flex-flow:row wrap;
+  margin-top:20px;
+  align-items: stretch;
 }
 .main-box{
   padding:30px;

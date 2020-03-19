@@ -1,17 +1,19 @@
 <template>
-  <section class="app-main">
-    <div class="common-bar">
+  <div>
+  <div class="common-bar">
       <hamburger :is-active="sidebar.opened"
                class="hamburger-container highblue"
                @toggleClick="toggleSideBar" />
 
     <breadcrumb class="breadcrumb-container highblue" />
     </div>
+  <section class="app-main">    
     <transition name="fade-transform"
                 mode="out-in">
       <router-view :key="key" />
     </transition>
   </section>
+</div>
 </template>
 
 <script>
@@ -51,7 +53,7 @@ export default {
   overflow: hidden;
   margin-left: 0rem;
   /* margin-left: 210px; */
-  padding: 24px;
+  padding: 15px;
 }
 .fixed-header + .app-main {
   padding-top: 50px;
@@ -69,13 +71,14 @@ export default {
   display: flex;
   justify-content: flex-start;
   color:rgb(102, 102, 102);
+  background: #fff;
+  line-height:50px;
   .hamburger-container{
-    line-height:30px;
     cursor:pointer;
   }
   .breadcrumb-container{
     .el-breadcrumb__item{
-      line-height:30px;
+      line-height:50px;
     }
   }
 }

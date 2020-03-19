@@ -33,7 +33,7 @@ export default {
       'sidebar'
     ]),
     routes () {
-      return this.$router.options.routes[1]
+      return this.$router.options.routes
     },
     activeMenu () {
       const route = this.$route

@@ -23,6 +23,7 @@
                       autofocus="true"
                       clearable
                       type="tel"
+                      :value="telNumber"
                       @change="verifyInput"></el-input>
           </el-row>
           <ul class="number-keybord">
@@ -39,7 +40,7 @@
             <el-button class="call-handle"
                        size="medium"
                        type="primary"
-                       @click="callHandle"
+                       @click="makeCall"
                        :disabled="callDisable">呼叫</el-button>
           </el-row>
         </el-tab-pane>
@@ -102,7 +103,7 @@ export default {
       // }
     },
     async makeCall () {
-      await this.$store.dispatch('SET_USERTEL', this.telNumber)
+      this.$store.commit('callcenter/SET_USERTEL', this.telNumber)
       this.$store.dispatch('callcenter/make_call')
     }
   },

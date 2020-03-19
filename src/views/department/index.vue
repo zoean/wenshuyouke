@@ -4,13 +4,29 @@
 			<div class="department-tree">
 				<div class="department-handle">
 					<h3>{{enterpriseName}}</h3>
-					<p>
-						<el-button type="primary" icon="el-icon-plus" circle @click="addDepartmentHandle"></el-button>
-						<el-button type="primary" icon="el-icon-edit" circle @click="editDepartmentHandle"></el-button>
-						<el-button type="danger" icon="el-icon-delete" circle @click="delDepartmentVerifyHandle"></el-button>
-					</p>
 				</div>
-				<el-tree check-on-click-node accordion ref="departmentTree" highlight-current default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" @check-change="treeChange" node-key="id"></el-tree>
+				<el-tree :check-on-click-node=false :accordion=false ref="departmentTree" highlight-current :expand-on-click-node="false" default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" node-key="id" @node-click="nodeClick">
+					<span class="custom-tree-node" slot-scope="{ node, data }">
+		        <span>{{ node.label }}</span>
+		        <span class="tree-handle">
+		        	<i class="el-icon-plus" title="添加同级部门" @click="addDepartmentHandle(data)"></i>
+		        	<i class="el-icon-edit" title="编辑部门名称" @click="editDepartmentHandle(data)"></i>
+		        	<i class="el-icon-delete" title="删除该部门" @click="delDepartmentVerifyHandle(data)"></i>
+		          <!-- <el-button
+		            type="text"
+		            size="mini"
+		            @click="() => append(data)">
+		            Append
+		          </el-button>
+		          <el-button
+		            type="text"
+		            size="mini"
+		            @click="() => remove(node, data)">
+		            Delete
+		          </el-button> -->
+		        </span>
+		      </span>
+				</el-tree>
 			</div>
 			<div class="gutter-line"></div>
 			<div class="department-data">
@@ -105,9 +121,8 @@
 		<!-- 组织架构增删改 -->
 		<el-dialog :title="editDepartmentType" :visible.sync="addDepartmentVisible" width="30%">
 		  <el-form :model="addDepartmentForm" ref="addDepartmentForm" :rules="addDepartmentRule">
-		    <el-form-item label="上级部门" inline :label-width="formLabelWidth" prop="departParent">
+		    <el-form-item v-show="!isEnt" label="上级部门" inline :label-width="formLabelWidth" prop="departParent">
 		    	<el-select v-model="addDepartmentForm.departParent">
-		    		<el-option :value="-1" label="添加一级部门" v-show="editDepartmentType=='添加部门'">添加一级部门</el-option>
 		    		<el-option v-for="(item, index) in departmentTree" :value="item.id" :label="item.label">{{item.label}}</el-option>
 		    	</el-select>
 		    </el-form-item>
@@ -222,6 +237,7 @@ export default{
 			addWorkerVisible:false,//添加用户visible
 			delWorkerVisible:false,//删除用户visible
 			delWorkerVerifyVisible:false,//删除用户确认visible
+			isEnt:false,
 			addDepartmentForm:{
 				entUserId:getLocalStorage('userId'),//企业用户ID
 				departParent:'',//上级部门（下拉菜单选择）
@@ -303,30 +319,31 @@ export default{
 				this.departmentTree = response.data.obj.data
 			})
     },
-		treeChange(data) {//check-change-监听组织架构选择事件
-			// this.treeSelection = data//增删改组织架构时判断长度用
-			// this.addDepartmentForm.parentId = data.parentId
-			// this.addDepartmentForm.departName = data.departName
-			// console.log(this.addDepartmentForm)
-      // this.addDepartmentForm.ids=[]
-      // this.addDepartmentForm.deName=[]
-      // for(let i in data){
-      // 	this.addDepartmentForm.ids(data(i).id)
-      // 	this.addDepartmentForm.deName(data(i).deName)
-      // }
-    },
-    addDepartmentHandle(){//添加部门事件触发
+		nodeClick(obj, data, node){
+			this.workerListForm.department = obj.id			
+			this.getWorkerHandle()
+		},
+    addDepartmentHandle(data){//添加部门事件触发
     	this.addDepartmentVisible = true
-    	this.editDepartmentType='添加部门'
+    	this.addDepartmentForm.departParent = data.parentId
+    	if(this.addDepartmentForm.departParent == -1){
+    		this.editDepartmentType='添加一级部门'
+    		this.isEnt = true
+    	}else{
+    		this.editDepartmentType='添加部门'
+    		this.isEnt = false
+    	}
     },
-    editDepartmentHandle(){
+    editDepartmentHandle(data){
     	this.addDepartmentVisible = true
+    	this.isEnt = false
     	this.editDepartmentType='编辑部门'
     	let curNode = this.$refs.departmentTree.getCheckedNodes()
-    	this.addDepartmentForm.departName = curNode[0].label
-    	this.addDepartmentForm.departParent = curNode[0].parentId + ''
+    	this.addDepartmentForm.departName = data.label
+    	this.addDepartmentForm.departParent = data.parentId
+    	this.addDepartmentForm.id = data.id
     },
-    delDepartmentVerifyHandle(){
+    delDepartmentVerifyHandle(data){
     	let curNode = this.$refs.departmentTree.getCheckedKeys()
     	if(curNode.length <=0){
     		this.$message.error('请选择要删除的部门')
@@ -338,7 +355,7 @@ export default{
     addEditDeSubmit(){
     	this.$refs['addDepartmentForm'].validate((valid)=>{
     		if(valid){
-    			if(this.editDepartmentType == '添加部门'){
+    			if(this.editDepartmentType != '编辑部门'){
     				addOrganize(this.addDepartmentForm).then(response=>{
 	    				try{
 	    					if(response.status==200){
@@ -373,7 +390,7 @@ export default{
     },
 		delDeSubmit(){
 			delOrganize(this.delDepartmentForm).then(response=>{
-  			if(response.status==200){
+				if(response.status==200){
   				this.$message.success('删除部门成功')
   				this.delDepartmentVisible = false
   				this.getOrganizeHandle()
@@ -461,12 +478,31 @@ export default{
 		display: flex;
 	flex-direction: row;
 	.department-tree{
-		width:22vw;
+		width:18vw;
 		.department-handle{
 			display: flex;
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
+		}
+		.el-tree{
+			.custom-tree-node{
+				width:100%;
+				display: flex;
+				flex-direction:row;
+				justify-content: space-between;
+				span.tree-handle{
+					display:none;
+					i{
+						margin-left:5px;
+					}
+				}
+			}
+			.custom-tree-node:hover{
+				span.tree-handle{
+					display:block;
+				}
+			}
 		}
 	}
 	.gutter-line{

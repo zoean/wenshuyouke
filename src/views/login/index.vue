@@ -187,6 +187,7 @@ $cursor: #ccc;
 
 /* reset element-ui css */
 .login-container {
+  padding-top: -64px;
   .el-input {
     display: inline-block;
     height: 47px;

@@ -27,8 +27,7 @@ router.beforeEach(async (to, from, next) => {
   const hasToken = getToken()
   if (hasToken) {
     if (to.path === '/login') {
-      // if is logged in, redirect to the home page
-      
+      // if is logged in, redirect to the home page      
       next({ path: '/' })
       NProgress.done()
     } else {
@@ -39,14 +38,19 @@ router.beforeEach(async (to, from, next) => {
         try {
           // get user info
           await store.dispatch('user/getInfo')
-          const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
-          // dynamically add accessible routes
-          router.addRoutes(accessRoutes)
-          router.options.routes.push(accessRoutes)
-          next({
-            ...to,
-            replace: true
-          })
+          if(store.getters.roles){
+            const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
+            // dynamically add accessible routes
+            router.addRoutes(accessRoutes)
+            router.options.routes.concat(accessRoutes)
+            console.log(router)
+            next({
+              ...to,
+              replace: true
+            })
+          }else{
+            Message.error('您暂未分配角色，请联系管理员')
+          }          
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

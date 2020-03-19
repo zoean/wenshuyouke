@@ -1,35 +1,19 @@
 <template>
   <div class="navbar">
-    <!-- <hamburger :is-active="sidebar.opened"
-               class="hamburger-container"
-               @toggleClick="toggleSideBar" />
-
-    <breadcrumb class="breadcrumb-container" /> -->
-    <img width="134"
+    <div class="navbar-left">
+      <img width="134"
          height="29"
          class="logo"
          src="@/assets/images/logo.png" />
-    <div class="narbar-right">
-      <!-- <ul>
-        <li>
-          <span class="svg-container">
-            <svg-icon icon-class="user-message" />
-          </span>
-          <span>消息</span>
-        </li>
-        <li>
-          <span class="svg-container">
-            <svg-icon icon-class="user-help" />
-          </span>
-          <span>帮助</span>
-        </li>
-        <li>
-          <span class="svg-container">
-            <svg-icon icon-class="user-set" />
-          </span>
-          <span>设置</span>
-        </li>
-      </ul> -->
+      <section class="marquee">
+        <ul class="content">
+          <li>已为您推送288条新企信息</li>
+          <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
+          <li>已为名单北京销售新增388条数据</li>
+        </ul>
+      </section>
+    </div>    
+    <div class="navbar-right">
       <div class="right-menu">
         <el-dropdown>          
           <p>
@@ -146,18 +130,42 @@ export default {
 .navbar {
   height: 64px;
   overflow: hidden;
-  position: relative;
+  position: fixed;
+  top:0;
+  width:100%;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   display: flex;
   justify-content: space-between;
   z-index: 1;
-  .logo {
-    margin: 18px 0 0 30px;
-  }
-  .narbar-right {
+  .navbar-left{
     display: flex;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: flex-start;
+    flex: 0 1 auto;
+    width: 50%;
+    .logo {
+      margin: 18px 60px 0 30px;
+    }
+    section{ 
+    width:100%;    
+      ul{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        overflow: hidden;
+        li{
+          height: 64px;
+          line-height: 64px; 
+          margin-right: 60px;         
+        }
+      }
+    }
+  }
+  
+  .navbar-right {
+    display: flex;
+    justify-content: space-between;
     ul {
       width: 480px;
       list-style: none;
@@ -168,6 +176,7 @@ export default {
     .user-info {
       width: 180px;
       display: flex;
+      flex-direction: row;
       justify-content: flex-start;
       align-items: center;
       img {
@@ -243,5 +252,24 @@ export default {
       }
     }
   }
+}
+@keyframes kf-marque-animation{ 0% { transform: translateX(0); } 100% { transform: translateX(-33.3%); } }
+.marquee{
+    height: 44px;
+    line-height: 44px;
+    background: #fff;
+    border: none;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+    position: relative;
+}
+.marquee .content{
+    display: inline-block;
+    position: relative;
+    padding-right: 0px;
+    animation: kf-marque-animation 11.3s linear infinite;
+    white-space: nowrap;
 }
 </style>

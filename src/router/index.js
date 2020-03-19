@@ -54,9 +54,13 @@ export const asyncRouterMap = [{
         meta: {
           title: "企业主页",
           icon: "dashboard",
-          role:['admin', 'seat']
+          role:['admin']
         }
       }]
+    },  {
+      path: "/",
+      component: Layout,
+      redirect: "saleslead"      
     },  
   // {
   //   path: "/dashboard",
@@ -206,8 +210,7 @@ export const asyncRouterMap = [{
     name: "expensecenter",
     meta: {
       title: "费用中心",
-      icon: "count",
-      roles:['admin']
+      icon: "count"
     },
     alwaysShow: true,
     children:[{
@@ -216,7 +219,8 @@ export const asyncRouterMap = [{
       name:'calldetails',
       meta:{
         title:'通话详情',
-        icon:'phone'
+        icon:'phone',
+        roles:['admin', 'seat']
       }
     }]
   },

@@ -1,7 +1,7 @@
 <template>
 	<div class="main-box">
 		<div class="search-area">
-			<dl>
+			<dl v-show="!isSeat">
 				<dt>统计范围：</dt>
 				<dd>
 					<el-select v-model="searchForm.extentionno" placeholder="请选择名单">
@@ -82,6 +82,7 @@
 	</div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import {getSubAccounts} from '@/api/cardmanage'
 import {getCallList} from '@/api/orderdetail'
 import {getLocalStorage,parseToTimestamp,beforeToday,beforeAweek,parseTime,parseDateTime} from '@/utils/index'
@@ -95,13 +96,18 @@ export default {
 				pageNum:1,
 				pageSize:10
 			},
-			orderDetailList:{}
+			orderDetailList:{},
+      isSeat:'false'
 		}
 	},
+  computed: {
+    ...mapGetters([
+      'roles'
+    ])
+  },
 	watch:{//监听搜索条件变化，请求数据
     searchForm:{
       handler:function(val,oldval){//监听回调
-      	console.log(val)
         this.fetchOrderList()
       },
       deep: true //开启深度监听
@@ -114,8 +120,13 @@ export default {
 			}catch(e){}
 		})
     this.fetchOrderList()
+    this.ifSeat()
 	},
 	methods:{
+    ifSeat(){
+      this.isSeat = this.roles.includes('seat') ? true :  false
+      console.log(this.isSeat)      
+    },
     formatDate(row, column, cellValue){//表格时间列格式化时间
       // return cellValue
       if(cellValue){
@@ -142,8 +153,6 @@ export default {
     	this.fetchOrderList()
 		},
 		pickerThisWeek(){
-      console.log(parseTime(parseToTimestamp(beforeAweek()[0],10)))
-      console.log(parseTime(parseToTimestamp(beforeAweek()[1],10)))
 			this.searchForm.endTime = parseToTimestamp(beforeAweek()[0],10)
     	this.searchForm.startTime = parseToTimestamp(beforeAweek()[1],10)
     	this.fetchOrderList()

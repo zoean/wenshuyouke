@@ -83,7 +83,7 @@
                          width="55">
         </el-table-column>
         <el-table-column label="号码"
-                         width="180" prop="telephone">
+                         width="80" prop="telephone">
           <template slot-scope="scope">
             <svg-icon class="onthouch-outbound highblue" icon-class="outbound" @click="oneTouchCall(scope.$index, scope.row)" />
             <!-- <el-button type="success"
@@ -108,7 +108,7 @@
              <el-row class="com-lable">
               <el-col :span="6">
                 <span class="label-blue" >地址</span>
-                <span :title="scope.row.address">{{scope.row.address | ellipsis(32)}}</span>
+                <span :title="scope.row.address">{{scope.row.address | ellipsis(22)}}</span>
               </el-col>
               <el-col :span="3">
                 <span class="label-dark-gray">{{scope.row.callStatus | callStatus}}</span>
@@ -123,7 +123,7 @@
                 <span v-show="scope.row.dataSource == 3">回收站</span>
               </el-col>
               <el-col :span="6">
-                <span class="label-light-gray" :title="scope.row.remark">备注：{{scope.row.remark | ellipsis(32)}}</span>
+                <span class="label-light-gray" :title="scope.row.remark">备注：{{scope.row.remark | ellipsis(22)}}</span>
               </el-col>
             </el-row> 
           </template>
@@ -587,7 +587,7 @@ export default {
     }
     .call-duration{
       width: 300px;
-      height: 200px;
+      min-height: 200px;
       padding:25px;
       box-shadow: 0 1px 3px rgba(0,0,0,.3);
       border-radius: 10px;
@@ -601,6 +601,8 @@ export default {
       align-items: center;
       .el-button{
         width: 200px;
+        font-weight: 100;
+        color: #fff;
       }
     }
   }  
@@ -613,4 +615,7 @@ export default {
 .el-pagination {
   margin-top: 20px;
 }
+</style>
+<style lang="scss" scoped>
+  
 </style>
