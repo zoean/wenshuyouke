@@ -105,7 +105,7 @@ const actions = {
           removeLocalStorage('userId')          
           removeLocalStorage('userName')
           removeLocalStorage('enterpriseName')
-          router.push(`/login?redirect=${this.$route.fullPath}`)
+          router.push(`/login`)
         }
         if (!obj) {
           reject('Verification failed, please Login again.')
@@ -131,7 +131,7 @@ const actions = {
         commit('SET_NAME', realName)
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
-        resolve(obj)
+        resolve(obj)//await的函数需要返回一个Promise 当resolve被触发时代表本次异步过程结束
       }).catch(error => {
         reject(error)
       })
@@ -146,9 +146,11 @@ const actions = {
       removeToken() // must remove  token  first    
       removeLocalStorage('userId')    
       removeLocalStorage('userName')
-      removeLocalStorage('enterpriseName')
+      removeLocalStorage('enterpriseName')      
+      commit('SET_ROLES', [])
       commit('RESET_STATE')
       resetRouter()
+      resolve()
     })
     
     // return new Promise((resolve, reject) => {

@@ -144,7 +144,7 @@
 		</el-dialog>
 		<!-- 用户、坐席增删 -->
 		<el-dialog title="增加用户" :visible.sync="addWorkerVisible">
-		  <el-form :model="addWorkerForm" ref="addWorkerForm" :rules="addWorderRule">
+		  <el-form :model="addWorkerForm" ref="addWorkerForm" :rules="addWorkerRule">
 		    <el-form-item label="用户名" inline :label-width="formLabelWidth" prop="realName">
 		      <el-input v-model="addWorkerForm.realName" autocomplete="off"></el-input>
 		    </el-form-item>
@@ -206,7 +206,7 @@
 	</div>
 </template>
 <script>
-import {getOrganize,addOrganize,delOrganize,editOrganize,getWorkerList,addWorder,delWorder} from '@/api/department.js'
+import {getOrganize,addOrganize,delOrganize,editOrganize,getWorkerList,addWorker,delWorker} from '@/api/department.js'
 import {loadRoleList} from '@/api/roleset'
 import {getLocalStorage} from '@/utils/index'
 export default{
@@ -265,7 +265,7 @@ export default{
 			addWorkerPositionProps:{
 				value:'id'
 			},	
-			addWorderRule:{
+			addWorkerRule:{
 				realName:[
 					{
 						required:true,message:'请输入员工/坐席姓名',trigger:'blur'
@@ -278,6 +278,9 @@ export default{
 				],
 				department:[{
 					required:true,message:'请选择员工/坐席所在部门',trigger:'blur'
+				}],
+				roleName:[{
+					required:true,message:'请选择员工/坐席角色',trigger:'blur'
 				}],
 				userType:[{
 					required:true,message:'请选择用户类别',trigger:'blur'
@@ -404,7 +407,7 @@ export default{
       }
     },
     delWorkerVerifyHandle(){//已确认删除用户
-    	delWorder(this.delWorkerForm).then(response=>{
+    	delWorker(this.delWorkerForm).then(response=>{
     		try{
     			if(response.status==200){
     				this.delWorkerVerifyVisible = false
@@ -426,11 +429,11 @@ export default{
     },
     handleSizeChange(val){
     	this.workerListForm.pageSize = val
-    	this.getWorkerHandle()()
+    	this.getWorkerHandle()
     },
 		handleCurrentChange(val){
 			this.workerListForm.pageNum = val
-			this.getWorkerHandle()()
+			this.getWorkerHandle()
 		},
     addWorkerHandle(){
     	this.addWorkerVisible = true
@@ -445,7 +448,7 @@ export default{
     addUserSubmit(){
     	this.$refs['addWorkerForm'].validate((valid) => {
         if (valid) {
-          addWorder(this.addWorkerForm).then(response=>{
+          addWorker(this.addWorkerForm).then(response=>{
 		    		try{
 		    			if(response.status==200){
 		    				this.addWorkerVisible = false

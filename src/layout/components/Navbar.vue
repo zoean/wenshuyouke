@@ -28,7 +28,7 @@
             <el-dropdown-item>2020-03-12 【通话】您的通话时长已不足100...</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> 
-        <el-dropdown>          
+        <el-dropdown @command="handleCommand">          
           <p>
             <span class="svg-container">
               <svg-icon icon-class="user-help" />
@@ -36,9 +36,9 @@
             <span>帮助</span>
           </p>
           <el-dropdown-menu>
-            <el-dropdown-item>意见反馈</el-dropdown-item>
-            <el-dropdown-item>客服中心</el-dropdown-item>
-            <el-dropdown-item>帮助中心</el-dropdown-item>
+            <el-dropdown-item command="1">意见反馈</el-dropdown-item>
+            <el-dropdown-item command="2">客服中心</el-dropdown-item>
+            <el-dropdown-item command="3">帮助中心</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> 
         <el-dropdown>          
@@ -93,6 +93,10 @@
       </div>
     </div>
 
+  <el-dialog :visible.sync="serviceCenterVisible" width="30%">
+    <p>感谢您对文投优客的大力支持</p>
+    <p>如有需要请拨打24小时服务热线：4001001111</p>
+  </el-dialog>
   </div>
 </template>
 
@@ -121,6 +125,20 @@ export default {
       this.$store.dispatch('user/logout')
       location.reload()
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    handleCommand(command) {//暂时写在navbar，后期调整
+      if(command == 1){//意见反馈
+
+      }else if(command == 2){//客服中心
+        this.serviceCenterVisible = true
+      }else{//帮助中心
+
+      }
+    }
+  },
+  data(){
+    return {
+      serviceCenterVisible:false
     }
   }
 }
@@ -153,7 +171,6 @@ export default {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        overflow: hidden;
         li{
           height: 64px;
           line-height: 64px; 

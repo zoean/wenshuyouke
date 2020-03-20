@@ -11,7 +11,7 @@
     <transition name="fade-transform"
                 mode="out-in">
       <router-view :key="key" />
-    </transition>
+    </transition>    
   </section>
 </div>
 </template>

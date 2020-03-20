@@ -10,6 +10,8 @@ import cluesmanage from './modules/cluesmanage' // 发现线索
 import company from './modules/company' //企业主页
 import myclue from './modules/myclue' //我的线索
 import recycle from './modules/recycle' //回收站
+import companysearch from './modules/companysearch' //企业搜索
+// import cluedetails from './modules/cluedetails' //线索明细
 
 
 Vue.use(Vuex)
@@ -24,7 +26,9 @@ const store = new Vuex.Store({
     cluesmanage,
     company,
     myclue,
-    recycle
+    recycle,
+    companysearch,
+    // cluedetails
   },
   getters
 })

@@ -42,16 +42,24 @@ export function getWorkerList(data){
 }
 
 //添加用户
-export function addWorder(data){
+export function addWorker(data){
 	return request({
 		url:'user/api/person/add',
 		method:'post',
 		data
 	})
 }
+//编辑用户
+export function editWorker(data){
+  return request({
+    url:'user/api/person/update',
+    method:'post',
+    data
+  })
+}
 
 //删除用户
-export function delWorder(data){
+export function delWorker(data){
 	return request({
 		url:'user/api/person/delete',
 		method:'post',

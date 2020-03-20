@@ -20,7 +20,7 @@
                   name="username"
                   type="text"
                   tabindex="1"
-                  auto-complete="on" />
+                  autocomplete="off" />
       </el-form-item>
 
       <el-form-item prop="password">
@@ -110,8 +110,8 @@ export default {
     };
     return {
       loginForm: {
-        username: "zzt",
-        password: "1"
+        username: "super",
+        password: "admin"
       },
       loginRules: {
         username: [

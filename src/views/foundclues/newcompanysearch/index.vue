@@ -1,6 +1,48 @@
 <template>
   <div class="newcom-wrap">
     <div class="newcom-main">
+    	<div class="search-area">
+    		<dl>
+    			<dt>所在地区：</dt>
+    			<dd>
+    				<el-button type="primary" @click="resetSearchOption(1)">不限</el-button>
+    				<el-select v-model="provinceName">
+    					<el-option v-for="(item,index) in provinceList" :value="item.id" :label="item.name"></el-option>
+    				</el-select>
+    				<el-select v-model="cityName" v-show="cityList.length > 0">
+    					<el-option v-for="(item,index) in cityList" :value="item.id" :label="item.name"></el-option>
+    				</el-select>
+    				<el-select v-model="districtName" v-show="districtList.length > 0">
+    					<el-option v-for="(item,index) in districtList" :value="item.id" :label="item.name"></el-option>
+    				</el-select>
+    			</dd>
+    		</dl>
+    		<dl>
+    			<dt>所属行业：</dt>
+    			<dd>
+    				<el-button type="primary" @click="resetSearchOption(2)">不限</el-button>
+    				<el-select v-model="industryName">
+    					<el-option v-for="item in industryList" :value="item.industryCode" :label="item.industryName"></el-option>
+    				</el-select>
+    				<el-select v-model="subIndustryName" v-show="subIndustryList.length > 0">
+    					<el-option v-for="item in subIndustryList" :value="item.id" :label="item.industryName"></el-option>
+    				</el-select>
+    			</dd>
+    		</dl>
+    		<dl>
+    			<dt>企业类型：</dt>
+    			<dd>
+    				<el-button type="primary" @click="resetSearchOption(3)">不限</el-button>
+    				<el-radio-group v-model="searchForm.entType" @change="changeEntType">
+				      <el-radio-button value="个人独资企业" label="个人独资企业">个人独资企业</el-radio-button>
+				      <el-radio-button value="有限责任公司" label="有限责任公司">有限责任公司</el-radio-button>
+				      <el-radio-button value="股份有限公司" label="股份有限公司">股份有限公司</el-radio-button>
+				      <el-radio-button value="外商投资企业" label="外商投资企业">外商投资企业</el-radio-button>
+				      <el-radio-button value="1" label="1">其他</el-radio-button>
+				    </el-radio-group>
+    			</dd>
+    		</dl>
+    	</div>
     	<div class="search-result">
     		<span>文投优客今天为您推荐了<b>{{newComList.total}}</b>家符合条件的企业</span>
     		<div class="get-data">
@@ -23,10 +65,10 @@
 				    ref="multipleTable"
 				    :data="newComList.list"
 				    tooltip-effect="dark"
-				    @selection-change="handleSelectionChange" empty-text="数据正在加载……">
+				    @selection-change="handleSelectionChange" :row-key="getRowKey">
 				    <el-table-column
 				      type="selection"
-				      width="55">
+				      width="55" :reserve-selection="true">
 				    </el-table-column>
 				    <el-table-column
 				      prop="name"
@@ -88,29 +130,48 @@
 /*
 *@api requestNewComList 获取新企列表 post
 *@api getCurUserCard 获取当前用户名单列表 get
+*@api area 省 市 区
+industry 市
 */
 import {requestNewComList,getCurUserCard,getNewComToCard,getSearchOption} from '@/api/foundclues'
+import {area, category, industry} from '@/api/companysearch'
 import {getLocalStorage} from '@/utils/index'
 export default {
   data() {
     return {
     	searchForm:{
     		pageNum:1,
-    		pageSize:10
+    		pageSize:10,
+    		raCode: '', //省市区
+    		industryCode:'', //行业
+    		entType: '' //企业类型
     	},
     	getNewComForm:{//领取新企推荐数据
     		dataSource:0,
     		listId:'',//选中要分配的名单
     		entId:[]//要领取到名单的企业id
     	},
+    	provinceName:'',
+    	provinceList:[],
+    	cityName: '',
+    	cityList: [],
+    	districtName: '',
+    	districtList: [],
+    	industryName: '',
+    	industryList: [],
+    	subIndustryName: '',
+    	subIndustryList: [],
     	newComList:{},//新企列表
     	cardList:{},
+    	pid: 100000,
     	multipleSelection:[]//选中要领取到名单的新企
     }
   },
   created(){
+  	this.getAreaObj('province') //获取省市区搜索条件
   	this.getNewComList() //初始化获取第一页新企列表
   	this.getCurUserCardHandle() //获取当前用户名单列表用于领取新企数据到名单
+  	this.getIndustryObj()
   },
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
@@ -118,10 +179,35 @@ export default {
         this.getNewComList()
       },
       deep: true //开启深度监听
+    },
+    provinceName: function(val, oldval){//省
+    	this.pid = val
+    	this.searchForm.raCode = val
+    	this.getAreaObj('city')
+    },
+    cityName: function (val, oldval){//市
+    	this.pid = val
+    	this.searchForm.raCode = val
+    	this.getAreaObj()
+    },
+    districtName: function (val,oldval){//区
+    	this.searchForm.raCode = val
+    },
+    industryName: function (val,oldval){ //行业
+    	this.getSubIndustryObj(val)
+    	this.searchForm.industryCode = val
+    },
+    subIndustryName: function (val, oldval){
+    	this.searchForm.industryCode = val
     }
   },
-
   methods: {
+  	changeEntType(val){
+  		console.log(val)
+  	},
+  	getRowKey(row){
+  		return row.id
+  	},
   	getNewComList(){//新企列表
   		requestNewComList(this.searchForm).then(response=>{
   			try{
@@ -132,6 +218,53 @@ export default {
   				console.log(e)
   			}
   		})
+  	},
+  	getAreaObj(obj){
+			area({pid: this.pid}).then(response => {
+				try{
+					if(response.status == 200){
+						if(obj == 'province'){
+							this.provinceList = response.data.obj
+						}else if(obj == 'city'){
+							this.cityList = response.data.obj
+						}else{
+							this.districtList = response.data.obj
+						}
+					}
+				}catch(e){}
+			})
+  	},
+  	getIndustryObj(){//获取行业
+			category().then(response => {
+				if(response.status == 200){
+					this.industryList = response.data.obj
+				}
+			})
+  	},
+  	getSubIndustryObj(code){
+  		industry({ industryCode: code}).then(response => {
+  			if(response.status == 200){
+  				console.log(response)
+  				this.subIndustryList = response.data.obj
+  			}  			
+  		})
+  	},
+  	resetSearchOption(tag){
+  		switch (tag) {
+  			case 1:
+  				this.searchForm.raCode = ''
+  				this.provinceName = ''
+  				this.cityList = []
+					this.districtList = []
+					this.pid = 100000
+  				break
+  			case 2:
+  				this.searchForm.industryCode = ''
+  				break
+  			default:
+  				this.searchForm.entType = ''
+  				break;
+  		}
   	},
   	reloadNewComList(curPage){
   		this.searchForm.pageNum = curPage
@@ -164,7 +297,9 @@ export default {
     handleSelectionChange(val) {//监听selection选择事件
     	this.getNewComForm.entId = []
     	for(let i in val){
-    		this.getNewComForm.entId.push(val[i].id)    		
+    		if(!this.getNewComForm.entId.includes(val[i].id)){
+    			this.getNewComForm.entId.push(val[i].id)
+    		}  		
     	}
     },
     handleSizeChange(pageSize){

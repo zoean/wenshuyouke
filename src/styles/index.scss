@@ -75,8 +75,28 @@ ul{
   border-radius:12px;
   padding: 22px 32px;
 }
+.search-area {
+  display: flex;
+  flex-direction: column;
+  dl {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    dd {
+      margin-left: 10px;
+    }
+  }
+  .companyHandle {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
 .highred{
   color: #FF4040;
 }
 .highblue{color:#4084FF};
+.el-pagination{
+  margin-top: 20px;
+}
 

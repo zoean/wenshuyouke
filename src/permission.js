@@ -6,8 +6,7 @@ import {
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import {
-  getToken,
-  setToken
+  getToken
 } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 
@@ -42,8 +41,7 @@ router.beforeEach(async (to, from, next) => {
             const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
             // dynamically add accessible routes
             router.addRoutes(accessRoutes)
-            router.options.routes.concat(accessRoutes)
-            console.log(router)
+            router.options.routes.push(...accessRoutes)
             next({
               ...to,
               replace: true
@@ -55,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')
           Message.error(error || 'Has Error')
-          next(`/login?redirect=${to.path}`)
+          next(`/login`)
           NProgress.done()
         }
       }
@@ -67,7 +65,7 @@ router.beforeEach(async (to, from, next) => {
       next()
     } else {
       // other pages that do not have permission to access are redirected to the login page.
-      next(`/login?redirect=${to.path}`)
+      next(`/login`)
       NProgress.done()
     }
   }

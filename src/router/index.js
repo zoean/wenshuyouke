@@ -35,10 +35,10 @@ const router = createRouter();
 export function resetRouter() {
   const newRouter = createRouter();
   router.matcher = newRouter.matcher; // reset router
-  router.routes({
-    path: '/login',
-    name: 'login'
-  })
+  // router.routes({
+  //   path: '/login',
+  //   name: 'login'
+  // })
 }
 
 //异步挂载的路由
@@ -47,21 +47,21 @@ export const asyncRouterMap = [{
       path: "/",
       component: Layout,
       redirect: "/home",
+      meta: {
+        title: "企业主页",
+        icon: "dashboard"
+      },
       children: [{
-        path: "home",
+        path: "/home",
         name: "home",
         component: () => import("@/views/home/index"),
         meta: {
           title: "企业主页",
-          icon: "dashboard",
-          role:['admin']
+          icon: "dashboard"
         }
       }]
-    },  {
-      path: "/",
-      component: Layout,
-      redirect: "saleslead"      
-    },  
+    },
+    
   // {
   //   path: "/dashboard",
   //   component: Layout,
@@ -73,7 +73,7 @@ export const asyncRouterMap = [{
   //     meta: {
   //       title: "工作台",
   //       icon: "workbench",
-  //       role: ['admin', 'super']
+  //       roles: ['admin', 'super']
   //     }
   //   }]
   // },
@@ -111,10 +111,11 @@ export const asyncRouterMap = [{
     path: "/cluesmanagement",
     component: Layout,
     name: "cluesmanagement",
-    redirect: "/cluesmanagement/listmanage",
+    redirect: "/cluesmanagement/saleslead",
     meta: {
       title: "线索管理",
-      icon: "admin"
+      icon: "admin",
+      roles:['seat']
     },
     children: [{
         path: "listmanage",
@@ -206,7 +207,7 @@ export const asyncRouterMap = [{
   {
     path: "/expenses",
     component: Layout,
-    redirect: "/reach/callcenter/index",
+    redirect: "/expenses/calldetails",
     name: "expensecenter",
     meta: {
       title: "费用中心",
@@ -215,6 +216,14 @@ export const asyncRouterMap = [{
     alwaysShow: true,
     children:[{
       path:'/expenses',
+      component:() => import("@/views/expensecenter/cluedetails/index"),
+      name:'cluedetails',
+      meta:{
+        title:'线索明细',
+        icon:'phone'
+      }
+    },{
+      path:'/calldetails',
       component:() => import("@/views/expensecenter/calldetails/index"),
       name:'calldetails',
       meta:{
@@ -237,7 +246,7 @@ export const asyncRouterMap = [{
   {
     path: "/set",
     component: Layout,
-    redirect: "/home",
+    redirect: "/set/department",
     meta:{
       title: "设置中心",
       icon: "dashboard",
@@ -250,7 +259,7 @@ export const asyncRouterMap = [{
       meta: {
         title: "部门用户设置",
         icon: "dashboard",
-        role:['admin']
+        roles:['admin']
       }
     },{
       path: "rolepermission",
@@ -259,7 +268,28 @@ export const asyncRouterMap = [{
       meta: {
         title: "角色权限设置",
         icon: "dashboard",
-        role:['admin']
+        roles:['admin']
+      }
+    }]
+  },
+  {
+    path: "/wtuk",
+    redirect:"/ukadmin/user",
+    component: Layout,
+    name: "ukadmin",
+    meta: {
+      title: "优客管理中心",
+      icon: "dashboard",
+      roles: ['super']
+    },
+    alwaysShow: true,
+    children: [{
+      path: "ukadmin/user",
+      name: "entAccount",
+      component: () => import("@/views/ukadmin/user"),
+      meta: {
+        title: '企业帐户管理',
+        icon: "dashboard"
       }
     }]
   },
@@ -268,8 +298,7 @@ export const asyncRouterMap = [{
     redirect: "/regester",
     component: () => import("@/views/regester/index"),
     name: 'regester',
-    hidden: true,
-    alwaysShow: true,
+    hidden: true
   },
   // 404 page must be placed at the end !!!
   {
