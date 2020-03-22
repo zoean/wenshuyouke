@@ -145,14 +145,14 @@
 		<!-- 用户、坐席增删 -->
 		<el-dialog title="增加用户" :visible.sync="addWorkerVisible">
 		  <el-form :model="addWorkerForm" ref="addWorkerForm" :rules="addWorkerRule">
-		    <el-form-item label="用户名" inline :label-width="formLabelWidth" prop="realName">
-		      <el-input v-model="addWorkerForm.realName" autocomplete="off"></el-input>
+		    <el-form-item label="用户名" inline :label-width="formLabelWidth" prop="userName">
+		      <el-input v-model="addWorkerForm.userName" autocomplete="off"></el-input>
 		    </el-form-item>
 		    <el-form-item label="密码" :label-width="formLabelWidth" prop="passWord">
 		      <el-input v-model="addWorkerForm.passWord" type="password" autocomplete="off"></el-input>
 		    </el-form-item>
-	    <el-form-item label="昵称" :label-width="formLabelWidth" prop="userName">
-	      <el-input v-model="addWorkerForm.userName" autocomplete="off"></el-input>
+	    <el-form-item label="昵称" :label-width="formLabelWidth" prop="realName">
+	      <el-input v-model="addWorkerForm.realName" autocomplete="off"></el-input>
 	    </el-form-item>	    
 	    <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
 	      <el-select v-model="addWorkerForm.sex" placeholder="请选择性别">
@@ -170,9 +170,9 @@
 				  </template>
 		    </el-cascader>
 	    </el-form-item>
-	    <el-form-item label="角色" :label-width="formLabelWidth" prop="roleName">
-	      <el-select v-model="addWorkerForm.roleName" placeholder="请选择性别">
-		      <el-option v-for="item in roleList" :label="item.roleName" value="item.id"></el-option>
+	    <el-form-item label="角色" :label-width="formLabelWidth" prop="userRole">
+	      <el-select v-model="addWorkerForm.userRole" placeholder="请选择性别">
+		      <el-option v-for="item in roleList" :label="item.roleName" :value="item.id"></el-option>
 		    </el-select>
 	    </el-form-item>
 	    <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
@@ -279,7 +279,7 @@ export default{
 				department:[{
 					required:true,message:'请选择员工/坐席所在部门',trigger:'blur'
 				}],
-				roleName:[{
+				userRole:[{
 					required:true,message:'请选择员工/坐席角色',trigger:'blur'
 				}],
 				userType:[{

@@ -65,6 +65,7 @@ export default{
 			tabPosition:'left',
 			roleList:[],
 			roleId:'',
+			roleType: '',
 			menuTree:[],
 			addEditRoleType:'',
 			addEditRoleVisible:false,
@@ -86,7 +87,9 @@ export default{
         children: 'children',
         label: 'label'
       },
-      setCurRoleTreeForm:{}
+      setCurRoleTreeForm:{
+      	ids: []
+      }
 		}
 	},
 	created(){
@@ -105,16 +108,17 @@ export default{
 			})
 		},
 		loadRoleTree(){	
-			getRoleTree({roleId: this.roleId}).then(response => {
+			getRoleTree({roleId: this.roleId, menuRole: this.roleType}).then(response => {
 				this.menuTree = response.data.obj.menus				
 				this.curUserRoleList = response.data.obj.keys	
-				console.log(this.curUserRoleList)
 			})
 		},
 		roleSelection(tab,event){
 			this.addEditRoleForm.roleName = tab.label
 			this.addEditRoleForm.id = this.roleList[tab.index].id
+			this.addEditRoleForm.roleType = this.roleList[tab.index].roleType
 			this.roleId = this.roleList[tab.index].id
+			this.roleType = this.roleList[tab.index].roleType
 			this.loadRoleTree()
 		},
 		addRoleHandle(){
@@ -181,18 +185,39 @@ export default{
 			}			
 		},
 		saveRoleSet(){
-			let curKeys = this.$refs.roleTree.getCheckedKeys()
-			if(!curKeys || curKeys.length <=0){
+			// let curKeys = this.$refs.roleTree.getCheckedKeys()
+			let curNodes = this.$refs.roleTree.getCheckedNodes()
+			if(!curNodes || curNodes.length <=0){
 				this.$message.error('请为该角色选择权限菜单')
 			}else{
 				this.setCurRoleTreeForm.roleId = this.roleId
-				this.setCurRoleTreeForm.ids = curKeys
+				for(let i in curNodes){
+					if(!this.setCurRoleTreeForm.ids.includes(curNodes[i].id)){//传子节点id
+						this.setCurRoleTreeForm.ids.push(curNodes[i].id)
+					}
+					if(!this.setCurRoleTreeForm.ids.includes(curNodes[i].parentId)){//传父节点id
+						this.setCurRoleTreeForm.ids.push(curNodes[i].parentId)
+					}
+				}
 				setRoleTree(this.setCurRoleTreeForm).then(response=>{
 					if(response.status == 200){
 						this.$message.success('权限设置成功')
+						this.setCurRoleTreeForm.ids = []
 					}
 				})
 			}
+			// 只传子节点id
+			// if(!curKeys || curKeys.length <=0){
+			// 	this.$message.error('请为该角色选择权限菜单')
+			// }else{
+			// 	this.setCurRoleTreeForm.roleId = this.roleId
+			// 	this.setCurRoleTreeForm.ids = curKeys
+			// 	setRoleTree(this.setCurRoleTreeForm).then(response=>{
+			// 		if(response.status == 200){
+			// 			this.$message.success('权限设置成功')
+			// 		}
+			// 	})
+			// }
 		}
 	}
 }	

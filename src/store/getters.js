@@ -8,6 +8,7 @@ const getters = {
   seatId: state => state.user.seatId,
   seatPw: state => state.user.seatPw,
   bindTel: state => state.user.bindTel,
-  userId: state => state.user.userId
+  userId: state => state.user.userId,
+  telephone: state => state.user.telephone
 }
 export default getters
