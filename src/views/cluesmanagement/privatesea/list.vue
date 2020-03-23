@@ -95,7 +95,7 @@
         <el-table-column prop="updateTime" label="收藏时间" show-overflow-tooltip :formatter="formatDate" />
         <el-table-column prop="entName" width="200" label="企业名称" show-overflow-tooltip>
           <template slot-scope="companyName">
-            <p @click="godetails(companyName.row)" >{{companyName.row.entName}}</p>
+            <p @click="godetails(companyName.row)">{{companyName.row.entName}}</p>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
@@ -139,28 +139,28 @@
   </div>
 </template>
 <script>
-import { getLocalStorage } from "@/utils/index";
-import { parseToTimestamp, parseTime } from "@/utils/index";
-import { getCurUserCard, getNewComToCard } from "@/api/foundclues";
+import { getLocalStorage } from "@/utils/index"
+import { parseToTimestamp, parseTime } from "@/utils/index"
+import { getCurUserCard, getNewComToCard } from "@/api/foundclues"
 
 export default {
-	name:'CompanyList',
-	props:{
-		changeCom:{
-			type:Function,
-			default:null
+  name:'CompanyList',
+		props:{
+			changeCom:{
+				type:Function,
+				default:null
+			},
+			setCListId:{
+				type:Function,
+				default:null
+			}
 		},
-		setCListId:{
-			type:Function,
-			default:null
-		}
-	},
   data() {
     return {
       fllowupStatus: ["待跟进", "有意向", "无意向", "已成交", "未成交"],
       curUserCardList: {}, //当前用户的名单列表
       searchForm: {
-        userId: getLocalStorage("userId"),
+        userID: getLocalStorage("userId"),
         fllowupStatus: [], //商机状态
         startTime: "", //开始时间
         endTime: "", // 结束时间
@@ -297,8 +297,7 @@ export default {
       for (var id in this.$refs.multipleTable.selection) {
         ids.push(this.$refs.multipleTable.selection[id].id);
       }
-      ids = ids.join(",");
-      this.ids = { ids: ids };
+      this.ids = ids.join(",");
       if (ids.length == 0) {
       } else {
         this.$confirm("确认删除, 是否继续?", "提示", {
@@ -364,12 +363,15 @@ export default {
     },
     godetails(val) {
       this.changeCom()
-      this.$store.commit('myclue/SET_COMPANYID', index.id)
+      this.$store.commit('myclue/SET_COMPANYID', val.id)
     }
   }
 };
 </script>
 <style lang="scss">
+.main-box{
+  margin-top:20px
+}
 .company-data {
   margin-top: 20px;
 }

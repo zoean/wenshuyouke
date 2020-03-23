@@ -11,8 +11,8 @@ import company from './modules/company' //企业主页
 import myclue from './modules/myclue' //我的线索
 import recycle from './modules/recycle' //回收站
 import companysearch from './modules/companysearch' //企业搜索
-// import cluedetails from './modules/cluedetails' //线索明细
-
+import cluedetails from './modules/cluedetails' //线索明细
+import accountoverview from './modules/accountoverview' //账户总览
 
 Vue.use(Vuex)
 
@@ -28,7 +28,8 @@ const store = new Vuex.Store({
     myclue,
     recycle,
     companysearch,
-    // cluedetails
+    cluedetails,
+    accountoverview
   },
   getters
 })

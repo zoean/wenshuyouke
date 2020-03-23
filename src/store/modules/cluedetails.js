@@ -1,6 +1,6 @@
 import {
-  editcompany
-} from '@/api/company'
+  cluedetails
+} from '@/api/cluedetails'
 
 import {
   getToken,
@@ -61,27 +61,11 @@ const mutations = {
   }
 }
 const actions = {
-  company({
+  clueslist({
     commit
-  },editcompanyInfo) {
-    const {
-      id,
-      enterpriseScale,
-      enterpeiseWebsite,
-      enterpriseContact,
-      enterpriseBusiness,
-      enterpriseDesc
-    }=editcompanyInfo
+  },tableData){
     return new Promise((resolve, reject) => {
-      editcompany({
-        id:id,
-        enterpriseScale:enterpriseScale,
-        enterpeiseWebsite:enterpeiseWebsite,
-        enterpriseContact:enterpriseContact,
-        enterpriseBusiness:enterpriseBusiness,
-        enterpriseDesc:enterpriseDesc
-      }).then(response => {
-		  console.log(editcompanyInfo)
+      cluedetails(tableData).then(response => {
         resolve(response.data)
       }).catch(error => {
         reject(error)

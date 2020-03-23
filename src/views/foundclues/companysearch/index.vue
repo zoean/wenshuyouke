@@ -2,7 +2,7 @@
   <div>
     <div class="main-box search">
       <el-input v-model="searchForm.entName" placeholder="请输入企业名关键词" class="input-with-select">
-        <el-button slot="append">搜索</el-button>
+        <el-button slot="append" @click="searchlist">搜索</el-button>
       </el-input>
     </div>
     <div class="main-box results">
@@ -437,11 +437,23 @@ export default {
 }
 </script>
 <style lang="scss">
+.main-box{
+  margin-top:20px
+}
 .search {
   padding: 36px 160px;
   background-image: url("~@/assets/images/searchbg.png");
-  // background-size: 100% 100%;
+  background-size: 101% 108%;
   background-position: center;
+  button{
+    height:41px;
+    background:linear-gradient(-23deg,#4088FF,#406DFF);
+    border-radius:0px 4px 4px 0px;
+    margin-right: -30px!important;
+    span{
+      color:#FFF;
+    }
+  }
   .input-with-select {
     opacity: 0.9;
   }

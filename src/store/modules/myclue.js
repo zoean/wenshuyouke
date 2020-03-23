@@ -68,7 +68,10 @@ const mutations = {
   },
   SET_BINDTEL: (state, bindTel) => {
     state.bindTel = bindTel
-  }
+  },
+  SET_COMPANYID(state, companyId){
+		state.companyId = companyId
+	}
 }
 const actions = {
   cluessearch({
@@ -112,7 +115,6 @@ const actions = {
         ids:ids,
         listId:listId
       }).then(response => {
-        console.log(1111)
         resolve(response.data)
       }).catch(error => {
         reject(error)
@@ -141,13 +143,8 @@ const actions = {
   clueslast({
     commit
   },lastinfo) {
-    const {
-      id,
-    }=lastinfo
     return new Promise((resolve, reject) => {
-      cluelast({
-        id:id,
-      }).then(response => {
+      cluelast(lastinfo).then(response => {
         resolve(response.data)
       }).catch(error => {
         reject(error)
@@ -157,13 +154,8 @@ const actions = {
   cluesnext({
     commit
   },nextinfo) {
-    const {
-      id,
-    }=nextinfo
     return new Promise((resolve, reject) => {
-      cluenext({
-        id:id,
-      }).then(response => {
+      cluenext(nextinfo).then(response => {
         resolve(response.data)
       }).catch(error => {
         reject(error)

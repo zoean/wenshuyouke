@@ -216,6 +216,14 @@ export const asyncRouterMap = [{
     alwaysShow: true,
     children:[{
       path:'/expenses',
+      component:() => import("@/views/expensecenter/accountoverview/index"),
+      name:'accountoverview',
+      meta:{
+        title:'帐户总览',
+        icon:'phone'
+      }
+    },{
+      path:'/cluedetails',
       component:() => import("@/views/expensecenter/cluedetails/index"),
       name:'cluedetails',
       meta:{
