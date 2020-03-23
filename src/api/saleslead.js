@@ -34,3 +34,12 @@ export function dropCallPost(data){
 		data
 	})
 }
+
+//发送坐席和线索号码
+export function sendPhoneNums(data){
+	return request({
+		url:'/marketing/business/ax/number',
+		method:'post',
+		data
+	})
+}

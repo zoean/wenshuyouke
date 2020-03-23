@@ -5,13 +5,18 @@
          height="29"
          class="logo"
          src="@/assets/images/logo.png" />
-      <section class="marquee">
-        <ul class="content">
-          <li>已为您推送288条新企信息</li>
-          <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
-          <li>已为名单北京销售新增388条数据</li>
-        </ul>
-      </section>
+         <!-- <div class="scroll-container">
+           <section class="marquee">
+            <ul class="content">
+              <li>已为您推送288条新企信息</li>
+              <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
+              <li>已为名单北京销售新增388条数据</li>
+              <li>新增企业</li>
+              <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
+              <li>已为名单北京销售新增388条数据</li>
+            </ul>
+          </section>
+         </div> -->      
     </div>    
     <div class="navbar-right">
       <div class="right-menu">
@@ -165,19 +170,26 @@ export default {
     .logo {
       margin: 18px 60px 0 30px;
     }
-    section{ 
-    width:100%;    
-      ul{
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        li{
-          height: 64px;
-          line-height: 64px; 
-          margin-right: 60px;         
-        }
-      }
-    }
+    // .scroll-container{
+    //   padding: 10px;
+    //   height: 28px;
+    //   margin: 10px;
+    //   .marquee{
+    //     height: 28px;
+    //     overflow: hidden;
+    //       width: 100%;
+    //     ul{
+    //       position: relative;
+    //       width: 100%;
+    //       animation: moveUp 8s 0.6s infinite;
+    //       -webkit-animation: moveUp 8s 0.6s infinite;
+    //       li{
+    //         line-height: 28px;
+    //         width: 100%;
+    //       }
+    //     }
+    //   }
+    // }
   }
   
   .navbar-right {
@@ -270,23 +282,71 @@ export default {
     }
   }
 }
-@keyframes kf-marque-animation{ 0% { transform: translateX(0); } 100% { transform: translateX(-33.3%); } }
-.marquee{
-    height: 44px;
-    line-height: 44px;
-    background: #fff;
-    border: none;
-    display: block;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: clip;
-    position: relative;
+@keyframes moveUp {
+  0% {
+    top: 0px;
+  }
+  18% {
+    top: 0px;
+  }
+  20% {
+    top: -28px;
+  }
+  38% {
+    top: -28px;
+  }
+  40% {
+    top: -56px;
+  }
+  58% {
+    top: -56px;
+  }
+  60% {
+    top: -84px;
+  }
+  78% {
+    top: -84px;
+  }
+  80% {
+    top: -112px;
+  }
+  98% {
+    top: -112px;
+  }
 }
-.marquee .content{
-    display: inline-block;
-    position: relative;
-    padding-right: 0px;
-    animation: kf-marque-animation 11.3s linear infinite;
-    white-space: nowrap;
+  
+@-webkit-keyframes moveUp{
+  0% {
+    top: 0px;
+  }
+  18% {
+    top: 0px;
+  }
+  20% {
+    top: -28px;
+  }
+  38% {
+    top: -28px;
+  }
+  40% {
+    top: -56px;
+  }
+  58% {
+    top: -56px;
+  }
+  60% {
+    top: -84px;
+  }
+  78% {
+    top: -84px;
+  }
+  80% {
+    top: -112px;
+  }
+  98% {
+    top: -112px;
+  }
 }
+
+
 </style>

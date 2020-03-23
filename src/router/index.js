@@ -215,7 +215,7 @@ export const asyncRouterMap = [{
     },
     alwaysShow: true,
     children:[{
-      path:'/expenses',
+      path:'accountoverview',
       component:() => import("@/views/expensecenter/accountoverview/index"),
       name:'accountoverview',
       meta:{
@@ -223,7 +223,7 @@ export const asyncRouterMap = [{
         icon:'phone'
       }
     },{
-      path:'/cluedetails',
+      path:'cluedetails',
       component:() => import("@/views/expensecenter/cluedetails/index"),
       name:'cluedetails',
       meta:{

@@ -83,9 +83,12 @@
                          width="55">
         </el-table-column>
         <el-table-column label="号码"
-                         width="80" prop="telephone">
+                         width="180" prop="telephone">
           <template slot-scope="scope">
-            <svg-icon class="onthouch-outbound highblue" icon-class="outbound" @click="oneTouchCall(scope.$index, scope.row)" />
+            <div class="telephone-info">
+              <svg-icon class="onthouch-outbound highblue" icon-class="outbound" @click="oneTouchCall(scope.$index, scope.row)" />
+              <p class="highblue" @click="fetchUserXphone(scope.row.id,scope.row.telePhone)">{{xnumber}}</p>
+            </div>            
             <!-- <el-button type="success"
                        round
                        >一键呼叫</el-button> -->
@@ -243,9 +246,10 @@
 @api-postCluesToSelf 转移线索给自己
 */
 import Vue from 'vue'
+import { mapGetters } from 'vuex'
 import {transforserClues} from '@/api/cardmanage'
 import {parseToTimestamp, parseTime} from '@/utils/index'
-import {getCluesList,postCluesToSelf,updateClues} from '@/api/saleslead'
+import {getCluesList,postCluesToSelf,updateClues, sendPhoneNums} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
 import {getLocalStorage,cutString} from '@/utils/index'
 let ellipsis = Vue.filter('ellipsis')//引入全局filter
@@ -315,10 +319,16 @@ export default {
       time:0,
       timer:null,
       countTime:'正在呼叫中...',
-      formTip:'展开更多信息'
+      formTip:'展开更多信息',
+      xnumber: '获取号码'
     }
   },
-  mounted(){
+  computed: {
+    ...mapGetters([
+      'telephone'
+    ])
+  },
+  mounted(){    
     if(this.holdOn){
       console.log('已经刷新但通话在继续')
     }
@@ -380,6 +390,13 @@ export default {
     },
     timerClear(){
       this.timer = null
+    },
+    fetchUserXphone(id, xphone){ //获取当前线索虚拟号
+      sendPhoneNums({id:id, caller: this.telephone, callee: xphone}).then(response => {
+        if(response.status == 200){
+          this.xnumber = response.data.obj.item.xNumber.substring(5)
+        }
+      })
     },
     fetchCardList(){//获取当前用户名单列表用于线索转移
       getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{
@@ -529,6 +546,16 @@ export default {
   .onthouch-outbound{
     font-size: 40px;
     cursor: pointer;
+  }
+  .telephone-info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    p{
+      text-align: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }    
   }
   .el-row {
     display: flex;
