@@ -160,7 +160,7 @@ export default {
       fllowupStatus: ["待跟进", "有意向", "无意向", "已成交", "未成交"],
       curUserCardList: {}, //当前用户的名单列表
       searchForm: {
-        userID: getLocalStorage("userId"),
+        userId: getLocalStorage("userId"),
         fllowupStatus: [], //商机状态
         startTime: "", //开始时间
         endTime: "", // 结束时间

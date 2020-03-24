@@ -115,7 +115,7 @@ export const asyncRouterMap = [{
     meta: {
       title: "线索管理",
       icon: "admin",
-      roles:['seat']
+      roles:['seat','admin']
     },
     children: [{
         path: "listmanage",
