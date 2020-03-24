@@ -44,8 +44,8 @@
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button type="text" @click="lastshow">上一条</el-button>
-          <el-button type="text" @click="nextshow">下一条</el-button>
+          <el-button type="primary" @click="lastshow">上一条</el-button>
+          <el-button type="primary" @click="nextshow">下一条</el-button>
           <el-dialog title="线索转移" :visible.sync="dialogFormVisible">
             <p>将选择的线索转移到其他用户的线索中</p>
             <el-form-item label="用户名">
@@ -370,9 +370,9 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.id = { id: this.companyId };
+          // this.id = { id: this.companyId };
           this.$store
-            .dispatch("myclue/cluedel", { id: this.id, listId: this.value3 })
+            .dispatch("myclue/cluedel", { id: this.companyId, listId: this.value3 })
             .then(res => {})
             .catch(() => {});
           this.$message({

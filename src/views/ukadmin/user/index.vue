@@ -58,7 +58,7 @@
     </div>
     <!-- 增加企业用户 -->
     <el-dialog :visible.sync="addEditEntUserVisible" :title="addEditType" width="30%">
-    	<el-form :model="addEditEntUserForm" ref="addEditEntUserForm" :rule="addEditEntUserRules">
+    	<el-form :model="addEditEntUserForm" ref="addEditEntUserForm" :rules="addEditEntUserRules">
     		<el-form-item label="企业名称" inline :label-width="formLabelWidth" prop="entName">
     			<el-input v-model="addEditEntUserForm.entName"></el-input>
     		</el-form-item>

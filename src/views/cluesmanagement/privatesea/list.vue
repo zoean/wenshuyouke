@@ -176,6 +176,9 @@ export default {
       },
       myclueinfo: {},
       dialogFormVisible: false,
+      delClueForm: {
+        ids:[]
+      },
       form: {},
       formLabelWidth: "120px",
       pickerOptions: {
@@ -269,10 +272,14 @@ export default {
     handleSelectionChange(val) {
       //获取标签选取id用于线索转移
       this.moveClueToCardForm.entId = [];
+      this.delClueForm.ids = []
       for (let i in val) {
-        this.moveClueToCardForm.entId.push(val[i].entId);
         this.moveClueToSelfForm.entId.push(val[i].id);
+        // this.moveClueToCardForm.entId.push(val[i].entId);
+        this.delClueForm.ids.push(val[i].id)
       }
+      console.log(this.delClueForm.ids)
+      console.log(this.moveClueToSelfForm.entid)
     },
     selectTime(val) {
       this.searchForm.startTime = parseToTimestamp(val[0], 10);

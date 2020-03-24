@@ -166,7 +166,7 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .search-area {
   display: flex;
   flex-direction: column;
@@ -176,6 +176,9 @@ export default {
     align-items: center;
     dd {
       margin-left: 10px;
+      .el-date-editor{
+        margin-left:10px !important;
+      }
     }
   }
   dl.backToList{

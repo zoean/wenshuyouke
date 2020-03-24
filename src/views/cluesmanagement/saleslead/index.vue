@@ -86,7 +86,7 @@
                          width="180" prop="telephone">
           <template slot-scope="scope">
             <div class="telephone-info">
-              <svg-icon class="onthouch-outbound highblue" icon-class="outbound" @click="oneTouchCall(scope.$index, scope.row)" />
+              <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall(scope.$index, scope.row)" />
               <p class="highblue" @click="fetchUserXphone(scope.row.id,scope.row.telePhone)">{{xnumber}}</p>
             </div>            
             <!-- <el-button type="success"
@@ -99,31 +99,32 @@
                          
           <template slot-scope="scope">
             <el-row>
-              <el-col :span="12">
-                <h2 class="highblue">{{scope.row.entName}}</h2>
+              <el-col :span="8">
+                <h2 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}</h2>
               </el-col>
-              <el-col :span="12" class="com-tips">
+              <el-col :span="6">
+                <span class="label-blue" v-if="scope.row.callStatus == 1">{{scope.row.callStatus | callStatus}}</span>
+                <span class="label-red" v-else-if="scope.row.callStatus == 2">{{scope.row.callStatus | callStatus}}</span>
+                <span class="label-dark-gray" v-else>{{scope.row.callStatus | callStatus}}</span>
+              </el-col>
+              <el-col :span="10" class="com-tips">
+                <span v-show="scope.row.dataSource == 0"><b>商机来源：</b><span class="highblue">新企推荐</span></span>
+                <span v-show="scope.row.dataSource == 1"><b>商机来源：</b><span class="highblue">企业搜索</span></span>
+                <span v-show="scope.row.dataSource == 2"><b>商机来源：</b><span class="highblue">转线索</span></span>
+                <span v-show="scope.row.dataSource == 3"><b>商机来源：</b><span class="highblue">回收站</span></span>
                 <span>{{scope.row.legalName}}</span>|
                 <span>{{scope.row.regDateTimestamp | transDateSub}}</span>|
                 <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
              <el-row class="com-lable">
-              <el-col :span="6">
-                <span class="label-blue" >地址</span>
-                <span :title="scope.row.address">{{scope.row.address | ellipsis(22)}}</span>
+              <el-col :span="8">
+                <span class="label-blue">地址</span>
+                <span :title="scope.row.address">{{scope.row.address | ellipsis(38)}}</span>
               </el-col>
-              <el-col :span="3">
-                <span class="label-dark-gray">{{scope.row.callStatus | callStatus}}</span>
-              </el-col>
-              <el-col :span="6">
-                <span class="label-light-gray">拨打记录：{{scope.row.lastCallTime | parseDateTime}}</span>
-              </el-col>
-              <el-col :span="3">
-                <span v-show="scope.row.dataSource == 0">新企推荐</span>
-                <span v-show="scope.row.dataSource == 1">企业搜索</span>
-                <span v-show="scope.row.dataSource == 2">转线索</span>
-                <span v-show="scope.row.dataSource == 3">回收站</span>
+              <el-col :span="10" class="call-log">
+                <span><b>最近拨打：</b>{{scope.row.lastCallTime | parseDateTime}}</span>
+                <span><b>拨打次数：</b>{{scope.row.callCount}}</span>
               </el-col>
               <el-col :span="6">
                 <span class="label-light-gray" :title="scope.row.remark">备注：{{scope.row.remark | ellipsis(22)}}</span>
@@ -392,9 +393,10 @@ export default {
       this.timer = null
     },
     fetchUserXphone(id, xphone){ //获取当前线索虚拟号
-      sendPhoneNums({id:id, caller: this.telephone, callee: xphone}).then(response => {
+      sendPhoneNums({id:id, caller: this.telephone || 0, callee: xphone}).then(response => {
         if(response.status == 200){
-          this.xnumber = response.data.obj.item.xNumber.substring(5)
+          // this.xnumber = response.data.obj.item.xNumber.substring(5)
+          this.fetchCluesList()
         }
       })
     },
@@ -524,7 +526,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 .search-area {
   display: flex;
   flex-direction: column;
@@ -540,12 +542,18 @@ export default {
     height: 44px;
     display: flex;
     justify-content: space-between;
+    .move-clue-to-card{
+      .el-select{
+        margin-right:10px;
+      }
+    }
   }
 }
 .saleslead-data {  
   .onthouch-outbound{
     font-size: 40px;
     cursor: pointer;
+    color: #F15533;
   }
   .telephone-info{
     display: flex;
@@ -572,6 +580,11 @@ export default {
         padding: 0 10px;
       }
     }
+    .call-log{
+      span{
+        padding-right: 18px;
+      }
+    }
   }
   .com-lable {
     display: flex;
@@ -579,6 +592,16 @@ export default {
     justify-content: space-between;
     span{
       min-width:52px;
+    }
+  }
+  .el-table{
+    margin-top:20px;
+    .el-table__header-wrapper{
+      th{
+        background:#eee;
+        font-size:18px;
+        color:#303133;
+      }
     }
   }
 }

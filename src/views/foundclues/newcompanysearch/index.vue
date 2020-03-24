@@ -176,6 +176,7 @@ export default {
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
       handler:function(val,oldval){//监听回调
+        console.log(val)
         this.getNewComList()
       },
       deep: true //开启深度监听
@@ -249,7 +250,7 @@ export default {
   			}  			
   		})
   	},
-  	resetSearchOption(tag){
+  	resetSearchOption(tag){ //不限
   		switch (tag) {
   			case 1:
   				this.searchForm.raCode = ''
@@ -260,6 +261,10 @@ export default {
   				break
   			case 2:
   				this.searchForm.industryCode = ''
+          this.industryName = ''
+          this.industryList = ''
+          this.subIndustryName = ''
+          this.subIndustryList = []
   				break
   			default:
   				this.searchForm.entType = ''
@@ -311,6 +316,7 @@ export default {
   }
  }
 </script>
+
 <style lang="scss">
 	.newcom-wrap{
 		width: 100%;
@@ -331,11 +337,13 @@ export default {
 		    align-items: center;
 		    dd {
 		      margin-left: 10px;
+          button{
+            margin-right:10px;
+          }
+          .el-select{
+            margin-right:10px;
+          }
 		    }
-		  }
-		  .companyHandle {
-		    display: flex;
-		    justify-content: space-between;
 		  }
 		}
 		.newcom-main{
@@ -362,6 +370,7 @@ export default {
 			.search-result{
 				display:flex;
 				justify-content: space-between;
+        align-items: center;
 				margin:25px auto;
 				span{
 					b{
@@ -381,4 +390,10 @@ export default {
 			}
 		}
 	}
+</style>
+<style lang="scss" scoped>
+.companyHandle {
+  display: flex;
+  justify-content: space-between;
+}
 </style>
