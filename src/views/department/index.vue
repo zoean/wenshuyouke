@@ -4,14 +4,15 @@
       <div class="department-tree">
         <div class="department-handle">
           <h3>{{enterpriseName}}</h3>
+          <p class="highblue" @click="addFirstDepartmentHandle">添加一级部门</p>
         </div>
-        <el-tree :check-on-click-node=false :accordion=false ref="departmentTree" highlight-current :expand-on-click-node="false" default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" node-key="id" @node-click="nodeClick">
+        <el-tree :check-on-click-node=true :accordion=false ref="departmentTree" highlight-current :expand-on-click-node="false" default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" node-key="id" @node-click="nodeClick" :check-strictly="false">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
 		        <span>{{ node.label }}</span>
 		        <span class="tree-handle">
-		        	<i class="el-icon-plus" title="添加同级部门" @click="addDepartmentHandle(data)"></i>
+		        	<i class="el-icon-plus" title="添加下属部门" @click="addEditHandle(data)"></i>
 		        	<i class="el-icon-edit" title="编辑部门名称" @click="editDepartmentHandle(data)"></i>
-		        	<i class="el-icon-delete" title="删除该部门" @click="delDepartmentVerifyHandle(data)"></i> git
+		        	<i class="el-icon-delete" title="删除该部门" @click="delDepartmentVerifyHandle(data)"></i>
               <!-- <el-button
                 type="text"
                 size="mini"
@@ -105,6 +106,13 @@
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.email || '--' }}</template>
           </el-table-column>
+          <el-table-column
+            prop="address"
+            label="操作">
+            <template slot-scope="scope">
+              <el-button type="primary" size="mini" @click="editWorkerHandle(scope.row)">编辑</el-button>
+            </template>
+          </el-table-column>
         </el-table>
         <el-pagination
           @size-change="handleSizeChange"
@@ -119,19 +127,19 @@
     </div>
 
     <!-- 组织架构增删改 -->
-    <el-dialog :title="editDepartmentType" :visible.sync="addDepartmentVisible" width="30%">
-      <el-form :model="addDepartmentForm" ref="addDepartmentForm" :rules="addDepartmentRule">
+    <el-dialog :title="editDepartmentType" :visible.sync="addEditVisible" width="30%">
+      <el-form :model="addEditForm" ref="addEditForm" :rules="addEditRule">
         <el-form-item v-show="!isEnt" label="上级部门" inline :label-width="formLabelWidth" prop="departParent">
-          <el-select v-model="addDepartmentForm.departParent">
+          <el-select v-model="addEditForm.departParent">
             <el-option v-for="(item, index) in departmentTree" :value="item.id" :label="item.label">{{item.label}}</el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="部门名称" :label-width="formLabelWidth" prop="departName" required>
-          <el-input v-model="addDepartmentForm.departName" autocomplete="off"></el-input>
+          <el-input v-model="addEditForm.departName" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancleHandle('addDepartmentVisible','addDepartmentForm')">取 消</el-button>
+        <el-button @click="cancleHandle('addEditVisible','addEditForm')">取 消</el-button>
         <el-button type="primary" @click="addEditDeSubmit">确 定</el-button>
       </div>
     </el-dialog>
@@ -143,27 +151,27 @@
 		  </span>
     </el-dialog>
     <!-- 用户、坐席增删 -->
-    <el-dialog title="增加用户" :visible.sync="addWorkerVisible">
-      <el-form :model="addWorkerForm" ref="addWorkerForm" :rules="addWorkerRule">
-        <el-form-item label="用户名" inline :label-width="formLabelWidth" prop="userName">
-          <el-input v-model="addWorkerForm.userName" autocomplete="off"></el-input>
+    <el-dialog :title="addEditType" :visible.sync="addEditWorkerVisible" width="30%">
+      <el-form :model="addEditWorkerForm" ref="addEditWorkerForm" :rules="addEditWorkerRule">
+        <el-form-item label="登录名" inline :label-width="formLabelWidth" prop="userName">
+          <el-input v-model="addEditWorkerForm.userName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" :label-width="formLabelWidth" prop="passWord">
-          <el-input v-model="addWorkerForm.passWord" type="password" autocomplete="off"></el-input>
+        <el-form-item v-show="addEditType=='添加用户'" label="密码" :label-width="formLabelWidth" prop="passWord">
+          <el-input v-model="addEditWorkerForm.passWord" type="password" autocomplete="off" show-password></el-input>
         </el-form-item>
-        <el-form-item label="昵称" :label-width="formLabelWidth" prop="realName">
-          <el-input v-model="addWorkerForm.realName" autocomplete="off"></el-input>
+        <el-form-item label="姓名" :label-width="formLabelWidth" prop="realName">
+          <el-input v-model="addEditWorkerForm.realName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-          <el-select v-model="addWorkerForm.sex" placeholder="请选择性别">
+          <el-select v-model="addEditWorkerForm.sex" placeholder="请选择性别">
             <el-option label="男" value="男"></el-option>
             <el-option label="女" value="女"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="部门" :label-width="formLabelWidth" prop="department">
           <el-cascader
-            v-model="addWorkerForm.department"
-            :options="departmentTree" :props="addWorkerPositionProps" @change="addWorkerDepartment" :show-all-levels="false">
+            v-model="addEditWorkerForm.department"
+            :options="departmentTree" :props="addWorkerPositionProps" @change="addWorkerDepartment" :show-all-levels="true">
             <template slot-scope="{ node, data }">
               <span>{{ data.label }}</span>
               <span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -171,26 +179,26 @@
           </el-cascader>
         </el-form-item>
         <el-form-item label="角色" :label-width="formLabelWidth" prop="userRole">
-          <el-select v-model="addWorkerForm.userRole" placeholder="请选择性别">
+          <el-select v-model="addEditWorkerForm.userRole" placeholder="请选择性别">
             <el-option v-for="item in roleList" :label="item.roleName" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
-          <el-input v-model="addWorkerForm.position" value="请输入职务"></el-input>
+          <el-input v-model="addEditWorkerForm.position" value="请输入职务"></el-input>
         </el-form-item>
         <el-form-item label="用户类别" :label-width="formLabelWidth" prop="userType">
-          <el-select v-model="addWorkerForm.userType" placeholder="请选择性别">
+          <el-select v-model="addEditWorkerForm.userType" placeholder="请选择性别">
             <el-option label="坐席组长" value="group"></el-option>
             <el-option label="坐席" value="seat"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="员工编号" :label-width="formLabelWidth" prop="workNo">
-          <el-input v-model="addWorkerForm.workNo" autocomplete="off" type="number"></el-input>
-        </el-form-item>
+        <!-- <el-form-item label="员工编号" :label-width="formLabelWidth" prop="workNo">
+          <el-input v-model="addEditWorkerForm.workNo" autocomplete="off" type="number"></el-input>
+        </el-form-item> -->
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancleHandle('addWorkerVisible','addWorkerForm')">取 消</el-button>
-        <el-button type="primary" @click="addUserSubmit">确 定</el-button>
+        <el-button @click="cancleHandle('addEditWorkerVisible','addEditWorkerForm')">取 消</el-button>
+        <el-button type="primary" @click="addEditUserSubmit">确 定</el-button>
       </div>
     </el-dialog>
     <el-dialog
@@ -206,7 +214,7 @@
   </div>
 </template>
 <script>
-  import {getOrganize,addOrganize,delOrganize,editOrganize,getWorkerList,addWorker,delWorker} from '@/api/department.js'
+  import {getOrganize,addOrganize,delOrganize,editOrganize,getWorkerList,addWorker,delWorker, editWorker} from '@/api/department.js'
   import {loadRoleList} from '@/api/roleset'
   import {getLocalStorage} from '@/utils/index'
   export default{
@@ -216,8 +224,8 @@
         departmentTree: [],	//组织架构存放
         workerList:{},//员工/坐席列表
         roleList:[],
-        addDepartmentVisible:false,//添加部门visible
-        addDepartmentRule:{
+        addEditVisible:false,//添加部门visible
+        addEditRule:{
           // departParent:[{
           // 	required:true,
           // 	message:'请选择上级部门',
@@ -234,11 +242,11 @@
         delDepartmentForm:{
           ids:''
         },
-        addWorkerVisible:false,//添加用户visible
+        addEditWorkerVisible:false,//添加用户visible
         delWorkerVisible:false,//删除用户visible
         delWorkerVerifyVisible:false,//删除用户确认visible
         isEnt:false,
-        addDepartmentForm:{
+        addEditForm:{
           entUserId:getLocalStorage('userId'),//企业用户ID
           departParent:'',//上级部门（下拉菜单选择）
           departName:''//departName
@@ -249,7 +257,7 @@
           entUserId:getLocalStorage('userId'),
           department:''
         },
-        addWorkerForm:{
+        addEditWorkerForm:{
           entUserId:getLocalStorage('userId'),
           userName:'',
           passWord:'',
@@ -265,15 +273,18 @@
         addWorkerPositionProps:{
           value:'id'
         },
-        addWorkerRule:{
+        addEditWorkerRule:{
+          userName:[{
+            required: true, message:'请输入登录名', trigger: 'blur'
+          }],
           realName:[
             {
-              required:true,message:'请输入员工/坐席姓名',trigger:'blur'
+              required: true, message:'请输入员工/坐席姓名',trigger:'blur'
             }
           ],
-          passWord:[
+          passWord:[ // 添加用户时密码必填，编辑用户时不作此校验
             {
-              required:true,message:'请输入员工/坐席密码',trigger:'blur'
+              required: this.addEditType == '添加用户' ? true : false,message:'请输入员工/坐席密码',trigger:'blur'
             }
           ],
           department:[{
@@ -286,6 +297,7 @@
             required:true,message:'请选择用户类别',trigger:'blur'
           }]
         },
+        addEditType: '', //操作类型：编辑 添加
         formLabelWidth:"100px",
         defaultProps: {
           children: 'children',
@@ -302,10 +314,10 @@
     },
     methods:{
       // 取消操作 1、隐藏dialog 2、重置表单
-      cancleHandle(visiblePro, formObj){//
+      cancleHandle(visiblePro, formObj){
         this[visiblePro] = false
         if(formObj){
-          this.resetForm(formObj)
+          this.$refs[formObj].resetFields()
         }
       },
       loadRoleList(){ //加载权限角色
@@ -326,28 +338,32 @@
         this.workerListForm.department = obj.id
         this.getWorkerHandle()
       },
-      addDepartmentHandle(data){//添加部门事件触发
-        this.addDepartmentVisible = true
-        this.addDepartmentForm.departParent = data.parentId
-        if(this.addDepartmentForm.departParent == -1){
-          this.editDepartmentType='添加一级部门'
-          this.isEnt = true
-        }else{
-          this.editDepartmentType='添加部门'
-          this.isEnt = false
-        }
+      addEditHandle(data){//添加部门事件触发
+        this.addEditVisible = true
+        this.addEditForm.departParent = data.id
+
+        this.editDepartmentType='添加部门'
+        this.isEnt = false  
       },
-      editDepartmentHandle(data){
-        this.addDepartmentVisible = true
-        this.isEnt = false
+      addFirstDepartmentHandle(){ //添加一级部门表单不显示上级部门
+        this.addEditVisible = true
+        this.addEditForm.departParent = -1
+        this.editDepartmentType = '添加一级部门'
+        this.isEnt = true
+      },
+      editDepartmentHandle(data){ 
+        this.isEnt = data.parentId == -1 ? true : false //如果编辑一级部门表单不显示上级部门
+        this.addEditVisible = true
+        // this.isEnt = false
         this.editDepartmentType='编辑部门'
         let curNode = this.$refs.departmentTree.getCheckedNodes()
-        this.addDepartmentForm.departName = data.label
-        this.addDepartmentForm.departParent = data.parentId
-        this.addDepartmentForm.id = data.id
+        this.addEditForm.departName = data.label
+        this.addEditForm.departParent = data.parentId
+        this.addEditForm.id = data.id
       },
       delDepartmentVerifyHandle(data){
-        let curNode = this.$refs.departmentTree.getCheckedKeys()
+        // let curNode = this.$refs.departmentTree.getCheckedKeys()
+        let curNode = data.id
         if(curNode.length <=0){
           this.$message.error('请选择要删除的部门')
         }else{
@@ -356,15 +372,15 @@
         }
       },
       addEditDeSubmit(){
-        this.$refs['addDepartmentForm'].validate((valid)=>{
+        this.$refs['addEditForm'].validate((valid)=>{
           if(valid){
             if(this.editDepartmentType != '编辑部门'){
-              addOrganize(this.addDepartmentForm).then(response=>{
+              addOrganize(this.addEditForm).then(response=>{
                 try{
                   if(response.status==200){
                     this.$message.success('部门添加成功')
-                    this.$refs['addDepartmentForm'].resetFields()
-                    this.addDepartmentVisible = false
+                    this.$refs['addEditForm'].resetFields()
+                    this.addEditVisible = false
                     this.getOrganizeHandle()
                   }else{
                     this.$message.error('添加部门失败，请重试')
@@ -372,12 +388,12 @@
                 }catch(e){}
               })
             }else{//编辑部门
-              editOrganize(this.addDepartmentForm).then(response=>{
+              editOrganize(this.addEditForm).then(response=>{
                 try{
                   if(response.status==200){
                     this.$message.success('部门编辑成功')
-                    this.$refs['addDepartmentForm'].resetFields()
-                    this.addDepartmentVisible = false
+                    this.$refs['addEditForm'].resetFields()
+                    this.addEditVisible = false
                     this.getOrganizeHandle()
                   }else{
                     this.$message.error('添加部门失败，请重试')
@@ -420,7 +436,8 @@
         })
       },
       addWorkerDepartment(val){
-        this.addWorkerForm.department = val[val.length-1]
+        console.log(val)
+        this.addEditWorkerForm.department = val[val.length-1]
       },
       getWorkerHandle(){//获取员工列表
         getWorkerList(this.workerListForm).then(response=>{
@@ -436,33 +453,51 @@
         this.getWorkerHandle()
       },
       addWorkerHandle(){
-        this.addWorkerVisible = true
+        this.addEditWorkerVisible = true
+        this.addEditType = '添加用户'
       },
-      cancleAddUser(){
-        this.addWorkerVisible = false
-        this.resetForm('addWorkerForm')
+      editWorkerHandle(data){
+        this.addEditWorkerVisible = true
+        this.addEditType = '编辑用户'
+        this.addEditWorkerForm = {
+          userName: data.userName,
+          realName: data.realName,
+          sex: data.sex,
+          // department: data.department,
+          department: 26,
+          userRole: data.userRole,
+          position: data.position,
+          userType: data.userType
+        }
       },
-      resetForm(formName){
-        this.$refs[formName].resetFields()
-      },
-      addUserSubmit(){
-        this.$refs['addWorkerForm'].validate((valid) => {
+      addEditUserSubmit(){
+        this.$refs['addEditWorkerForm'].validate((valid) => {
           if (valid) {
-            addWorker(this.addWorkerForm).then(response=>{
-              try{
-                if(response.status==200){
-                  this.addWorkerVisible = false
-                  this.$message.success('添加坐席成功！')
-                  this.getWorkerHandle()
-                  this.cancleHandle('addWorkerVisible','addWorkerForm')
-                }
-              }catch(e){}
-            })
-          } else {
-            console.log('error submit!!');
-            return false;
+            if(this.addEditType == '添加用户'){
+              addWorker(this.addEditWorkerForm).then(response=>{
+                try{
+                  if(response.status==200){
+                    this.addEditWorkerVisible = false
+                    this.$message.success('添加用户成功！')
+                    this.getWorkerHandle()
+                    this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
+                  }
+                }catch(e){}
+              })
+            }else{
+              editWorker(this.addEditWorkerForm).then(response=>{
+                try{
+                  if(response.status==200){
+                    this.addEditWorkerVisible = false
+                    this.$message.success('用户编辑成功！')
+                    this.getWorkerHandle()
+                    this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
+                  }
+                }catch(e){}
+              })
+            }
           }
-        });
+        })
       },
       delWorkerHandle(){
         if(!this.delWorkerForm.ids || this.delWorkerForm.ids.length <=0){
@@ -487,6 +522,9 @@
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
+          p{
+            cursor:pointer;
+          }
         }
         .el-tree{
           .custom-tree-node{

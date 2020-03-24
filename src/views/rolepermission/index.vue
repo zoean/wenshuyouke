@@ -22,7 +22,6 @@
 			  :data="menuTree"
 			  show-checkbox
 			  node-key="id"
-			  default-expand-all
 			  :default-checked-keys="curUserRoleList"
 			  :props="defaultProps"
 			  ref="roleTree">
@@ -228,7 +227,9 @@ export default{
 		div.el-tabs__header{
 			width:100% !important;
 			.el-tabs__item{
-				text-align:center;					
+				text-align:left;
+				height:50px;
+				line-height: 50px;					
 			}
 			div.is-active{
 				background:#409EFF;
@@ -250,8 +251,6 @@ export default{
 			justify-content: space-between;
 			align-items: center;
 		}
-		
-		
 	}
 	.gutter-line{
 		border-right:1px solid #ccc;
