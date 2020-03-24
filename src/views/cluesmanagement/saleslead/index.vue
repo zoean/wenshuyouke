@@ -392,9 +392,10 @@ export default {
       this.timer = null
     },
     fetchUserXphone(id, xphone){ //获取当前线索虚拟号
-      sendPhoneNums({id:id, caller: this.telephone, callee: xphone}).then(response => {
+      sendPhoneNums({id:id, caller: this.telephone || 0, callee: xphone}).then(response => {
         if(response.status == 200){
-          this.xnumber = response.data.obj.item.xNumber.substring(5)
+          // this.xnumber = response.data.obj.item.xNumber.substring(5)
+          this.fetchCluesList()
         }
       })
     },
