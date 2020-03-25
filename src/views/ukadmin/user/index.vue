@@ -154,7 +154,7 @@ export default{
 			this.addEditEntUserVisible = true
 			this.addEditType = "添加企业用户"
 			this.addEditEntUserForm.entName = ''
-			this.addEditEntUserForm.userNam = ''
+			this.addEditEntUserForm.userName = ''
 			this.addEditEntUserForm.id = ''
 		},
 		editEntUserHandle(id, entName, userName){

@@ -47,19 +47,22 @@
       <div class="companyHandle">
         <el-button
           slot="reference"
-          type="info"
+          type="primary"
           round
-          size="medium"
-          class="delbtn"
-          @click="delclue"
-        >删除</el-button>
+          @click="dialogFormVisible = true"
+        >转移</el-button>
+        <el-button
+          slot="reference"
+          type="primary"
+          round
+          @click="dialogFormVisible = true"
+        >导出</el-button>
         <el-button
           slot="reference"
           type="info"
           round
-          size="medium"
-          @click="dialogFormVisible = true"
-        >转移</el-button>
+          @click="delclue"
+        >删除</el-button>
         <el-dialog title="线索转移" :visible.sync="dialogFormVisible">
           <el-form :model="form">
             <p>将选择的线索转移到其他用户的线索中</p>
@@ -174,7 +177,7 @@ export default {
         listId: this.$store.state.cluesmanage.curCardId,
         entId: [] //选取的线索列表
       },
-      myclueinfo: {},
+      myclueinfo: [],
       dialogFormVisible: false,
       delClueForm: {
         ids:[]
@@ -289,6 +292,7 @@ export default {
       this.$store
         .dispatch("myclue/cluessearch", this.searchForm)
         .then(res => {
+          console.log(res)
           if (res.status == 200) {
             this.myclueinfo = res.obj.list;
             this.total = res.obj.total;
@@ -381,12 +385,6 @@ export default {
 }
 .company-data {
   margin-top: 20px;
-}
-.el-button {
-  box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
-}
-.delbtn {
-  background: linear-gradient(-23deg, #4088ff, #406dff);
 }
 .is-circle {
   box-shadow: none;

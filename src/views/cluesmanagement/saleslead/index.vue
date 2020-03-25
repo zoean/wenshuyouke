@@ -82,12 +82,12 @@
         <el-table-column type="selection"
                          width="55">
         </el-table-column>
-        <el-table-column label="号码"
+        <el-table-column label=""
                          width="180" prop="telephone">
           <template slot-scope="scope">
             <div class="telephone-info">
               <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall(scope.$index, scope.row)" />
-              <p class="highblue" @click="fetchUserXphone(scope.row.id,scope.row.telePhone)">{{xnumber}}</p>
+              <p class="highblue" @click="fetchUserXphone(scope.row.id,scope.row.telePhone)" :title="scope.row.contaceV ? '点击切换号码' : '点击获取号码'">{{scope.row.contactV | formatterVphone}}</p>
             </div>            
             <!-- <el-button type="success"
                        round
@@ -95,39 +95,46 @@
           </template>
         </el-table-column>
         <el-table-column prop="cluesListObj.list"
-                         label="名片">
-                         
+                         label="">
           <template slot-scope="scope">
             <el-row>
               <el-col :span="8">
                 <h2 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}</h2>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="2">
                 <span class="label-blue" v-if="scope.row.callStatus == 1">{{scope.row.callStatus | callStatus}}</span>
                 <span class="label-red" v-else-if="scope.row.callStatus == 2">{{scope.row.callStatus | callStatus}}</span>
                 <span class="label-dark-gray" v-else>{{scope.row.callStatus | callStatus}}</span>
               </el-col>
-              <el-col :span="10" class="com-tips">
+              <el-col :span="4">
                 <span v-show="scope.row.dataSource == 0"><b>商机来源：</b><span class="highblue">新企推荐</span></span>
                 <span v-show="scope.row.dataSource == 1"><b>商机来源：</b><span class="highblue">企业搜索</span></span>
                 <span v-show="scope.row.dataSource == 2"><b>商机来源：</b><span class="highblue">转线索</span></span>
                 <span v-show="scope.row.dataSource == 3"><b>商机来源：</b><span class="highblue">回收站</span></span>
-                <span>{{scope.row.legalName}}</span>|
-                <span>{{scope.row.regDateTimestamp | transDateSub}}</span>|
-                <span>{{ Math.floor(scope.row.regCapital)}}万元</span>
+              </el-col>
+              <el-col :span="3">
+                <span><b>法人：</b>{{scope.row.legalName}}</span>
+              </el-col>
+              <el-col :span="4">
+                <span><b>成立时间：</b>{{scope.row.regDateTimestamp | transDateSub}}</span>
+              </el-col>
+              <el-col :span="3">
+                <span><b>注册资金：</b>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
              <el-row class="com-lable">
-              <el-col :span="8">
-                <span class="label-blue">地址</span>
+              <el-col :span="10">
+                <span><b>地址：</b></span>
                 <span :title="scope.row.address">{{scope.row.address | ellipsis(38)}}</span>
               </el-col>
-              <el-col :span="10" class="call-log">
+              <el-col :span="6">
                 <span><b>最近拨打：</b>{{scope.row.lastCallTime | parseDateTime}}</span>
+              </el-col>
+              <el-col :span="3">
                 <span><b>拨打次数：</b>{{scope.row.callCount}}</span>
               </el-col>
-              <el-col :span="6">
-                <span class="label-light-gray" :title="scope.row.remark">备注：{{scope.row.remark | ellipsis(22)}}</span>
+              <el-col :span="5">
+                <span :title="scope.row.remark"><b>备注：</b>{{scope.row.remark | ellipsis(22)}}</span>
               </el-col>
             </el-row> 
           </template>
@@ -276,6 +283,13 @@ export default {
         default:
           return '未拨打'
       }
+    },
+    formatterVphone(val){
+      if(val){
+        return val.substr(4)
+      }else{
+        return '获取号码'
+      }
     }
   },
   data () {
@@ -321,7 +335,6 @@ export default {
       timer:null,
       countTime:'正在呼叫中...',
       formTip:'展开更多信息',
-      xnumber: '获取号码'
     }
   },
   computed: {
@@ -395,7 +408,6 @@ export default {
     fetchUserXphone(id, xphone){ //获取当前线索虚拟号
       sendPhoneNums({id:id, caller: this.telephone || 0, callee: xphone}).then(response => {
         if(response.status == 200){
-          // this.xnumber = response.data.obj.item.xNumber.substring(5)
           this.fetchCluesList()
         }
       })
@@ -527,28 +539,7 @@ export default {
 }
 </script>
 <style lang="scss" scope>
-.search-area {
-  display: flex;
-  flex-direction: column;
-  dl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    dd {
-      margin-left: 10px;
-    }
-  }
-  .companyHandle {
-    height: 44px;
-    display: flex;
-    justify-content: space-between;
-    .move-clue-to-card{
-      .el-select{
-        margin-right:10px;
-      }
-    }
-  }
-}
+
 .saleslead-data {  
   .onthouch-outbound{
     font-size: 40px;
@@ -594,16 +585,7 @@ export default {
       min-width:52px;
     }
   }
-  .el-table{
-    margin-top:20px;
-    .el-table__header-wrapper{
-      th{
-        background:#eee;
-        font-size:18px;
-        color:#303133;
-      }
-    }
-  }
+  
 }
 .add-clues{
   .el-dialog{
@@ -667,5 +649,29 @@ export default {
 }
 </style>
 <style lang="scss" scoped>
-  
+.search-area {
+  display: flex;
+  flex-direction: column;
+  dl {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    dd {
+      margin-left: 10px;
+    }
+  }
+  .companyHandle {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    .move-clue-to-card{
+      .el-select{
+        margin-right:10px;
+      }
+    }
+  }
+}
+  .companyHandle{
+    justify-content:space-between;
+  }
 </style>

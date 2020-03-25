@@ -28,7 +28,8 @@ const getDefaultState = () => {
     seatId: '6002',
     seatPw: '1234',
     bindTel: '6002',
-    telephone: ''
+    telephone: '',
+    userMenu: []
   }
 }
 
@@ -63,6 +64,9 @@ const mutations = {
   },
   SET_TELEPHONE: (state, telephone) => {
     state.telephone = telephone
+  },
+  SET_USERMENU: (state, userMenu) => {
+    state.userMenu = userMenu
   }
 }
 
@@ -118,7 +122,8 @@ const actions = {
         const {
           realName,
           userIcon,
-          roleType
+          roleType,
+          userMenu
         } = obj
         if (obj.seatId) {
           commit('SET_SEATID', obj.seatId)
@@ -136,6 +141,7 @@ const actions = {
         commit('SET_AVATAR', userIcon)
         commit('SET_ROLES', roleType)
         commit('SET_TELEPHONE', obj.phone)
+        commit('SET_USERMENU', userMenu)
         resolve(obj)//await的函数需要返回一个Promise 当resolve被触发时代表本次异步过程结束
       }).catch(error => {
         reject(error)
