@@ -12,8 +12,7 @@
             <el-input
               v-model="entName"
               placeholder="请输入内容"
-              @change="changeEntName()"
-              @keyup.enter.native="changeEntName()"
+              @input="changeEntName()"
             />
           </dd>
           </dl>
@@ -32,26 +31,13 @@
                   :key="item.id"
                   :label="item.listName"
                   :value="item.id"
-                />
+                ></el-option>
               </el-select>
             </template>
           </dd>
         </dl>
         <div class="search-result">
           <div class="get-data">
-            <template>
-              <el-select
-                v-model="value2"
-                placeholder="请选择"
-              >
-                <el-option
-                  v-for="item in options"
-                  :key="item.id"
-                  :label="item.listName"
-                  :value="item.id"
-                />
-              </el-select>
-            </template>
             <input
               class="btn-8032-general"
               type="button"
@@ -132,6 +118,7 @@
 <script>  
 import Vue from 'vue'
 import { getLocalStorage, parseTime,parseDateTime } from '@/utils/index'
+import {postCluesToSelf} from '@/api/saleslead'
 export default {
   data() {
     return {
@@ -141,8 +128,8 @@ export default {
       pageNum: 1,
       pageSize: 10,
       total: 0,
-      value1: null,
-      value2: null,
+      value1: '',
+      value2: '',
       entName: ''
     }
   },
@@ -203,6 +190,7 @@ export default {
         })
     },
     searchlist() {
+
       this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
       // this.$store.dispatch('recycle/selectList', { 'entUserId': 1 })
         .then((res) => {
@@ -212,28 +200,23 @@ export default {
         })
     },
     receive() {
-      if (!this.value2) {
-        this.$message.success('请选择名单')
-        return
-      }
       var idArr = this.multipleSelection
-      var ids = ''
-      for (var i = 0; i < idArr.length; i++) {
-        ids += idArr[i].id + ','
-      }
-      if (ids.length > 0) {
-        ids = ids.substr(0, ids.length - 1)
-      }
-      this.$store.dispatch('recycle/receive', { 'ids': ids, 'listId': this.value2 })
-        .then((res) => {
-          if (res.message == 'success') {
-            this.$message.success('领取成功')
-          } else {
-            this.$message.success('领取失败')
+      if(!idArr){
+        this.$message.error('请选择要转移的线索')
+      }else{
+        let ids = []
+        for(let i in idArr){
+          ids.push(idArr[i].id)
+        }
+        postCluesToSelf({entId: ids}).then(response => {
+          if(response.status == 200){
+            this.$message.success(response.data.obj)
+            this.searchclue()
+          }else{
+            this.$message.error(response.data.obj)
           }
         })
-        .catch(() => {
-        })
+      }
     },
     toggleSelection(rows) {
       if (rows) {
