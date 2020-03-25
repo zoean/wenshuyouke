@@ -107,33 +107,33 @@
                 <span class="label-dark-gray" v-else>{{scope.row.callStatus | callStatus}}</span>
               </el-col>
               <el-col :span="4">
-                <span v-show="scope.row.dataSource == 0"><b>商机来源：</b><span class="highblue">新企推荐</span></span>
-                <span v-show="scope.row.dataSource == 1"><b>商机来源：</b><span class="highblue">企业搜索</span></span>
-                <span v-show="scope.row.dataSource == 2"><b>商机来源：</b><span class="highblue">转线索</span></span>
-                <span v-show="scope.row.dataSource == 3"><b>商机来源：</b><span class="highblue">回收站</span></span>
-              </el-col>
-              <el-col :span="3">
-                <span><b>法人：</b>{{scope.row.legalName}}</span>
+                <span><b>拨打次数：</b>{{scope.row.callCount}}</span>
               </el-col>
               <el-col :span="4">
                 <span><b>成立时间：</b>{{scope.row.regDateTimestamp | transDateSub}}</span>
+              </el-col>
+              <el-col :span="3">
+                <span><b>法人：</b>{{scope.row.legalName}}</span>
               </el-col>
               <el-col :span="3">
                 <span><b>注册资金：</b>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
              <el-row class="com-lable">
-              <el-col :span="10">
+              <el-col :span="8">
                 <span><b>地址：</b></span>
                 <span :title="scope.row.address">{{scope.row.address | ellipsis(38)}}</span>
               </el-col>
               <el-col :span="6">
                 <span><b>最近拨打：</b>{{scope.row.lastCallTime | parseDateTime}}</span>
               </el-col>
-              <el-col :span="3">
-                <span><b>拨打次数：</b>{{scope.row.callCount}}</span>
+              <el-col :span="4">
+                <span v-show="scope.row.dataSource == 0"><b>商机来源：</b><span class="highblue">新企推荐</span></span>
+                <span v-show="scope.row.dataSource == 1"><b>商机来源：</b><span class="highblue">企业搜索</span></span>
+                <span v-show="scope.row.dataSource == 2"><b>商机来源：</b><span class="highblue">转线索</span></span>
+                <span v-show="scope.row.dataSource == 3"><b>商机来源：</b><span class="highblue">回收站</span></span>
               </el-col>
-              <el-col :span="5">
+              <el-col :span="6">
                 <span :title="scope.row.remark"><b>备注：</b>{{scope.row.remark | ellipsis(22)}}</span>
               </el-col>
             </el-row> 
@@ -587,6 +587,39 @@ export default {
   }
   
 }
+
+.add-clues-handle{
+  .el-button{
+    margin-left: 10px;
+  }
+}
+.el-pagination {
+  margin-top: 20px;
+}
+</style>
+<style lang="scss" scoped>
+.search-area {
+  display: flex;
+  flex-direction: column;
+  dl {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    dd {
+      margin-left: 10px;
+    }
+  }
+  .companyHandle {
+    height: 44px;
+    display: flex;
+    justify-content: space-between;
+    .move-clue-to-card{
+      .el-select{
+        margin-right:10px;
+      }
+    }
+  }
+}
 .add-clues{
   .el-dialog{
     border-radius: 10px;
@@ -639,39 +672,7 @@ export default {
     }
   }  
 }
-.add-clues-handle{
-  .el-button{
-    margin-left: 10px;
-  }
+.companyHandle{
+  justify-content:space-between;
 }
-.el-pagination {
-  margin-top: 20px;
-}
-</style>
-<style lang="scss" scoped>
-.search-area {
-  display: flex;
-  flex-direction: column;
-  dl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    dd {
-      margin-left: 10px;
-    }
-  }
-  .companyHandle {
-    height: 44px;
-    display: flex;
-    justify-content: space-between;
-    .move-clue-to-card{
-      .el-select{
-        margin-right:10px;
-      }
-    }
-  }
-}
-  .companyHandle{
-    justify-content:space-between;
-  }
 </style>
