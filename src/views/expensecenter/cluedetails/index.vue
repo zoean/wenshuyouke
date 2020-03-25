@@ -122,3 +122,8 @@ export default {
   }
 }
 </style>
+<style lang="scss" scoped>
+.el-date-editor{
+  margin-left:10px;
+}
+</style>

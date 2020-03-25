@@ -186,12 +186,6 @@
         <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
           <el-input v-model="addEditWorkerForm.position" value="请输入职务"></el-input>
         </el-form-item>
-        <el-form-item label="用户类别" :label-width="formLabelWidth" prop="userType">
-          <el-select v-model="addEditWorkerForm.userType" placeholder="请选择性别">
-            <el-option label="坐席组长" value="group"></el-option>
-            <el-option label="坐席" value="seat"></el-option>
-          </el-select>
-        </el-form-item>
         <!-- <el-form-item label="员工编号" :label-width="formLabelWidth" prop="workNo">
           <el-input v-model="addEditWorkerForm.workNo" autocomplete="off" type="number"></el-input>
         </el-form-item> -->
@@ -266,7 +260,7 @@
           department:'',
           email:'',
           position:'',
-          userType:'',
+          userType:'seat',
           workNo:''
         },
         delWorkerForm:{},
@@ -292,9 +286,6 @@
           }],
           userRole:[{
             required:true,message:'请选择员工/坐席角色',trigger:'blur'
-          }],
-          userType:[{
-            required:true,message:'请选择用户类别',trigger:'blur'
           }]
         },
         addEditType: '', //操作类型：编辑 添加
@@ -466,8 +457,7 @@
           // department: data.department,
           department: 26,
           userRole: data.userRole,
-          position: data.position,
-          userType: data.userType
+          position: data.position
         }
       },
       addEditUserSubmit(){

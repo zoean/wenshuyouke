@@ -101,12 +101,14 @@ export default{
 					if(response.status==200){
 						this.roleList = response.data.obj		
 						this.roleId = this.roleList[0].id
+						this.roleType = this.roleList[0].roleType
 						this.loadRoleTree()
 					}
 				}catch(e){}
 			})
 		},
 		loadRoleTree(){	
+			console.log(this.roleId)
 			getRoleTree({roleId: this.roleId, menuRole: this.roleType}).then(response => {
 				this.menuTree = response.data.obj.menus				
 				this.curUserRoleList = response.data.obj.keys	

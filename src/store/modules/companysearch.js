@@ -131,6 +131,7 @@ const actions = {
   },entlist) {
     return new Promise((resolve, reject) => {
       addClueManager(entlist).then(response => {
+        console.log(entlist)
         resolve(response.data)
       }).catch(error => {
         reject(error)

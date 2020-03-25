@@ -3,65 +3,66 @@
     <!-- 上部公司信息展示 -->
     <div class="main-box header-box">
       <el-row>
-        <el-col :span="22">
+        <el-col :span="20">
            <h3>{{ cluesinfo.entName }}</h3>
-          <el-select ref="clueStatus" v-model="value" placeholder="请选择" @change="clueedit" class="clueStatus">
-            <el-option v-for="item in statusoptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
         </el-col>
-        <el-col :span="2">
-          <p class="back-list highblue" @click="backToList">返回列表</p>
+        <el-col :span="4">
+          <p class="back-list highblue" @click="backToList">返回我的线索列表</p>
         </el-col>
       </el-row>
-      <el-row>
-        {{ cluesinfo.legalName }}
-        <span>|</span>
-        {{ cluesinfo.regDate }}
-        <span>|</span>
-        {{ cluesinfo.regCapital }}{{ cluesinfo.regCurrency }}
+      <el-row type="flex" justify="end">
+        <el-col :span="20">
+          {{ cluesinfo.legalName }}
+          <span>|</span>
+          {{ cluesinfo.regDate }}
+          <span>|</span>
+          {{ Math.floor(cluesinfo.regCapital) }}万元
+        </el-col>
+        <el-col :span="4" style="text-align: right">
+          <el-button type="primary" @click="lastshow">上一条</el-button>
+          <el-button type="primary" @click="nextshow">下一条</el-button>
+        </el-col>
       </el-row>
+        
       <el-row>
-        <el-col :span="8">
-          <div class="address">
-            <span>地址</span>
+        <el-col :span="10">
+          <div>
+            <b>地址：</b>
             {{ cluesinfo.address }}
           </div>
         </el-col>
          <el-col :span="2" >
           <div class="callStatus">
-            <span v-if="cluesinfo.callStatus == null">未拨打</span>
-            <span v-if="cluesinfo.callStatus == 0">未拨打</span>
-            <span v-if="cluesinfo.callStatus == 1">已接通</span>
-            <span v-if="cluesinfo.callStatus == 2">未接通</span>
+            <span class="label-dark-gray" v-if="!cluesinfo.callStatus">未拨打</span>
+            <span class="label-blue" v-if="cluesinfo.callStatus == 1">已接通</span>
+            <span class="label-red" v-if="cluesinfo.callStatus == 2">未接通</span>
           </div>
         </el-col>
-        <el-col :span="7">
-          <div class="grid-content bg-purple-light">拨打记录：{{ cluesinfo.lastCallTime }}</div>
+        <el-col :span="5">
+          <div class="grid-content bg-purple-light">拨打记录：{{ cluesinfo.lastCallTime || '--' }}</div>
         </el-col>
         <el-col :span="7">
-          <div class="grid-content bg-purple">备注：{{ cluesinfo.remark }}</div>
+          <div class="grid-content bg-purple">备注：{{ cluesinfo.remark || '--'}}</div>
         </el-col>
       </el-row>
       <el-row>
         <el-col :span="12">
-          <el-button type="primary" @click="lastshow">上一条</el-button>
-          <el-button type="primary" @click="nextshow">下一条</el-button>
-          <el-dialog title="线索转移" :visible.sync="dialogFormVisible">
-            <p>将选择的线索转移到其他用户的线索中</p>
-            <el-form-item label="用户名">
-              <el-select v-model="userlist" placeholder="请选择用户名">
-                <el-option v-for="item in options" :key="item.id" :label="item.listName" :value="item.id"/>
-              </el-select>
-            </el-form-item>
-            <div slot="footer" class="dialog-footer">
-              <el-button @click="dialogFormVisible = false">取 消</el-button>
-              <el-button type="primary" @click="cluetransfer">确 定</el-button>
-            </div>
-          </el-dialog>
+          <b>线索当前状态：</b>
+          <el-select ref="clueStatus" v-model="value" placeholder="修改线索状态" @change="clueedit">
+            <el-option v-for="item in statusoptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
         </el-col>
-        <el-col :span="12" style="text-align: right;">
-          <el-button type="info" round @click="dialogFormVisible = true">转移</el-button>
-          <el-button type="info" round @click="cluedel">删除</el-button>
+        <el-col :span="12" class="clue-detail-handle">
+          <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
+          <el-option
+            v-for="item in curUserCardList"
+            :key="item.id"
+            :label="item.listName"
+            :value="item.id"
+          />
+        </el-select>
+          <el-button type="primary" size="middle" round @click="moveClueToCardHandle">转移</el-button>
+          <el-button type="info" size="middle" round @click="cluedel">删除</el-button>
         </el-col>
       </el-row>
     </div>
@@ -105,7 +106,7 @@
                 <p>{{ cluesinfo.entAddress }}</p>
               </div>
             </div>
-            <div class="gocall"><el-button type="success" round>一键呼叫</el-button></div>
+            <!-- <div class="gocall"><el-button type="success" round>一键呼叫</el-button></div> -->
             <el-dialog class="editcont" title="修改信息" :visible.sync="dialogFormVisible" @close="closeDialog">
               <el-form ref="cluesinfo" :model="cluesinfo">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
@@ -150,7 +151,7 @@
             </el-radio-group>
             <div class="followcont">
               <div>
-                <el-dialog title="写跟进" :visible.sync="dialogVisible" :before-close="handleClose" width="400" customClass="customWidth">
+                <el-dialog title="写跟进" :visible.sync="dialogVisible" width="400" customClass="customWidth">
                   <el-form ref="followadd" label-width="120px">
                     <el-form-item label="跟进方式">
                       <el-select v-model="followadd.followType" placeholder="类型">
@@ -211,7 +212,8 @@
   </div>
 </template>
 <script>
-import { getLocalStorage } from "@/utils/index";
+import { getLocalStorage } from "@/utils/index"
+import { getCurUserCard } from "@/api/foundclues"
 
 export default {
   name: 'CompanyDetails',
@@ -231,6 +233,7 @@ export default {
       options: [],
       count: "",
       followtype: "",
+      curUserCardList: [],
       statusoptions: [
         {
           value: "0",
@@ -261,26 +264,54 @@ export default {
       dialogTableVisible: false,
       dialogFormVisible: false,
       followinfos: [],
-      formLabelWidth: "100px"
-    };
+      formLabelWidth: "100px",
+      moveClueToCardForm:{
+        dataSource:2,
+        listId:'',
+        entId: ''//选取的线索列表
+      }
+    }
   },
   created() {
     this.companyId = this.$store.state.myclue.companyId
+    this.moveClueToCardForm.entId = this.$store.state.myclue.companyId
     this.detailsinfo()
     this.searchlist()
     this.cluefollowselect()
+    this.fetchCardList()
   },
   methods: {
     backToList(){ 
       this.changeCom()
     },
+    moveClueToCardHandle(){
+      if(!this.moveClueToCardForm.listId){
+        this.$message.error('请选择目标名单')
+      }else{
+        this.$store
+          .dispatch("myclue/cluesedit", this.moveClueToCardForm)
+          .then(res => {
+            this.nextshow()
+          }).catch(error => {
+            console.log(error);
+          })
+      }
+    },
+    fetchCardList() {
+      //获取当前用户名单列表用于线索转移
+      getCurUserCard({ entUserId: getLocalStorage("userId") }).then(
+        response => {
+          this.curUserCardList = response.data.obj;
+        }
+      );
+    },
     detailsinfo() {
       this.companyId = this.$store.state.myclue.companyId
-      this.id = { id: this.companyId };
       this.$store
-        .dispatch("myclue/cluesdetail", this.id)
+        .dispatch("myclue/cluesdetail", { id: this.companyId })
         .then(res => {
-          this.cluesinfo = res.obj;
+          this.cluesinfo = res.obj
+          this.value = res.obj.clueStatus
         })
         .catch(() => {});
     },
@@ -379,7 +410,7 @@ export default {
             type: "success",
             message: "删除成功!"
           });
-          this.nextshow();
+          this.nextshow()
         })
         .catch(() => {
           this.$message({
@@ -440,6 +471,21 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  .back-list{
+    cursor:pointer;
+    font-size: 16px;
+    text-align: right;
+  }
+  .clue-detail-handle{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    .el-select{
+      margin-right: 10px;
+    }
+  }
+</style>
 <style lang="scss">
 .main-box{
   margin-top:20px
@@ -467,16 +513,7 @@ export default {
     justify-content: flex-end;
   }
 }
-.callStatus{
-  span{
-    color: #FFF;
-    padding:2px 12px;
-    background: #44CD67;
-    display: inline-block;
-    border-radius: 4px;
-  }
-  
-}
+
 .header-box {
   .el-row {
     margin-bottom: 35px;

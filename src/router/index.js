@@ -132,7 +132,7 @@ export const asyncRouterMap = [{
         component: () => import("@/views/cluesmanagement/saleslead/index"),
         meta: {
           title: "销售商机",
-          icon: "databag",
+          icon: "saleslead",
           roles: ['super', 'seat']
         }
       },
@@ -142,7 +142,7 @@ export const asyncRouterMap = [{
         component: () => import("@/views/cluesmanagement/privatesea/index"),
         meta: {
           title: "我的线索",
-          icon: "privatesea",
+          icon: "myclues",
           roles: ['super', 'seat']
         }
        },
@@ -188,7 +188,7 @@ export const asyncRouterMap = [{
   //       component: () => import("@/views/reach/message/index"),
   //       meta: {
   //         title: "短信",
-  //         icon: "message",
+  //         icon: "messagedetails",
   //         roles: ['super', 'seat']
   //       }
   //     },
@@ -220,7 +220,7 @@ export const asyncRouterMap = [{
       name:'accountoverview',
       meta:{
         title:'帐户总览',
-        icon:'phone'
+        icon:'accountoverview'
       }
     },{
       path:'cluedetails',
@@ -228,7 +228,7 @@ export const asyncRouterMap = [{
       name:'cluedetails',
       meta:{
         title:'线索明细',
-        icon:'phone'
+        icon:'cluedetails'
       }
     },{
       path:'/calldetails',

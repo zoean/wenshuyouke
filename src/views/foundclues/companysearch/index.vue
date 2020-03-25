@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="main-box search">
+    <div class="search">
       <el-input v-model="searchForm.entName" placeholder="请输入企业名关键词" class="input-with-select">
         <el-button slot="append" @click="searchlist">搜索</el-button>
       </el-input>
@@ -75,7 +75,7 @@
           本次搜索共为您检测到 <b>{{companytotal}}</b> 家符合标准的企业
         </el-col>
         <el-col :span="12" style="text-align:right">
-          <el-select v-model="searchForm.listId" placeholder="请选择">
+          <el-select v-model="curListId" placeholder="请选择">
               <el-option v-for="index in listId" :key="index.id"
                 :label="index.listName"
                 :value="index.id"
@@ -85,21 +85,31 @@
         </el-col>
       </el-row>
       <el-table
-        :default-expand-all="true"
         :data="companydata"
         ref="companydataTable"
-        style="width: 100%"
-        :show-header="false"
-        @cell-click="companyinfoshow"
+        stripe
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="公司信息" prop="entName"></el-table-column>
+        <el-table-column prop="entName" width="280"></el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">法人：{{scope.row.legalName}}</template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">成立时间：{{scope.row.regDate}}</template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">注册资本：{{Math.floor(scope.row.regCapital)}}</template>
+        </el-table-column>
+        <el-table-column width="380">
+          <template slot-scope="scope">地址：{{scope.row.address}}</template>
+        </el-table-column>
+
         <el-table-column type="expand">
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
               <el-col :span="8">
                 <el-form-item label="法人">
-                  <span>{{ props.row.legalName }} |</span>
+                  <span>法人：{{ props.row.legalName }} |</span>
                 </el-form-item>
                 <el-form-item label="成立时间">
                   <span>{{ props.row.regDate }} |</span>
@@ -115,7 +125,7 @@
               </el-col>
               <el-col :span="10">
                 <el-form-item label="注册地址">
-                  <span>注册地址：{{ props.row.address }}</span>
+                  <b>地址：</b>{{ props.row.address }}</span>
                 </el-form-item>
               </el-col>
             </el-form>
@@ -125,60 +135,12 @@
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        :page-sizes="[5,10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]"
+        :page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]"
         layout="total, sizes, prev, pager, next, jumper"
         :current-page="searchForm.pageNum"
         :page-size="searchForm.pageSize"
         :total="companytotal"
       />
-      <el-dialog title="企业信息" :visible.sync="dialogVisible" :before-close="handleClose">
-        <!-- <span>{{rowinfo.id}}</span> -->
-        <el-row :gutter="20">
-          <el-col :span="8" class="infoboxleft">
-            <img src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg" alt />
-            <h5>{{rowinfo.entName}}</h5>
-          </el-col>
-          <el-col :span="16" class="infoboxright">
-            <div>
-              <span>企业规模:</span>
-              <!-- {{rowinfo.opscope}} -->
-              接口中暂无数据
-            </div>
-            <div>
-              <span>企业官网:</span>
-              <!-- {{rowinfo.opscope}} -->
-              接口中暂无数据
-            </div>
-            <div>
-              <span>联系电话:</span>
-              {{rowinfo.telePhone}}
-            </div>
-            <div>
-              <span>主营业务:</span>
-              <!-- {{rowinfo.opscope}} -->
-              接口中暂无数据
-            </div>
-            <div>
-              <span>企业简介:</span>
-              <!-- {{rowinfo.opscope}} -->
-              接口中暂无数据
-            </div>
-          </el-col>
-        </el-row>
-        <span slot="footer" class="dialog-footer">
-           <el-select v-model="searchForm.listId" placeholder="请选择">
-              <el-option
-                v-for="index in listId"
-                :key="index.id"
-                :label="index.listName"
-                :value="index.id"
-              />
-            </el-select>
-          <el-button type="primary" @click="receive">领取</el-button>
-          <el-button @click="dialogVisible = false">关闭</el-button>
-
-        </span>
-      </el-dialog>
     </div>
   </div>
 </template>
@@ -201,9 +163,10 @@ export default {
         industryCode: "", //行业
         pid:"",
         pageNum: 1,
-        pageSize: 5
+        pageSize: 10
       },
       listId:'',
+      curListId: '',
       province: [],
       city: [],
       block: [],
@@ -361,24 +324,24 @@ export default {
     handleCurrentChange(pageNum) {
       this.searchForm.pageNum = pageNum;
     },
-    companyinfoshow(row) {
-      this.dialogVisible = true;
-      this.rowid = {id:row.id}
-      this.$store
-      .dispatch("companysearch/searchinfo",this.rowid)
-        .then(res => {
-            if(res){
-              this.rowinfo = res.obj
-              if(rowinfo.enterpriseLogo){
-                this.rowinfo.enterpriseLogo = rowinfo.enterpriseLogo
-              }else{
-                this.rowinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
-              }
-            }
-        })
-        .catch(() => {});
+    // companyinfoshow(row) {
+    //   this.dialogVisible = true;
+    //   this.rowid = {id:row.id}
+    //   this.$store
+    //   .dispatch("companysearch/searchinfo",this.rowid)
+    //     .then(res => {
+    //         if(res){
+    //           this.rowinfo = res.obj
+    //           if(rowinfo.enterpriseLogo){
+    //             this.rowinfo.enterpriseLogo = rowinfo.enterpriseLogo
+    //           }else{
+    //             this.rowinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
+    //           }
+    //         }
+    //     })
+    //     .catch(() => {});
       
-    },
+    // },
     searchlist() {
       this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
       // this.$store.dispatch('recycle/selectList', { 'entUserId': 3 })
@@ -389,42 +352,26 @@ export default {
         })
     },
     receives() {
-      if (!this.searchForm.listId) {
-        this.$message.success('请选择名单')
-        return
-      }
-      this.$refs.companydataTable.selection
-      var entIdsArr = []
-      for (var id in this.$refs.companydataTable.selection) {
-        entIdsArr.push(this.$refs.companydataTable.selection[id].id);
-      }
-      this.entIds = entIdsArr.join(",");
-      this.$store.dispatch('companysearch/addClueManager', { 'entId': this.entIds.split(","), 'listId': this.searchForm.listId,'dataSource':2 })
+      let ids = this.$refs.companydataTable.selection
+      if (!this.curListId) {
+        this.$message.error('请选择目标名单')
+      }else if(!ids || !ids.length){
+        this.$message.error('请选择要转移的线索')
+      }else{
+        var entIdsArr = []
+        for (var id in ids) {
+          entIdsArr.push(ids[id].id);
+        }
+        this.$store.dispatch('companysearch/addClueManager', { 'entId': entIdsArr, 'listId': this.curListId,'dataSource':2 })
         .then((res) => {
           if (res.message == 'success') {
-            this.$message.success('领取成功')
+            this.$message.success(res.obj)
+            this.companylist();
           } else {
             this.$message.success('领取失败')
           }
         })
-        .catch(() => {
-        })
-    },
-     receive() {
-      if (!this.searchForm.listId) {
-        this.$message.success('请选择名单')
-        return
       }
-      this.$store.dispatch('companysearch/addClueManager', { 'entId': this.rowinfo.id.split(), 'listId': this.searchForm.listId,'dataSource':2 })
-        .then((res) => {
-          if (res.message == 'success') {
-            this.$message.success('领取成功')
-          } else {
-            this.$message.success('领取失败')
-          }
-        })
-        .catch(() => {
-        })
     },
     handleClose(done) {
       this.$confirm("确认关闭？")
@@ -442,8 +389,6 @@ export default {
 }
 .search {
   padding: 36px 160px;
-  background-image: url("~@/assets/images/searchbg.png");
-  background-size: 101% 108%;
   background-position: center;
   button{
     height:41px;
@@ -462,7 +407,6 @@ export default {
   .criteria {
     .el-row {
       margin-bottom: 15px;
-      font-size: 14px;
 
       .el-button {
         background: #6699ff;
@@ -487,9 +431,9 @@ export default {
     }
   }
   .general {
-    font-size: 12px;
     color: #999999;
     margin: 33px 0 16px;
+    line-height:40px;
     b {
       color: #cc0000;
     }
@@ -501,12 +445,8 @@ export default {
       line-height: 32px;
       background: linear-gradient(-23deg, #4088ff, #406dff);
       box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
+      margin-left: 10px;
     }
-  }
-  .el-table .cell {
-    font-size: 24px;
-    color: #333333;
-    padding-top: 30px;
   }
   .el-form-item {
     margin-bottom: 0;
@@ -534,8 +474,6 @@ export default {
       }
     }
     .infoboxright {
-      //  padding: 85px 80px 20px 62px;
-      font-size: 14px;
       color: #333;
       line-height: 28px;
       div {
@@ -569,7 +507,6 @@ export default {
   display: none !important;
 }
 .results /deep/ .el-table__expanded-cell {
-  font-size: 14px;
   color: #666666;
   padding: 25px 66px;
   border-bottom: 1px solid #ebeef5;

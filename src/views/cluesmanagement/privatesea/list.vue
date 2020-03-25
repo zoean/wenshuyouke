@@ -45,43 +45,32 @@
         </dd>
       </dl>
       <div class="companyHandle">
+        <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
+          <el-option
+            v-for="item in curUserCardList"
+            :key="item.id"
+            :label="item.listName"
+            :value="item.id"
+          />
+        </el-select>
         <el-button
           slot="reference"
           type="primary"
           round
-          @click="dialogFormVisible = true"
+          @click="editclue"
         >转移</el-button>
-        <el-button
+        <!-- 功能待添加 -->
+        <!-- <el-button
           slot="reference"
           type="primary"
           round
-          @click="dialogFormVisible = true"
-        >导出</el-button>
+        >导出</el-button> -->
         <el-button
           slot="reference"
           type="info"
           round
           @click="delclue"
         >删除</el-button>
-        <el-dialog title="线索转移" :visible.sync="dialogFormVisible">
-          <el-form :model="form">
-            <p>将选择的线索转移到其他用户的线索中</p>
-            <el-form-item label="用户名" :label-width="formLabelWidth">
-              <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
-                <el-option
-                  v-for="item in curUserCardList"
-                  :key="item.id"
-                  :label="item.listName"
-                  :value="item.id"
-                />
-              </el-select>
-            </el-form-item>
-          </el-form>
-          <div slot="footer" class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取 消</el-button>
-            <el-button type="primary" @click="editclue">确 定</el-button>
-          </div>
-        </el-dialog>
       </div>
     </div>
     <div class="company-data">
@@ -93,20 +82,19 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @cell-click="godetails"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column prop="updateTime" label="收藏时间" show-overflow-tooltip :formatter="formatDate" />
-        <el-table-column prop="entName" width="200" label="企业名称" show-overflow-tooltip>
+        <el-table-column prop="entName" label="企业名称">
           <template slot-scope="companyName">
-            <p @click="godetails(companyName.row)">{{companyName.row.entName}}</p>
+            <p :title="companyName.row.entName">{{companyName.row.entName | ellipsis(20)}}</p>
           </template>
         </el-table-column>
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
-        <el-table-column prop="telePhone" label="电话" show-overflow-tooltip />
-        <el-table-column prop="name" label="联系人" />
+        <el-table-column prop="legalName" label="联系人" />
+        <el-table-column prop="updateTime" label="收藏时间" show-overflow-tooltip :formatter="formatDate" />
         <el-table-column
           prop="lastFollowTime"
-          width="135"
           label="最后跟进时间"
           show-overflow-tooltip
         />
@@ -120,7 +108,7 @@
         </el-table-column>
         <el-table-column prop="fllowupStatus" property="fllowupStatus" label="线索状态" show-overflow-tooltip>
           <template slot-scope="status">
-            <span v-if="status.row.fllowupStatus == 0">转跟进</span>
+            <span v-if="status.row.fllowupStatus == 0">待跟进</span>
             <span v-if="status.row.fllowupStatus == 1">有意向</span>
             <span v-if="status.row.fllowupStatus == 2">无意向</span>
             <span v-if="status.row.fllowupStatus == 3">已成交</span>
@@ -142,9 +130,11 @@
   </div>
 </template>
 <script>
+import Vue from 'vue'
 import { getLocalStorage } from "@/utils/index"
-import { parseToTimestamp, parseTime } from "@/utils/index"
+import { parseToTimestamp, parseTime, parseDateTime } from "@/utils/index"
 import { getCurUserCard, getNewComToCard } from "@/api/foundclues"
+let ellipsis = Vue.filter('ellipsis')//引入全局filter
 
 export default {
   name:'CompanyList',
@@ -161,7 +151,7 @@ export default {
   data() {
     return {
       fllowupStatus: ["待跟进", "有意向", "无意向", "已成交", "未成交"],
-      curUserCardList: {}, //当前用户的名单列表
+      curUserCardList: [], //当前用户的名单列表
       searchForm: {
         userId: getLocalStorage("userId"),
         fllowupStatus: [], //商机状态
@@ -174,7 +164,7 @@ export default {
       },
       moveClueToCardForm: {
         dataSource: 2,
-        listId: this.$store.state.cluesmanage.curCardId,
+        listId: '',
         entId: [] //选取的线索列表
       },
       myclueinfo: [],
@@ -263,6 +253,9 @@ export default {
       s < 10 ? (s = `0${s}`) : "";
       this.countTime = `${h}:${m}:${s}`;
     },
+    formatDate(row, column, cellValue, index){
+      return cellValue ? parseDateTime(cellValue) : ''
+    },
     timerClear() {
       this.timer = null;
     },
@@ -277,22 +270,18 @@ export default {
       this.moveClueToCardForm.entId = [];
       this.delClueForm.ids = []
       for (let i in val) {
-        this.moveClueToSelfForm.entId.push(val[i].id);
-        // this.moveClueToCardForm.entId.push(val[i].entId);
+        this.moveClueToCardForm.entId.push(val[i].id)
         this.delClueForm.ids.push(val[i].id)
       }
-      console.log(this.delClueForm.ids)
-      console.log(this.moveClueToSelfForm.entid)
     },
     selectTime(val) {
       this.searchForm.startTime = parseToTimestamp(val[0], 10);
       this.searchForm.endTime = parseToTimestamp(val[1], 10);
     },
-    searchclue() {
+    searchclue() { //获取我的线索列表
       this.$store
         .dispatch("myclue/cluessearch", this.searchForm)
         .then(res => {
-          console.log(res)
           if (res.status == 200) {
             this.myclueinfo = res.obj.list;
             this.total = res.obj.total;
@@ -303,12 +292,7 @@ export default {
         });
     },
     delclue() {
-      this.$refs.multipleTable.selection;
-      var ids = [];
-      for (var id in this.$refs.multipleTable.selection) {
-        ids.push(this.$refs.multipleTable.selection[id].id);
-      }
-      this.ids = ids.join(",");
+      let ids = this.delClueForm.ids.join(",")
       if (ids.length == 0) {
       } else {
         this.$confirm("确认删除, 是否继续?", "提示", {
@@ -318,9 +302,9 @@ export default {
         })
           .then(() => {
             this.$store
-              .dispatch("myclue/cluesdel", this.ids)
+              .dispatch("myclue/cluesdel", {ids: ids})
               .then(res => {
-                this.searchclue();
+                console.log(res)
               })
               .catch(error => {
                 console.log(error);
@@ -337,48 +321,70 @@ export default {
               message: "已取消删除"
             });
           });
-        this.searchclue();
       }
     },
     editclue() {
       this.$refs.multipleTable.selection;
       var ids = [];
       for (var id in this.$refs.multipleTable.selection) {
-        ids.push(this.$refs.multipleTable.selection[id].id);
+        ids.push(this.$refs.multipleTable.selection[id].id)
       }
-      ids = ids.join(",");
-      if (!this.value3) {
-        this.$message({
-          type: "info",
-          message: "请选择名单!"
-        });
-      } else {
-        if (ids.length == 0) {
-          this.$message({
-            type: "info",
-            message: "请选择要转移的线索!"
-          });
-          return;
-        } else {
-          this.$store
-            .dispatch("myclue/cluesedit", { ids: ids, listId: this.value3 })
-            .then(res => {
-              this.searchclue();
-              this.dialogFormVisible = false;
-            })
-            .catch(error => {
-              console.log(error);
-            });
-        }
+      ids = ids.join(",")
+      if(!this.moveClueToCardForm.listId){
+        this.$message.error('请选择目标名单')
+      }else if(!this.moveClueToCardForm.entId || !this.moveClueToCardForm.entId.length){
+        this.$message.error('请选择要转移的线索')
+      }else{
+        this.$store
+          .dispatch("myclue/cluesedit", {ids: ids, dataSource: 2, listId: this.moveClueToCardForm.listId})
+          .then(res => {
+            this.searchclue();
+            this.dialogFormVisible = false;
+          }).catch(error => {
+            console.log(error);
+          })
       }
+      // if (!this.listId) {
+      //   this.$message({
+      //     type: "error",
+      //     message: "请选择名单!"
+      //   })
+      // } else if(ids.length == 0){
+      //   this.$message({
+      //     type: "info",
+      //     message: "请选择要转移的线索!"
+      //   });
+      // } else {
+      //   this.$store
+      //     .dispatch("myclue/cluesedit", { ids: ids, listId: this.listId })
+      //     .then(res => {
+      //       this.searchclue();
+      //       this.dialogFormVisible = false;
+      //     }).catch(error => {
+      //       console.log(error);
+      //     })
+      // }
     },
-    godetails(val) {
+    godetails(row,column,event,cell) {
       this.changeCom()
-      this.$store.commit('myclue/SET_COMPANYID', val.id)
+      this.$store.commit('myclue/SET_COMPANYID', row.id)
     }
   }
 };
 </script>
+<style lang="scss" scoped>
+.companyHandle {
+  display: flex;
+  justify-content: flex-end;
+  .el-select{
+    margin-right: 10px;
+  }
+}
+
+.el-table >>> tr.el-table__row{
+    cursor: pointer;
+}
+</style>
 <style lang="scss">
 .main-box{
   margin-top:20px
@@ -414,10 +420,7 @@ export default {
       padding: 12px 20px 0 10px;
     }
   }
-  div.companyHandle {
-    display: flex;
-    justify-content: flex-end;
-  }
+
 }
 .el-pagination {
   margin-top: 20px;

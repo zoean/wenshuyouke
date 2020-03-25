@@ -183,7 +183,8 @@ export default{
 			}else{
 				addEntUser(this.addEditEntUserForm).then(response => {
 					if(response.status == 200){
-						this.$message.success('成功添加企业用户')						
+						this.$message.success('成功添加企业用户')		
+						this.fetchEntUserList()				
 						this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
 					}else{
 						this.$message.error('添加企业用户失败，请重试')

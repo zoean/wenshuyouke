@@ -89,13 +89,8 @@ const actions = {
   cluesdel({
     commit
   },delclueinfo) {
-    const {
-      ids
-    }=delclueinfo
     return new Promise((resolve, reject) => {
-      mycluedel({
-        ids:ids
-      }).then(response => {
+      mycluedel(delclueinfo).then(response => {
         resolve(response.data)
       }).catch(error => {
         reject(error)
@@ -106,15 +101,8 @@ const actions = {
   cluesedit({
     commit
   },editclueinfo) {
-    const {
-      ids,
-      listId
-    }=editclueinfo
     return new Promise((resolve, reject) => {
-      myclueedit({
-        ids:ids,
-        listId:listId
-      }).then(response => {
+      myclueedit(editclueinfo).then(response => {
         resolve(response.data)
       }).catch(error => {
         reject(error)
@@ -125,13 +113,8 @@ const actions = {
   cluesdetail({
     commit
   },cluesinfo) {
-    const {
-      id,
-    }=cluesinfo
     return new Promise((resolve, reject) => {
-      cluedetail({
-        id:id,
-      }).then(response => {
+      cluedetail(cluesinfo).then(response => {
         // console.log(1111)
         resolve(response.data)
       }).catch(error => {

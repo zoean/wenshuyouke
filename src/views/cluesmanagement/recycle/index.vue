@@ -91,10 +91,6 @@
             />
             </el-table-column>
             <el-table-column
-              prop="contact"
-              label="电话"
-            />
-            <el-table-column
               prop="dataSource"
               label="线索来源" :formatter="dataSource"
             />
