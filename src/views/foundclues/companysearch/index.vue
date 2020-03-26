@@ -90,18 +90,18 @@
         stripe
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="entName" width="280"></el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">法人：{{scope.row.legalName}}</template>
+        <el-table-column prop="entName" label="公司名称" width="280"></el-table-column>
+        <el-table-column label="法人">
+          <template slot-scope="scope">{{scope.row.legalName}}</template>
         </el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">成立时间：{{scope.row.regDate}}</template>
+        <el-table-column label="成立时间">
+          <template slot-scope="scope">{{scope.row.regDate}}</template>
         </el-table-column>
-        <el-table-column>
-          <template slot-scope="scope">注册资本：{{Math.floor(scope.row.regCapital)}}</template>
+        <el-table-column label="注册资本">
+          <template slot-scope="scope">{{Math.floor(scope.row.regCapital)}}</template>
         </el-table-column>
-        <el-table-column width="380">
-          <template slot-scope="scope">地址：{{scope.row.address}}</template>
+        <el-table-column width="380" label="地址">
+          <template slot-scope="scope">{{scope.row.address}}</template>
         </el-table-column>
 
         <el-table-column type="expand">

@@ -5,35 +5,10 @@
       <input class="btn-8032-general" type="button" name="" value="查询" @click="getCardList">
     </div>
     <div class="list-card">
-    	<!-- 修改名单名称 -->
-    	<template>
-    		<el-dialog title="修改名称" :visible.sync="renameVisible" width="25%">
-		      <el-form ref="renameForm" :ruels="renameFormRules" :model="renameForm">
-		        <el-form-item label="名单名称：" :label-width="addCardLableWidth" prop="listName">
-		          <el-input autocomplete="off" placeholder="请输入名单名称" v-model="renameForm.listName"></el-input>
-		        </el-form-item>
-		      </el-form>
-		      <el-row type="flex" justify="end" :gutter="5">
-		      	<el-col :span="5"><el-button @click="cancleRename">取消</el-button></el-col>
-		      	<el-col :span="5"><el-button @click="renameSubmit()" type="primary">确定</el-button></el-col>
-		      </el-row>
-		    </el-dialog>
-    	</template>			
     	<ul>
     		<li class="first-card" @click="addCard">
           <i class="el-icon-plus"></i>
           <p>点击新建名单</p>
-          <el-dialog title="新建名单" :visible.sync="addCardVisible" width="25%">
-			      <el-form ref="addCardForm" :ruels="addCardRules" :model="addCardForm">
-			        <el-form-item label="名单名称：" :label-width="addCardLableWidth">
-			          <el-input v-model="addCardForm.listName" autocomplete="off" placeholder="请输入名单名称"></el-input>
-			        </el-form-item>			        	
-			      </el-form>
-			      <div slot="footer" class="dialog-footer">
-			        <el-button @click="cancleAddCardSubmit()">取 消</el-button>
-			        <el-button type="primary" @click="addCardSubmit">确 定</el-button>
-			      </div>
-			    </el-dialog>
         </li>
         <li class="card-item" v-for="(item,index) in userCardList" :key="index">
           <!-- <el-switch
@@ -59,6 +34,18 @@
         </li>
     	</ul>
     </div> 
+
+    <el-dialog title="新建名单" :visible.sync="addCardVisible" width="25%">
+      <el-form ref="addCardForm" :model="addCardForm">
+        <el-form-item label="名单名称：" :label-width="addCardLableWidth">
+          <el-input v-model="addCardForm.listName" autocomplete="off" placeholder="请输入名单名称"></el-input>
+        </el-form-item>			        	
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancleAddCardSubmit">取 消</el-button>
+        <el-button type="primary" @click="addCardSubmit">确 定</el-button>
+      </div>
+    </el-dialog>
     <!-- 分配子帐户 -->
     <el-dialog :visible.sync="distributionVisible" width="30%">
     	<el-form>
@@ -83,6 +70,18 @@
 		    <el-button type="primary" @click="delListVerify">确 定</el-button>
 		  </span>
 		</el-dialog>
+    	<!-- 修改名单名称 -->
+		<el-dialog title="修改名称" :visible.sync="renameVisible" width="25%">
+      <el-form ref="renameForm" :model="renameForm">
+        <el-form-item label="名单名称：" :label-width="addCardLableWidth">
+          <el-input autocomplete="off" placeholder="请输入名单名称" v-model="renameForm.listName"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-row type="flex" justify="end" :gutter="5">
+      	<el-col :span="5"><el-button @click="cancleRename">取消</el-button></el-col>
+      	<el-col :span="5"><el-button @click="renameSubmit" type="primary">确定</el-button></el-col>
+      </el-row>
+    </el-dialog>
 	</div>
 </template>
 <script>
@@ -139,25 +138,6 @@
 				renameVisible:false,
 				addCardLableWidth:'100px',
 				subAccount:[],
-				addCardRules:{
-					listName:[{
-						required:true,
-						message:'请输入名单名称',
-						trigger:'blur'
-					}],
-					userId:[{
-						required:true,
-						message:'请选择子帐户',
-						trigger:'blur'
-					}]
-				},
-				renameFormRules:{
-					listName:[{
-						required:true,
-						message:'请输入名单名称',
-						trigger:'blur'
-					}]
-				},
 				userCardList:{},
 			}
 		},
@@ -206,8 +186,8 @@
 				this.distributionVisible = false
 			},
 			cancleAddCardSubmit(){
-				this.resetForm('addCardForm');
-				this.addCardVisible = false;
+				this.resetForm('addCardForm')
+				this.addCardVisible = false
 			},
 			cancleRename(){
 				this.resetForm('renameForm');
@@ -232,48 +212,36 @@
 				})
 			},
 			renameSubmit(){
-				this.$refs['renameForm'].validate((valid)=>{
-					if(valid){
-						renameCardPost(this.renameForm).then(response=>{
-							try{
-								if(response.data.status==200){
-									this.$message.success('修改成功')
-									this.getCardList();
-									this.renameVisible = false;
-								}								
-							}catch(e){
-								this.$message.error('修改名单名称失败')
-							}
-						})
-					}
-				})
+				if(!this.renameForm.listName){
+					this.$message.error('请输入名单名称')
+				}else{
+					renameCardPost(this.renameForm).then(response=>{
+						try{
+							if(response.data.status==200){
+								this.$message.success('修改成功')
+								this.getCardList();
+								this.renameVisible = false;
+							}								
+						}catch(e){
+							this.$message.error('修改名单名称失败')
+						}
+					})
+				}
 			},
 			addCardSubmit(){//提交添加名单表单
-				this.$refs['addCardForm'].validate((valid)=>{
-					if(valid){
-						addCardPost(this.addCardForm).then(response=>{
-							if(response.status==200){
-								this.resetForm('addCardForm');
-								this.addCardVisible = false;
-								this.getCardList();
-								this.$message.success('添加名单成功')
-							}
-						})
-					}
-				})
+				if(!this.addCardForm.listName){
+					this.$message.error('请输入名单名称')
+				}else{
+					addCardPost(this.addCardForm).then(response=>{
+						if(response.status==200){
+							this.resetForm('addCardForm');
+							this.addCardVisible = false;
+							this.getCardList();
+							this.$message.success('添加名单成功')
+						}
+					})
+				}
 			},
-			submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            // addCard({this.addCardForm}).then(response=>{
-            // 	console.log(response)
-            // })
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
 			resetForm(formName) {
 				this.$nextTick(()=>{
 	        this.$refs[formName].resetFields();

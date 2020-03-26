@@ -16,7 +16,7 @@
     <el-row class="overview" :gutter="5">
       <el-col :span="8">
         <div class="main-box">
-          <div><h2>8499<span>条</span></h2><p>剩余线索</p></div>
+          <div><h2>100<span>条</span></h2><p>剩余线索</p></div>
           <div><h2>8499<span>条</span></h2><p>已领取线索</p></div>
         </div>
       </el-col>

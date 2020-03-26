@@ -95,7 +95,7 @@
             <template slot-scope="scope">{{ scope.row.position }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="phone"
             label="手机号"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.phone }}</template>
@@ -158,6 +158,9 @@
         </el-form-item>
         <el-form-item v-show="addEditType=='添加用户'" label="密码" :label-width="formLabelWidth" prop="passWord">
           <el-input v-model="addEditWorkerForm.passWord" type="password" autocomplete="off" show-password></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
+          <el-input v-model="addEditWorkerForm.phone"></el-input>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="realName">
           <el-input v-model="addEditWorkerForm.realName" autocomplete="off"></el-input>
@@ -281,6 +284,9 @@
               required: this.addEditType == '添加用户' ? true : false,message:'请输入员工/坐席密码',trigger:'blur'
             }
           ],
+          phone:[{
+            required:true, message: '请输入坐席手机号码',trigger:'blur'
+          }],
           department:[{
             required:true,message:'请选择员工/坐席所在部门',trigger:'blur'
           }],
