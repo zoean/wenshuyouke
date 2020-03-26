@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<CompanyList v-if="!showDetail" :changeCom="changeCom" :setCListId="setCListId" />
-		<CompanyDetails v-if="showDetail" :changeCom="changeCom" :setCListId="setCListId" /> 
+		<CompanyList v-if="!showDetail" :changeCom="changeCom" :setCListId="setCListId" :showDetail="showDetail" />
+		<CompanyDetails v-if="showDetail" :changeCom="changeCom" :setCListId="setCListId" :showDetail="showDetail" /> 
 	</div>
 </template>
 <script>

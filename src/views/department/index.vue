@@ -102,12 +102,6 @@
           </el-table-column>
           <el-table-column
             prop="address"
-            label="邮箱"
-            show-overflow-tooltip>
-            <template slot-scope="scope">{{ scope.row.email || '--' }}</template>
-          </el-table-column>
-          <el-table-column
-            prop="address"
             label="操作">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="editWorkerHandle(scope.row)">编辑</el-button>
@@ -338,7 +332,6 @@
       addEditHandle(data){//添加部门事件触发
         this.addEditVisible = true
         this.addEditForm.departParent = data.id
-
         this.editDepartmentType='添加部门'
         this.isEnt = false  
       },
@@ -366,6 +359,20 @@
         }else{
           this.delDepartmentForm.ids = curNode
           this.delDepartmentVisible = true
+        }
+      },
+      addEditFormReset(){
+        this.addEditWorkerForm = {
+          entUserId:getLocalStorage('userId'),
+          userName:'',
+          passWord:'',
+          realName:'',
+          sex:'',
+          department:'',
+          email:'',
+          position:'',
+          userType:'seat',
+          workNo:''
         }
       },
       addEditDeSubmit(){
@@ -452,6 +459,8 @@
       addWorkerHandle(){
         this.addEditWorkerVisible = true
         this.addEditType = '添加用户'
+        this.addEditFormReset()
+        this.$refs['addEditWorkerForm'].resetFields()
       },
       editWorkerHandle(data){
         this.addEditWorkerVisible = true
@@ -460,8 +469,8 @@
           userName: data.userName,
           realName: data.realName,
           sex: data.sex,
-          // department: data.department,
-          department: 26,
+          phone: data.phone,
+          department: [-1,24],
           userRole: data.userRole,
           position: data.position
         }

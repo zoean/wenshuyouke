@@ -98,7 +98,7 @@
           <template slot-scope="scope">{{scope.row.regDate}}</template>
         </el-table-column>
         <el-table-column label="注册资本">
-          <template slot-scope="scope">{{Math.floor(scope.row.regCapital)}}</template>
+          <template slot-scope="scope">{{Math.floor(scope.row.regCapital)}}万元</template>
         </el-table-column>
         <el-table-column width="380" label="地址">
           <template slot-scope="scope">{{scope.row.address}}</template>

@@ -3,35 +3,23 @@
     <!-- 上部公司信息展示 -->
     <div class="main-box header-box">
       <el-row>
-        <el-col :span="20">
-           <h3>{{ cluesinfo.entName }}</h3>
-        </el-col>
-        <el-col :span="4">
-          <p class="back-list highblue" @click="backToList">返回我的线索列表</p>
+        <el-col :span="10">
+          <p class="back-list highblue" @click="backToList">返回</p>
         </el-col>
       </el-row>
-      <el-row type="flex" justify="end">
-        <el-col :span="20">
+      <el-row type="flex" align="middle">
+        <el-col :span="12"><h3>{{ cluesinfo.entName }}</h3></el-col>
+        <el-col :span="12" style="text-align: right">
           {{ cluesinfo.legalName }}
           <span>|</span>
           {{ cluesinfo.regDate }}
           <span>|</span>
           {{ Math.floor(cluesinfo.regCapital) }}万元
-        </el-col>
-        <el-col :span="4" style="text-align: right">
-          <el-button type="primary" @click="lastshow">上一条</el-button>
-          <el-button type="primary" @click="nextshow">下一条</el-button>
-        </el-col>
+        地址：{{ cluesinfo.address }}
+      </el-col>
       </el-row>
-        
-      <el-row>
-        <el-col :span="10">
-          <div>
-            <b>地址：</b>
-            {{ cluesinfo.address }}
-          </div>
-        </el-col>
-         <el-col :span="2" >
+      <el-row type="flex" justify="end">
+        <el-col :span="2" >
           <div class="callStatus">
             <span class="label-dark-gray" v-if="!cluesinfo.callStatus">未拨打</span>
             <span class="label-blue" v-if="cluesinfo.callStatus == 1">已接通</span>
@@ -41,9 +29,18 @@
         <el-col :span="5">
           <div class="grid-content bg-purple-light">拨打记录：{{ cluesinfo.lastCallTime || '--' }}</div>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="13">
           <div class="grid-content bg-purple">备注：{{ cluesinfo.remark || '--'}}</div>
         </el-col>
+        <el-col :span="4" style="text-align: right">
+          <el-button type="primary" @click="lastshow">上一条</el-button>
+          <el-button type="primary" @click="nextshow">下一条</el-button>
+        </el-col>
+      </el-row>
+        
+      <el-row>
+        
+         
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -91,7 +88,7 @@
             <div class="editinfo">
               <div>
                 <span>联系方式：</span>
-                <p>{{ cluesinfo.telePhone }}</p>
+                <p>{{ cluesinfo.contact }}</p>
               </div>
               <div>
                 <span>微信号：</span>
@@ -119,7 +116,7 @@
                   <el-input v-model="cluesinfo.duties" />
                 </el-form-item>
                 <el-form-item label="联系方式" :label-width="formLabelWidth">
-                  <el-input v-model="cluesinfo.telePhone" />
+                  <el-input v-model="cluesinfo.contact" />
                 </el-form-item>
                 <el-form-item label="微信号" :label-width="formLabelWidth">
                   <el-input v-model="cluesinfo.wechat" />
@@ -364,7 +361,8 @@ export default {
         duties: this.cluesinfo.duties,
         contact: this.cluesinfo.contact,
         wechat: this.cluesinfo.wechat,
-        email: this.cluesinfo.email
+        email: this.cluesinfo.email,
+        entAddress: this.cluesinfo.entAddress
       };
       this.clueeditinfo = Object.assign(
         this.id,
@@ -475,7 +473,7 @@ export default {
   .back-list{
     cursor:pointer;
     font-size: 16px;
-    text-align: right;
+    margin: 0;
   }
   .clue-detail-handle{
     display: flex;
@@ -484,6 +482,9 @@ export default {
     .el-select{
       margin-right: 10px;
     }
+  }
+  h3{
+    margin:0;
   }
 </style>
 <style lang="scss">

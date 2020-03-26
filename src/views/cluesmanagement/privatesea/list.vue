@@ -146,8 +146,14 @@ export default {
 			setCListId:{
 				type:Function,
 				default:null
-			}
+			},
+      showDetail: {
+        type: Boolean
+      }
 		},
+    mouted(){
+      console.log('列表页')
+    },
   data() {
     return {
       fllowupStatus: ["待跟进", "有意向", "无意向", "已成交", "未成交"],
@@ -218,6 +224,11 @@ export default {
         this.searchclue();
       },
       deep: true //开启深度监听
+    },
+    showDetail: {
+      handler: function (val){
+        // this.fetchCardList()
+      }
     }
   },
   created() {

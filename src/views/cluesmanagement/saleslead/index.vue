@@ -286,7 +286,7 @@ export default {
     },
     formatterVphone(val){
       if(val){
-        return val.substr(4)
+        return val.replace(/^0086/g,'')
       }else{
         return '获取号码'
       }

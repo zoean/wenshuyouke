@@ -214,15 +214,17 @@ export const asyncRouterMap = [{
       icon: "count"
     },
     alwaysShow: true,
-    children:[{
-      path:'accountoverview',
-      component:() => import("@/views/expensecenter/accountoverview/index"),
-      name:'accountoverview',
-      meta:{
-        title:'帐户总览',
-        icon:'accountoverview'
-      }
-    },{
+    children:[
+    // {
+    //   path:'accountoverview',
+    //   component:() => import("@/views/expensecenter/accountoverview/index"),
+    //   name:'accountoverview',
+    //   meta:{
+    //     title:'帐户总览',
+    //     icon:'accountoverview'
+    //   }
+    // },
+    {
       path:'cluedetails',
       component:() => import("@/views/expensecenter/cluedetails/index"),
       name:'cluedetails',
@@ -257,7 +259,7 @@ export const asyncRouterMap = [{
     redirect: "/set/department",
     meta:{
       title: "设置中心",
-      icon: "dashboard",
+      icon: "setcenter",
       roles:['admin']
     },
     children: [{
@@ -266,7 +268,7 @@ export const asyncRouterMap = [{
       component: () => import("@/views/department/index"),
       meta: {
         title: "部门用户设置",
-        icon: "dashboard",
+        icon: "department",
         roles:['admin']
       }
     },{
@@ -275,7 +277,7 @@ export const asyncRouterMap = [{
       component: () => import("@/views/rolepermission/index"),
       meta: {
         title: "角色权限设置",
-        icon: "dashboard",
+        icon: "rolepermission",
         roles:['admin']
       }
     }]
