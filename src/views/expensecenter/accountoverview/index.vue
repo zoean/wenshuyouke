@@ -50,7 +50,7 @@ export default {
   }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .recharge {
   padding: 46px 160px;
   background-image: url("~@/assets/images/rechargebg.png");

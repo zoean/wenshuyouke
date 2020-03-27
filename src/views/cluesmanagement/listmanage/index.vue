@@ -28,7 +28,7 @@
 		}		
 	}
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 	.list-search{
 		display: flex;
 		align-items: center;

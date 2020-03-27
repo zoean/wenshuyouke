@@ -324,62 +324,63 @@ export default {
 </script>
 
 <style lang="scss">
-	.newcom-wrap{
-		width: 100%;
-		color:#666;
-		display: flex;
-		flex-direction:column;
-		.change-type{
-			input{
-				margin-right:14px;
-			}
-		}
-		.newcom-main{
-			background:rgba(255,255,255,1);
-			box-shadow:0px 2px 7px 1px rgba(211,229,255,1);
-			border-radius:12px;
-			margin-top:16px;
-			padding: 22px 32px;
-			.open-search{
-				background:rgba(244,244,244,1);
-				border:1px solid rgba(230,230,230,1);
-				border-radius:12px;
-				text-align:center;
-				color:#4083FF;
-				text-decoration: underline;
-				line-height: 64px;
-				font-size: 14px;
-			}
-			.search-area{
-				.if-all-cond{
 
-				}
-			}
-			.search-result{
-				display:flex;
-				justify-content: space-between;
-        align-items: center;
-				margin:25px auto;
-				span{
-					b{
-						padding: 0 5px;
-					}
-				}
-				div{
-					.el-select{
-						margin-right: 10px;
-					}
-				}
-			}
-			.el-pagination{
-				margin-top: 20px;
-			}
-		}
-	}
 </style>
 <style lang="scss" scoped>
 .companyHandle {
   display: flex;
   justify-content: space-between;
 }
+  .newcom-wrap{
+    width: 100%;
+    color:#666;
+    display: flex;
+    flex-direction:column;
+    .change-type{
+      input{
+        margin-right:14px;
+      }
+    }
+    .newcom-main{
+      background:rgba(255,255,255,1);
+      box-shadow:0px 2px 7px 1px rgba(211,229,255,1);
+      border-radius:12px;
+      margin-top:16px;
+      padding: 22px 32px;
+      .open-search{
+        background:rgba(244,244,244,1);
+        border:1px solid rgba(230,230,230,1);
+        border-radius:12px;
+        text-align:center;
+        color:#4083FF;
+        text-decoration: underline;
+        line-height: 64px;
+        font-size: 14px;
+      }
+      .search-area{
+        .if-all-cond{
+
+        }
+      }
+      .search-result{
+        display:flex;
+        justify-content: space-between;
+        align-items: center;
+        margin:25px auto;
+        span{
+          b{
+            padding: 0 5px;
+          }
+        }
+        div{
+          .el-select{
+            margin-right: 10px;
+          }
+        }
+      }
+      .el-pagination{
+        margin-top: 20px;
+      }
+    }
+  }
 </style>

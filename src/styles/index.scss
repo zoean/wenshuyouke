@@ -76,20 +76,17 @@ ul{
   padding: 22px 32px;
 }
 .search-area {
-  display: flex;
-  flex-direction: column;
-  dl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    dd {
-      margin-left: 10px;
-    }
-  }
   .companyHandle {
     height: 44px;
     display: flex;
     justify-content: space-between;
+  }
+}
+.companyHandle {
+  display: flex;
+  justify-content: flex-end;
+  .el-select{
+    margin-right: 10px;
   }
 }
 .highred{
@@ -126,7 +123,15 @@ ul{
       .el-input__icon{
         line-height:36px;
       }
+      .el-date-editor{
+        .el-input__icon{
+          line-height:30px;
+        }
+      }
       .el-radio-button__inner{
+        padding: 10px 20px;
+      }
+      .el-button--primary{
         padding: 10px 20px;
       }
       .el-radio-button__orig-radio:checked+.el-radio-button__inner{

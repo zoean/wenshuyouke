@@ -244,7 +244,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .newcom-wrap {
   width: 100%;
   color: #666;

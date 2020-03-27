@@ -100,28 +100,7 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
-.search-area {
-  display: flex;
-  flex-direction: column;
-  dl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    dd {
-      margin-left: 10px;
-    }
-  }
-  dl.backToList{
-    text-align: center;
-    cursor: pointer;
-  }
-  div.companyHandle {
-    display: flex;
-    justify-content: space-between;
-  }
-}
-</style>
+
 <style lang="scss" scoped>
 .el-date-editor{
   margin-left:10px;

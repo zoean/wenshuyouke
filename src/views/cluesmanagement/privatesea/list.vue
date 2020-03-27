@@ -384,25 +384,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.companyHandle {
-  display: flex;
-  justify-content: flex-end;
-  .el-select{
-    margin-right: 10px;
-  }
-}
-
-.el-table >>> tr.el-table__row{
-    cursor: pointer;
-}
-</style>
-<style lang="scss">
-.main-box{
-  margin-top:20px
-}
-.company-data {
-  margin-top: 20px;
-}
 .is-circle {
   box-shadow: none;
   border: none;
@@ -433,8 +414,8 @@ export default {
   }
 
 }
-.el-pagination {
-  margin-top: 20px;
+.el-table >>> tr.el-table__row{
+    cursor: pointer;
 }
 .search-area /deep/ .el-input-group__prepend {
   width: 125px;

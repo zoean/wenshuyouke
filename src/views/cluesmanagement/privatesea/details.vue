@@ -8,14 +8,14 @@
         </el-col>
       </el-row>
       <el-row type="flex" align="middle">
-        <el-col :span="12"><h3>{{ cluesinfo.entName }}</h3></el-col>
-        <el-col :span="12" style="text-align: right">
+        <el-col :span="9"><h3 :title="cluesinfo.entName">{{ cluesinfo.entName | ellipsis(40) }}</h3></el-col>
+        <el-col :span="15" style="text-align: right">
           {{ cluesinfo.legalName }}
           <span>|</span>
           {{ cluesinfo.regDate }}
           <span>|</span>
           {{ Math.floor(cluesinfo.regCapital) }}万元<span></span>
-        地址：{{ cluesinfo.address }}
+        地址：{{ cluesinfo.address}}
       </el-col>
       </el-row>
       <el-row type="flex" justify="end">
@@ -36,11 +36,6 @@
           <el-button type="primary" @click="lastshow">上一条</el-button>
           <el-button type="primary" @click="nextshow">下一条</el-button>
         </el-col>
-      </el-row>
-        
-      <el-row>
-        
-         
       </el-row>
       <el-row>
         <el-col :span="12">
@@ -69,7 +64,7 @@
         <el-col :span="8">
           <div class="main-box">
             <h5 style="display: inline-block;">基本信息</h5>
-            <svg-icon icon-class="edit" @click="dialogFormVisible = true" />
+            <svg-icon class="edit-clue" icon-class="edit" @click="dialogFormVisible = true" />
             <div class="editinfo">
               <div>
                 <span>姓名：</span>
@@ -104,7 +99,7 @@
               </div>
             </div>
             <!-- <div class="gocall"><el-button type="success" round>一键呼叫</el-button></div> -->
-            <el-dialog class="editcont" title="修改信息" :visible.sync="dialogFormVisible" @close="closeDialog">
+            <el-dialog class="editcont" title="修改信息" :visible.sync="dialogFormVisible" @close="closeDialog" width="30%">
               <el-form ref="cluesinfo" :model="cluesinfo">
                 <el-form-item label="姓名" :label-width="formLabelWidth">
                   <el-input v-model="cluesinfo.name" />
@@ -128,7 +123,7 @@
                   <el-input v-model="cluesinfo.entAddress" />
                 </el-form-item>
               </el-form>
-              <div slot="footer" class="dialog-footer btns">
+              <div slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog">取 消</el-button>
                 <el-button class="surebtn" type="primary" @click="clueedit">确 定</el-button>
               </div>
@@ -179,7 +174,7 @@
                         value-format="timestamp"
                       />
                     </el-form-item>
-                    <el-form-item class="btns">
+                    <el-form-item>
                       <el-button @click="dialogVisible = false">取消</el-button>
                       <el-button class="surebtn" type="primary" @click="cluefollowadd">保存</el-button>
                     </el-form-item>
@@ -211,7 +206,8 @@
 <script>
 import { getLocalStorage } from "@/utils/index"
 import { getCurUserCard } from "@/api/foundclues"
-
+import Vue from 'vue'
+let ellipsis = Vue.filter('ellipsis')//引入全局filter
 export default {
   name: 'CompanyDetails',
   props:{
@@ -486,36 +482,7 @@ export default {
   h3{
     margin:0;
   }
-</style>
-<style lang="scss">
-.main-box{
-  margin-top:20px
-}
-.gocall{
-  text-align: right;
-  button{
-    box-shadow:0px 2px 4px 0px rgba(43,97,187,0.5);
-    background: #2AB046;
-  }
-}
-.search-area {
-  display: flex;
-  flex-direction: column;
-  dl {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    dd {
-      margin-left: 10px;
-    }
-  }
-  div.companyHandle {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-
-.header-box {
+  .header-box {
   .el-row {
     margin-bottom: 35px;
     font-size: 14px;
@@ -545,9 +512,6 @@ export default {
     }
   }
 }
-.el-pagination {
-  margin-top: 20px;
-}
 .main-box {
   padding: 30px;
   h3 {
@@ -575,39 +539,7 @@ export default {
     margin-right: 8px;
     margin-left: 0 !important;
   }
-  .el-dialog {
-    width: 500px;
-    border-radius: 12px;
-    span {
-      color: #4083ff;
-      font-size: 16px;
-      font-weight: bold;
-    }
-    label {
-      width: 120px !important;
-      text-align: right;
-      font-weight: 400;
-      font-size: 14px;
-      color: #666;
-    }
-    .el-textarea,
-    .el-select,
-    .el-date-editor {
-      width: calc(100% - 40px) !important;
-    }
-    .btns {
-      text-align: right;
-      button {
-        box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
-      }
-      .surebtn {
-        background: linear-gradient(-23deg, #4088ff, #406dff);
-        span {
-          color: #fff;
-        }
-      }
-    }
-  }
+
   h5 {
     color: #407bff;
     font-size: 14px;
@@ -680,7 +612,6 @@ export default {
     height: 400px;
   }
 }
-
 .main-box /deep/ .el-radio__inner {
   display: none;
 }
@@ -704,5 +635,8 @@ export default {
 }
 .el-radio--medium.is-bordered {
   padding: 12px 20px 0 10px;
+}
+.edit-clue{
+  cursor:pointer;
 }
 </style>

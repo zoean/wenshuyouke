@@ -395,42 +395,10 @@ export default {
 </script>
 <style lang="scss">
 
-.results {
-  .criteria {
-    .el-row {
-      margin-bottom: 15px;
-      .el-radio {
-        margin-right: 8px;
-        margin-left: 0px;
-        text-align: center;
-        min-width: 100px;
-        height: 36px;
-      }
-      .el-select {
-        margin-right: 4px;
-        margin-left: 0px;
-      }
-    }
-  }
-  .general {
-    color: #999999;
-    margin: 33px 0 16px;
-    line-height:40px;
-    .el-button {
-      width: 80px;
-      padding: 0;
-      height: 36px;
-      font-size: 14px;
-      line-height: 36px;
-      background: linear-gradient(-23deg, #4088ff, #406dff);
-      box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
-      margin-left: 10px;
-    }
-  }
-}
+
 
 </style>
-<style scoped>
+<style lang="scss" scoped>
 .search{
   margin: 40px auto;
   width: 80%;
@@ -456,5 +424,48 @@ export default {
   height: 36px;
   min-width: 100px;
   margin-right:0;
+}
+.search-area{
+  dl{
+    dd{
+      .el-button--primary{
+        padding: 0
+      }
+    }
+  }
+} 
+.results {
+  .criteria {
+    .el-row {
+      margin-bottom: 15px;
+      .el-radio {
+        margin-right: 8px;
+        margin-left: 0px;
+        text-align: center;
+        min-width: 100px;
+        height: 36px;
+      }
+      
+      .el-select {
+        margin-right: 4px;
+        margin-left: 0px;
+      }
+    }
+  }
+  .general {
+    color: #999999;
+    margin: 33px 0 16px;
+    line-height:40px;
+    .el-button {
+      width: 80px;
+      padding: 0;
+      height: 36px;
+      font-size: 14px;
+      line-height: 36px;
+      background: linear-gradient(-23deg, #4088ff, #406dff);
+      box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
+      margin-left: 10px;
+    }
+  }
 }
 </style>

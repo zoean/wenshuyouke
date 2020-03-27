@@ -538,65 +538,6 @@ export default {
   }
 }
 </script>
-<style lang="scss" scope>
-
-.saleslead-data {  
-  .onthouch-outbound{
-    font-size: 40px;
-    cursor: pointer;
-    color: #F15533;
-  }
-  .telephone-info{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    p{
-      text-align: center;
-      cursor: pointer;
-      flex-grow: 1;
-    }    
-  }
-  .el-row {
-    display: flex;
-    align-items: center;
-    .el-col {
-      h2 {
-        font-size: 24px;
-        font-weight: 100;
-      }
-    }
-    .com-tips{
-      text-align: right;
-      span{
-        padding: 0 10px;
-      }
-    }
-    .call-log{
-      span{
-        padding-right: 18px;
-      }
-    }
-  }
-  .com-lable {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    span{
-      min-width:52px;
-    }
-  }
-  
-}
-
-.add-clues-handle{
-  .el-button{
-    margin-left: 10px;
-  }
-}
-.el-pagination {
-  margin-top: 20px;
-}
-</style>
 <style lang="scss" scoped>
 .search-area {
   display: flex;
@@ -679,5 +620,58 @@ export default {
 }
 .companyHandle{
   justify-content:space-between;
+}
+.saleslead-data {  
+  .onthouch-outbound{
+    font-size: 40px;
+    cursor: pointer;
+    color: #F15533;
+  }
+  .telephone-info{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    p{
+      text-align: center;
+      cursor: pointer;
+      flex-grow: 1;
+    }    
+  }
+  .el-row {
+    display: flex;
+    align-items: center;
+    .el-col {
+      h2 {
+        font-size: 24px;
+        font-weight: 100;
+      }
+    }
+    .com-tips{
+      text-align: right;
+      span{
+        padding: 0 10px;
+      }
+    }
+    .call-log{
+      span{
+        padding-right: 18px;
+      }
+    }
+  }
+  .com-lable {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    span{
+      min-width:52px;
+    }
+  }
+  
+}
+
+.add-clues-handle{
+  .el-button{
+    margin-left: 10px;
+  }
 }
 </style>

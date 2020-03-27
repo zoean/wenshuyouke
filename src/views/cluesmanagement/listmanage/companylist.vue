@@ -312,7 +312,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .search-area {
   display: flex;
   flex-direction: column;
@@ -349,8 +349,5 @@ export default {
   .el-dropdown-link{
     cursor: pointer;
   }
-}
-.el-pagination {
-  margin-top: 20px;
 }
 </style>
