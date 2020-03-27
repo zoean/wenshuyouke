@@ -106,13 +106,13 @@
             <span v-if="status.row.dataSource == 3">回收站</span>
           </template>
         </el-table-column>
-        <el-table-column prop="fllowupStatus" property="fllowupStatus" label="线索状态" show-overflow-tooltip>
+        <el-table-column prop="clueStatus" property="clueStatus" label="线索状态" show-overflow-tooltip>
           <template slot-scope="status">
-            <span v-if="status.row.fllowupStatus == 0">待跟进</span>
-            <span v-if="status.row.fllowupStatus == 1">有意向</span>
-            <span v-if="status.row.fllowupStatus == 2">无意向</span>
-            <span v-if="status.row.fllowupStatus == 3">已成交</span>
-            <span v-if="status.row.fllowupStatus == 4">未成交</span>
+            <span v-if="status.row.clueStatus == 0">待跟进</span>
+            <span v-if="status.row.clueStatus == 1">有意向</span>
+            <span v-if="status.row.clueStatus == 2">无意向</span>
+            <span v-if="status.row.clueStatus == 3">已成交</span>
+            <span v-if="status.row.clueStatus == 4">未成交</span>
           </template>
         </el-table-column>
         <el-table-column prop="remark" label="备注" show-overflow-tooltip />
@@ -412,7 +412,9 @@ export default {
       padding: 12px 20px 0 10px;
     }
   }
-
+  .companyHandle{
+    justify-content: flex-end;
+  }
 }
 .el-table >>> tr.el-table__row{
     cursor: pointer;
