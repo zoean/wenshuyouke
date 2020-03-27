@@ -5,14 +5,14 @@
     		<dl>
     			<dt>所在地区：</dt>
     			<dd>
-    				<el-button type="primary" @click="resetSearchOption(1)">不限</el-button>
-    				<el-select v-model="provinceName">
+    				<el-button class="btn-blue-default" type="primary" @click="resetSearchOption(1)">不限</el-button>
+    				<el-select v-model="provinceName" placeholder="省级地区">
     					<el-option v-for="(item,index) in provinceList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
-    				<el-select v-model="cityName" v-show="cityList.length > 0">
+    				<el-select v-model="cityName" placeholder="市级地区">
     					<el-option v-for="(item,index) in cityList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
-    				<el-select v-model="districtName" v-show="districtList.length > 0">
+    				<el-select v-model="districtName" placeholder="区级地区">
     					<el-option v-for="(item,index) in districtList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
     			</dd>
@@ -20,11 +20,11 @@
     		<dl>
     			<dt>所属行业：</dt>
     			<dd>
-    				<el-button type="primary" @click="resetSearchOption(2)">不限</el-button>
-    				<el-select v-model="industryName">
+    				<el-button class="btn-blue-default" type="primary" @click="resetSearchOption(2)">不限</el-button>
+    				<el-select v-model="industryName" placeholder="一级">
     					<el-option v-for="item in industryList" :value="item.industryCode" :label="item.industryName"></el-option>
     				</el-select>
-    				<el-select v-model="subIndustryName" v-show="subIndustryList.length > 0">
+    				<el-select v-model="subIndustryName" placeholder="二级">
     					<el-option v-for="item in subIndustryList" :value="item.id" :label="item.industryName"></el-option>
     				</el-select>
     			</dd>
@@ -32,7 +32,7 @@
     		<dl>
     			<dt>企业类型：</dt>
     			<dd>
-    				<el-button type="primary" @click="resetSearchOption(3)">不限</el-button>
+    				<el-button class="btn-blue-default" type="primary" @click="resetSearchOption(3)">不限</el-button>
     				<el-radio-group v-model="searchForm.entType" @change="changeEntType">
 				      <el-radio-button value="个人独资企业" label="个人独资企业">个人独资企业</el-radio-button>
 				      <el-radio-button value="有限责任公司" label="有限责任公司">有限责任公司</el-radio-button>
@@ -44,7 +44,7 @@
     		</dl>
     	</div>
     	<div class="search-result">
-    		<span>文投优客今天为您推荐了<b>{{newComList.total}}</b>家符合条件的企业</span>
+    		<span>文投优客今天为您推荐了<b class="highred">{{newComList.total}}</b>家符合条件的企业</span>
     		<div class="get-data">
 	    		<template>
 					  <el-select v-model="getNewComForm.listId" placeholder="请选择名单">
@@ -118,7 +118,7 @@
 			  @size-change="handleSizeChange"
 	      @current-change="handleCurrentChange"
 	      :current-page="searchForm.pageNum"
-	      :page-sizes="[10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200]"
+	      :page-sizes="[20, 50, 100, 200, 500, 1000, 2000]"
 	      :page-size="searchForm.pageSize"
 	      layout="total, sizes, prev, pager, next, jumper"
 	      :total="newComList.total">
@@ -141,7 +141,7 @@ export default {
     return {
     	searchForm:{
     		pageNum:1,
-    		pageSize:10,
+    		pageSize:20,
     		raCode: '', //省市区
     		industryCode:'', //行业
     		entType: '' //企业类型
@@ -184,6 +184,10 @@ export default {
     provinceName: function(val, oldval){//省
     	this.pid = val
     	this.searchForm.raCode = val
+      this.cityList = [] //监听当省发生变化时，清空上一次市和区的选中状态和数据
+      this.districtList = []
+      this.cityName = ''
+      this.districtName = ''
     	this.getAreaObj('city')
     },
     cityName: function (val, oldval){//市
@@ -195,6 +199,8 @@ export default {
     	this.searchForm.raCode = val
     },
     industryName: function (val,oldval){ //行业
+      this.subIndustryList = [] // 监听当行业一级发生变化，清空上一次二级行业的选中状态和数据
+      this.subIndustryName = '' 
     	this.getSubIndustryObj(val)
     	this.searchForm.industryCode = val
     },
@@ -328,24 +334,6 @@ export default {
 				margin-right:14px;
 			}
 		}
-		.search-area {
-		  display: flex;
-		  flex-direction: column;
-		  dl {
-		    display: flex;
-		    flex-direction: row;
-		    align-items: center;
-		    dd {
-		      margin-left: 10px;
-          button{
-            margin-right:10px;
-          }
-          .el-select{
-            margin-right:10px;
-          }
-		    }
-		  }
-		}
 		.newcom-main{
 			background:rgba(255,255,255,1);
 			box-shadow:0px 2px 7px 1px rgba(211,229,255,1);
@@ -374,8 +362,6 @@ export default {
 				margin:25px auto;
 				span{
 					b{
-						color:#FF4040;
-						font-weight: 100;
 						padding: 0 5px;
 					}
 				}

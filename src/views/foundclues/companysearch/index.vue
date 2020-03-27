@@ -6,10 +6,11 @@
       </el-input>
     </div>
     <div class="main-box results">
-      <div class="criteria">
-        <el-row>
-          所在地区：
-          <el-button type="primary" @click="clearcity">不限</el-button>
+      <div class="criteria search-area">
+        <dl>
+          <dt>所在地区：</dt>
+          <dd>
+          <el-button type="primary" @click="clearcity" class="btn-blue-default">不限</el-button>
           <el-select v-model="pname" placeholder="省级地区" @change="choseProvince">
             <el-option v-for="index in province" :label="index.name" :value="index.id" />
           </el-select>
@@ -19,60 +20,69 @@
           <el-select v-model="bname" @change="choseBlock" placeholder="区级地区">
             <el-option v-for="index in block" :label="index.name" :value="index.id" />
           </el-select>
-        </el-row>
-        <el-row>
-          所属行业：
-          <el-button type="primary" @click="clearindustry">不限</el-button>
-          <el-select v-model="categoryname" placeholder="一级" @change="choseCategory">
-            <el-option v-for="index in Category" :label="index.industryName" :value="index.industryCode" />
-          </el-select>
-          <el-select v-model="industry" placeholder="二级" @change="choseIndustry">
-            <el-option v-for="index in Industry" :label="index.industryName" :value="index.industryCode" />
-          </el-select>
-        </el-row>
-        <el-row>
-          企业类型：
+        </dd>
+        </dl>
+        <dl>
+          <dt>所属行业：</dt>
+          <dd>
+            <el-button type="primary" @click="clearindustry" class="btn-blue-default">不限</el-button>
+            <el-select v-model="categoryname" placeholder="一级" @change="choseCategory">
+              <el-option v-for="index in Category" :label="index.industryName" :value="index.industryCode" />
+            </el-select>
+            <el-select v-model="industry" placeholder="二级" @change="choseIndustry">
+              <el-option v-for="index in Industry" :label="index.industryName" :value="index.industryCode" />
+            </el-select>
+          </dd>
+        </dl>
+        <dl>
+          <dt>企业类型：</dt>
+          <dd>
+            <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
+            <el-radio-group v-model="searchForm.entType">
+              <el-radio
+                v-for="index in entType"
+                :label="index.value"
+                :key="index.value"
+                border
+                size="medium"
+              >{{index.label}}</el-radio>
+            </el-radio-group>
+          </dd>
+        </dl>
+        <dl>
+          <dt>联系方式：</dt>
+          <dd>
+            <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
+            <el-radio-group v-model="searchForm.telePhone">
+              <el-radio
+                v-for="index in telePhone"
+                :label="index.value"
+                :key="index.value"
+                border
+                size="medium"
+              >{{index.label}}</el-radio>
+            </el-radio-group>
+          </dd>
+        </dl>
+        <dl>
+          <dt>注册资本：</dt>
+          <dd>
           <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
-          <el-radio-group v-model="searchForm.entType">
-            <el-radio
-              v-for="index in entType"
-              :label="index.value"
-              :key="index.value"
-              border
-              size="medium"
-            >{{index.label}}</el-radio>
-          </el-radio-group>
-        </el-row>
-        <el-row>
-          联系方式：
-          <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
-          <el-radio-group v-model="searchForm.telePhone">
-            <el-radio
-              v-for="index in telePhone"
-              :label="index.value"
-              :key="index.value"
-              border
-              size="medium"
-            >{{index.label}}</el-radio>
-          </el-radio-group>
-        </el-row>
-        <el-row>
-          注册资本：
-          <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
-          <el-radio-group v-model="searchForm.regCapital">
-            <el-radio
-              v-for="index in regCapital"
-              :label="index.value"
-              :key="index.value"
-              border
-              size="medium"
-            >{{index.label}}</el-radio>
-          </el-radio-group>
-        </el-row>
+            <el-radio-group v-model="searchForm.regCapital">
+              <el-radio
+                v-for="index in regCapital"
+                :label="index.value"
+                :key="index.value"
+                border
+                size="medium"
+              >{{index.label}}</el-radio>
+            </el-radio-group>
+          </dd>
+        </dl>
       </div>
       <el-row class="general">
         <el-col :span="12">
-          本次搜索共为您检测到 <b>{{companytotal}}</b> 家符合标准的企业
+          本次搜索共为您检测到 <b class="highred">{{companytotal}}</b> 家符合标准的企业
         </el-col>
         <el-col :span="12" style="text-align:right">
           <el-select v-model="curListId" placeholder="请选择">
@@ -384,45 +394,17 @@ export default {
 }
 </script>
 <style lang="scss">
-.main-box{
-  margin-top:20px
-}
-.search {
-  padding: 36px 160px;
-  background-position: center;
-  button{
-    height:41px;
-    background:linear-gradient(-23deg,#4088FF,#406DFF);
-    border-radius:0px 4px 4px 0px;
-    margin-right: -30px!important;
-    span{
-      color:#FFF;
-    }
-  }
-  .input-with-select {
-    opacity: 0.9;
-  }
-}
+
 .results {
   .criteria {
     .el-row {
       margin-bottom: 15px;
-
-      .el-button {
-        background: #6699ff;
-        margin-left: 0;
-        margin-right: 4px;
-        width: 100px;
-        padding: 0;
-        height: 32px;
-        line-height: 32px;
-      }
       .el-radio {
         margin-right: 8px;
         margin-left: 0px;
         text-align: center;
         min-width: 100px;
-        height: 32px;
+        height: 36px;
       }
       .el-select {
         margin-right: 4px;
@@ -434,85 +416,45 @@ export default {
     color: #999999;
     margin: 33px 0 16px;
     line-height:40px;
-    b {
-      color: #cc0000;
-    }
     .el-button {
       width: 80px;
       padding: 0;
-      height: 32px;
+      height: 36px;
       font-size: 14px;
-      line-height: 32px;
+      line-height: 36px;
       background: linear-gradient(-23deg, #4088ff, #406dff);
       box-shadow: 0px 2px 4px 0px rgba(43, 97, 187, 0.5);
       margin-left: 10px;
     }
   }
-  .el-form-item {
-    margin-bottom: 0;
-  }
-  .el-pagination{
-    margin-top: 20px;
-  }
-  .el-dialog {
-    width: 1100px;
-    .infoboxleft {
-      text-align: center;
-      img {
-        width: 140px;
-        height: 140px;
-        background: #e6f0ff;
-        border-radius: 50%;
-      }
-      h5 {
-        font-size: 24px;
-        font-weight: 400;
-        color: #333;
-        padding: 33px 0 39px;
-        margin-block-start: 0;
-        margin-block-end: 0;
-      }
-    }
-    .infoboxright {
-      color: #333;
-      line-height: 28px;
-      div {
-        margin-bottom: 20px;
-      }
-      span {
-        color: #999;
-        margin-right: 11px;
-      }
-    }
-  }
 }
-.main-box /deep/ .el-radio__inner {
+
+</style>
+<style scoped>
+.search{
+  margin: 40px auto;
+  width: 80%;
+}
+.el-radio__inner {
   display: none;
 }
-.main-box /deep/.el-radio.is-bordered.is-checked {
+.search-area >>>.el-radio.is-bordered.is-checked {
   border: none;
   background: #6699ff;
 }
-.main-box /deep/.el-radio.is-bordered.is-checked span {
+.search-area >>>.el-radio.is-bordered.is-checked span {
   color: #fff;
 }
-.criteria /deep/ .el-input__inner {
-  height: 32px;
-}
-.main-box /deep/ .el-table__expand-icon {
+
+.search-area >>> .el-radio__input{
   display: none;
-  width: 0;
 }
-.results /deep/ .el-form--inline .el-form-item__label {
-  display: none !important;
-}
-.results /deep/ .el-table__expanded-cell {
-  color: #666666;
-  padding: 25px 66px;
-  border-bottom: 1px solid #ebeef5;
-}
-.el-table td,
-.el-table th.is-leaf {
-  border-bottom: none;
+.search-area >>> .el-radio{
+  padding: 0 20px 0 10px;
+  text-align:center;
+  line-height: 36px;
+  height: 36px;
+  min-width: 100px;
+  margin-right:0;
 }
 </style>

@@ -8,9 +8,9 @@
         </div>
         <el-tree :check-on-click-node=true :accordion=false ref="departmentTree" highlight-current :expand-on-click-node="false" default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" node-key="id" @node-click="nodeClick" :check-strictly="false">
 					<span class="custom-tree-node" slot-scope="{ node, data }">
-		        <span>{{ node.label }}</span>
+		        <span>{{ node.label}}</span>
 		        <span class="tree-handle">
-		        	<i class="el-icon-plus" title="添加下属部门" @click="addEditHandle(data)"></i>
+		        	<i class="el-icon-plus" title="添加下属部门" v-show="data.parentId < 2" @click="addEditHandle(data)"></i>
 		        	<i class="el-icon-edit" title="编辑部门名称" @click="editDepartmentHandle(data)"></i>
 		        	<i class="el-icon-delete" title="删除该部门" @click="delDepartmentVerifyHandle(data)"></i>
               <!-- <el-button
@@ -54,18 +54,18 @@
             <template slot-scope="scope">{{ scope.row.workNo }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="userName"
             label="分配帐号"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.userName }}</template>
           </el-table-column>
           <el-table-column
-            prop="name"
+            prop="realName"
             label="姓名">
             <template slot-scope="scope">{{ scope.row.realName }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="userType"
             label="权限"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.userType == 'seat' ? '坐席' : '坐席组长' }}</template>
@@ -77,20 +77,20 @@
             <template slot-scope="scope">{{ scope.row.userRole }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="sex"
             label="性别"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.sex }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
+            prop="department"
             label="部门"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.department }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
-            label="职位"
+            prop="position"
+            label="职务"
             show-overflow-tooltip>
             <template slot-scope="scope">{{ scope.row.position }}</template>
           </el-table-column>
@@ -101,7 +101,6 @@
             <template slot-scope="scope">{{ scope.row.phone }}</template>
           </el-table-column>
           <el-table-column
-            prop="address"
             label="操作">
             <template slot-scope="scope">
               <el-button type="primary" size="mini" @click="editWorkerHandle(scope.row)">编辑</el-button>
@@ -153,7 +152,7 @@
         <el-form-item v-show="addEditType=='添加用户'" label="密码" :label-width="formLabelWidth" prop="passWord">
           <el-input v-model="addEditWorkerForm.passWord" type="password" autocomplete="off" show-password></el-input>
         </el-form-item>
-        <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
+        <el-form-item label="手机号" :label-width="formLabelWidth" placeholder="请输入手机号" prop="phone">
           <el-input v-model="addEditWorkerForm.phone"></el-input>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="realName">
@@ -361,7 +360,7 @@
           this.delDepartmentVisible = true
         }
       },
-      addEditFormReset(){
+      addEditFormReset(){ // 添加和编辑用户/坐席共用表单，需要添加前清空表单数据再resetfields
         this.addEditWorkerForm = {
           entUserId:getLocalStorage('userId'),
           userName:'',
@@ -372,7 +371,8 @@
           email:'',
           position:'',
           userType:'seat',
-          workNo:''
+          workNo:'',
+          id: ''
         }
       },
       addEditDeSubmit(){
@@ -460,19 +460,35 @@
         this.addEditWorkerVisible = true
         this.addEditType = '添加用户'
         this.addEditFormReset()
-        this.$refs['addEditWorkerForm'].resetFields()
+        // this.$refs['addEditWorkerForm'].resetFields()
       },
       editWorkerHandle(data){
         this.addEditWorkerVisible = true
         this.addEditType = '编辑用户'
+        let departmentLable = data.department
+        let departmentArray = []
+        // cascader 回显部门处理，只处理两级，如果多于两级需要改写成递归函数
+        this.departmentTree.map(item => {
+          if(item.label == departmentLable){
+            departmentArray.push(item.id)
+          }else if(item.children && item.children.length > 0){
+            for( let i in item.children){
+              if(item.children[i].label == departmentLable){
+                departmentArray.push(item.children[i].parentId)
+                departmentArray.push(item.children[i].id)
+              }
+            }
+          }
+        })
         this.addEditWorkerForm = {
           userName: data.userName,
           realName: data.realName,
           sex: data.sex,
           phone: data.phone,
-          department: [-1,24],
+          department: departmentArray,
           userRole: data.userRole,
-          position: data.position
+          position: data.position,
+          id: data.id
         }
       },
       addEditUserSubmit(){

@@ -46,13 +46,24 @@ service.interceptors.response.use(
       })      
       return Promise.reject(new Error(res.message || 'Error'))
     } else {
+      if(res.data.status != 200){
+        Message({
+          message: res.data.message,
+          type:'error'
+        })
+      }
       return res
     }
   },
   error => {//
+    console.log(error)
     if(error.response.status == 403){
       store.dispatch('user/resetToken').then(() => {
         location.reload()
+      })
+      Message({
+        message: '登录超时，请重新登录',
+        type: 'error'
       })
     }
     // Message({ //升级用户体验，暂不显示报错
