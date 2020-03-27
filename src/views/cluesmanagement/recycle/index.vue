@@ -83,6 +83,7 @@
             <el-table-column
               prop="lastFollowTime"
               :formatter="formatDate"
+              width="180"
               label="最后跟进时间"
             />
             <el-table-column

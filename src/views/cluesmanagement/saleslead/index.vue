@@ -83,7 +83,7 @@
                          width="55">
         </el-table-column>
         <el-table-column label=""
-                         width="180" prop="telephone">
+                         width="170" prop="telephone">
           <template slot-scope="scope">
             <div class="telephone-info">
               <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall(scope.$index, scope.row)" />
@@ -98,8 +98,8 @@
                          label="">
           <template slot-scope="scope">
             <el-row>
-              <el-col :span="8">
-                <h2 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}</h2>
+              <el-col :span="6">
+                <h3 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}</h3>
               </el-col>
               <el-col :span="2">
                 <span class="label-blue" v-if="scope.row.callStatus == 1">{{scope.row.callStatus | callStatus}}</span>
@@ -109,31 +109,31 @@
               <el-col :span="4">
                 <span><b>拨打次数：</b>{{scope.row.callCount}}</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <span><b>成立时间：</b>{{scope.row.regDateTimestamp | transDateSub}}</span>
               </el-col>
               <el-col :span="3">
                 <span><b>法人：</b>{{scope.row.legalName}}</span>
               </el-col>
-              <el-col :span="3">
+              <el-col :span="4">
                 <span><b>注册资金：</b>{{ Math.floor(scope.row.regCapital)}}万元</span>
               </el-col>
             </el-row>
              <el-row class="com-lable">
-              <el-col :span="8">
+              <el-col :span="6">
                 <span><b>地址：</b></span>
-                <span :title="scope.row.address">{{scope.row.address | ellipsis(38)}}</span>
+                <span :title="scope.row.address">{{scope.row.address | ellipsis(30)}}</span>
               </el-col>
               <el-col :span="6">
                 <span><b>最近拨打：</b>{{scope.row.lastCallTime | parseDateTime}}</span>
               </el-col>
-              <el-col :span="4">
+              <el-col :span="5">
                 <span v-show="scope.row.dataSource == 0"><b>商机来源：</b><span class="highblue">新企推荐</span></span>
                 <span v-show="scope.row.dataSource == 1"><b>商机来源：</b><span class="highblue">企业搜索</span></span>
                 <span v-show="scope.row.dataSource == 2"><b>商机来源：</b><span class="highblue">转线索</span></span>
                 <span v-show="scope.row.dataSource == 3"><b>商机来源：</b><span class="highblue">回收站</span></span>
               </el-col>
-              <el-col :span="6">
+              <el-col :span="7">
                 <span :title="scope.row.remark"><b>备注：</b>{{scope.row.remark | ellipsis(22)}}</span>
               </el-col>
             </el-row> 
@@ -618,6 +618,11 @@ export default {
         margin-right:10px;
       }
     }
+  }
+}
+.main-box{
+  h3{
+    font-size:18px;
   }
 }
 .add-clues{

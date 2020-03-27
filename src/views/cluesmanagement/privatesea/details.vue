@@ -14,7 +14,7 @@
           <span>|</span>
           {{ cluesinfo.regDate }}
           <span>|</span>
-          {{ Math.floor(cluesinfo.regCapital) }}万元
+          {{ Math.floor(cluesinfo.regCapital) }}万元<span></span>
         地址：{{ cluesinfo.address }}
       </el-col>
       </el-row>
