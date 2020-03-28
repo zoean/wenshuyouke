@@ -39,33 +39,33 @@
                 type="index"
                 width="50" label="序号"></el-table-column>
         <el-table-column prop="storageTime"
-                         label="坐席名称" width="100px">
+                         label="坐席名称" width="100">
                          <template slot-scope="scope">{{ scope.row.workno }}</template>
         </el-table-column>   
         <el-table-column prop="storageTime"
-                         label="坐席号码" width="100px">
+                         label="坐席号码" width="100">
                          <template slot-scope="scope">{{ scope.row.extentionno }}</template>
         </el-table-column>     
         <el-table-column prop="updateTime"
-                         label="主呼叫号码" width="120px">
+                         label="主呼叫号码" width="120">
           <template slot-scope="scope">{{ scope.row.caller }}</template>
         </el-table-column>
-        <el-table-column label="呼叫时间" prop="starttime" :formatter="formatDate" width="160px">
+        <el-table-column label="呼叫时间" prop="starttime" :formatter="formatDate" width="180">
         </el-table-column>
         <el-table-column prop="connecttime"
-                         label="接通呼叫时间" :formatter="formatDate" width="160px">
+                         label="接通呼叫时间" :formatter="formatDate" width="180">
         </el-table-column>
         <el-table-column prop="endtime"
-                         label="结束呼叫时间" :formatter="formatDate" width="160px">
+                         label="结束呼叫时间" :formatter="formatDate" width="180">
         </el-table-column>
         <el-table-column prop="address"
-                         label="通话时长" width="120px">
+                         label="通话时长" width="120">
           <template slot-scope="scope">{{ scope.row.timelen }}s</template>
         </el-table-column>
         <el-table-column prop="address"
                          label="通话录音">
           <template slot-scope="scope">
-            <audio v-if="scope.row.recordfilename" width="100" :src="scope.row.recordfilename" controls="controls"></audio>
+            <audio v-if="scope.row.recordfilename" style="width: 100px" :src="scope.row.recordfilename" controls="controls"></audio>
             <span v-else>--</span>
           </template>
         </el-table-column>
