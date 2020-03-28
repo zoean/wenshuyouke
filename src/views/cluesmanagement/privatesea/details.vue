@@ -229,23 +229,23 @@ export default {
       statusoptions: [
         {
           value: "0",
-          label: "有意向"
+          label: "待跟进"
         },
         {
           value: "1",
-          label: "无意向"
+          label: "有意向"
         },
         {
           value: "2",
-          label: "已成交"
+          label: "无意向"
         },
         {
           value: "3",
-          label: "未成交"
+          label: "已成交"
         },
         {
           value: "4",
-          label: "待更新"
+          label: "未成交"
         }
       ],
       value: "",

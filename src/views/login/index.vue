@@ -7,7 +7,7 @@
              auto-complete="on"
              label-position="left">
       <div class="logo">
-        <img src="@/assets/images/logo.png" />
+        <img width="250" src="@/assets/images/logo.png" />
       </div>
 
       <el-form-item prop="username">
