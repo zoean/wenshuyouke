@@ -318,16 +318,15 @@ export default {
             this.$store
               .dispatch("myclue/cluesdel", {ids: ids})
               .then(res => {
-                console.log(res)
+                this.$message({
+                  type: "success",
+                  message: "删除成功!"
+                });
+                this.searchclue();
               })
               .catch(error => {
                 console.log(error);
               });
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            this.searchclue();
           })
           .catch(() => {
             this.$message({
