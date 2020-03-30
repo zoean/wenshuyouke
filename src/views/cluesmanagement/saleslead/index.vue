@@ -87,7 +87,7 @@
           <template slot-scope="scope">
             <div class="telephone-info">
               <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall(scope.$index, scope.row)" />
-              <p class="highblue" @click="fetchUserXphone(scope.row.id,scope.row.telePhone)" :title="scope.row.contaceV ? '点击切换号码' : '点击获取号码'">{{scope.row.contactV | formatterVphone}}</p>
+              <p class="highblue" @click="fetchUserXphone(scope.row.entId)">点击获取号码</p>
             </div>            
             <!-- <el-button type="success"
                        round
@@ -99,7 +99,7 @@
           <template slot-scope="scope">
             <el-row>
               <el-col :span="6">
-                <h3 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}</h3>
+                <h3 class="highblue" :title="scope.row.entNam">{{scope.row.entName | ellipsis(26)}}<i class="el-icon-edit" title="点击查看/编辑商机" @click="editEntInfo(scope.row)"></i></h3>
               </el-col>
               <el-col :span="2">
                 <span class="label-blue" v-if="scope.row.callStatus == 1">{{scope.row.callStatus | callStatus}}</span>
@@ -149,101 +149,7 @@
                      :total="cluesListObj.total">
       </el-pagination>
     </div>
-    <el-dialog class="add-clues highblue"
-               title="新增线索"
-               :visible.sync="curCluesVisible"
-               :modal="true"
-               :close-on-click-modal="false"
-               :close-on-press-escape="false"
-               :showClose="false"
-               :model="curCluesForm"          
-               width="600px">
-       <div class="call-duration" v-show="callPanelVisible">
-         <h2 class="call-company highblue">{{curCluesForm.entName}}</h2>
-        <p class="call-company-duration">{{countTime}}</p>        
-        <el-button type="danger"
-                   round @click="dropCall">挂断</el-button>
-       </div>
-      <el-form label-width="120px" :class="moreForm ?'heightAuto':'heightShort'">
-        <el-form-item label="公司名称：" prop="entName">
-          <el-input v-model="curCluesForm.entName"
-                    placeholder="请输入公司名称" disabled></el-input>
-        </el-form-item>
-        <el-form-item label="姓名：" prop="name">
-          <el-input v-model="curCluesForm.name"
-                    placeholder="请输入姓名"></el-input>
-        </el-form-item>
-        <el-form-item label="联系方式：" prop="telePhone">
-          <el-input v-model="curCluesForm.telePhone" type="tel"
-                    placeholder="请输入联系电话"></el-input>
-        </el-form-item>
-        <el-form-item label="部门：" prop="department">
-          <el-input v-model="curCluesForm.department"
-                    placeholder="请输入部门名称"></el-input>
-        </el-form-item>
-        <el-form-item label="职务：" prop="chargeMan">
-          <el-input v-model="curCluesForm.chargeMan"
-                    placeholder="请输入职务"></el-input>
-        </el-form-item>
-        <el-form-item label="微信号：" prop="wechat">
-          <el-input v-model="curCluesForm.wechat"
-                    placeholder="请输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="邮箱：" prop="email">
-          <el-input v-model="curCluesForm.email"
-                    placeholder="请输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="地址：" prop="address">
-          <el-input v-model="curCluesForm.address"
-                    placeholder="请输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="跟进状态：" prop="fllowupStatus">
-          <el-select v-model="curCluesForm.fllowupStatus">
-            <el-option v-for="(item,index) in fllowupStatus" :value="index" :label="item"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="线索来源：" prop="dataSource">
-          <el-input v-model="curCluesForm.dataSource"
-                    placeholder="请输入内容" disabled>{{cluesSource[curCluesForm.dataSource]}}</el-input>
-        </el-form-item>
-        <el-form-item label="下次跟进时间：" prop="nextFllowupTime">
-          <el-input v-model="curCluesForm.nextFllowupTime"
-                    placeholder="请输入内容"></el-input>
-        </el-form-item>
-        <el-form-item label="备注：">
-          <el-input v-model="curCluesForm.remark" prop="remark"
-                    placeholder="请输入内容"></el-input>
-        </el-form-item>
-      </el-form>
-      <el-row type="flex" justify="end">
-        <el-col :span="4" class="moreForm highblue"><span @click="toggleHeight">{{formTip}}</span></el-col>
-      </el-row>
-      <el-row type="flex"
-              justify="end" class="add-clues-handle">
-        <el-col :span="6">
-          <el-button size="middle"
-                     type="info"
-                     round :disabled="callPanelVisible" @click="cancleEditForm">取消</el-button>         
-    <el-button slot="reference" @click="visible = !visible">手动激活</el-button>
-  </el-popover>
-        </el-col>
-        <el-col :span="4">
-          <el-button size="middle"
-                     type="primary"
-                     round  :disabled="callPanelVisible" @click="saveCluseForm">保存</el-button>
-        </el-col>
-      </el-row>        
-      <el-row type="flex" justify="end" class="el-tips">
-        <el-col :span="14"></el-col>
-        <el-col :span="10">
-          <el-alert
-            title="通话结束前无法关闭表单"
-            type="warning"
-            show-icon :closable="false" v-show="callPanelVisible">
-          </el-alert>
-        </el-col>
-      </el-row>    
-    </el-dialog>
+      <CallForm ref="callModule" :updateClue="fetchCluesList" />
   </div>
 </template>
 <script>  
@@ -257,9 +163,10 @@ import Vue from 'vue'
 import { mapGetters } from 'vuex'
 import {transforserClues} from '@/api/cardmanage'
 import {parseToTimestamp, parseTime} from '@/utils/index'
-import {getCluesList,postCluesToSelf,updateClues, sendPhoneNums} from '@/api/saleslead'
+import {getCluesList,postCluesToSelf,updateClues, getxPhoneNums} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'
 import {getLocalStorage,cutString} from '@/utils/index'
+import CallForm from '@/components/CallForm/index' //引入通话表单组件
 let ellipsis = Vue.filter('ellipsis')//引入全局filter
 let parseDateTime = Vue.filter('parseDateTime')
 export default {
@@ -283,14 +190,10 @@ export default {
         default:
           return '未拨打'
       }
-    },
-    formatterVphone(val){
-      if(val){
-        return val.replace(/^0086/g,'')
-      }else{
-        return '获取号码'
-      }
     }
+  },
+  components: {
+    CallForm
   },
   data () {
     return {
@@ -405,10 +308,16 @@ export default {
     timerClear(){
       this.timer = null
     },
-    fetchUserXphone(id, xphone){ //获取当前线索虚拟号
-      sendPhoneNums({id:id, caller: this.telephone || 0, callee: xphone}).then(response => {
-        if(response.status == 200){
-          this.fetchCluesList()
+    fetchUserXphone(entId){ //获取当前线索虚拟号
+      getxPhoneNums({entId, callType: "number"}).then(response => {
+        if(response.data.status == 200){
+          this.$alert(`您本次获取的虚拟号是：${response.data.obj}，有效时长为3分钟，超时请重新获取`,'获取虚拟号',{
+            confirmButtonText: '确定',
+            callback: action => {
+            }
+          })
+        }else{
+          this.$message.error(response.message)
         }
       })
     },
@@ -468,12 +377,9 @@ export default {
         this.moveClueToSelfForm.entId.push(val[i].id)     
       }
     },
-    oneTouchCall (index,row) {//一键呼叫
-      this.curCluesVisible = true
-      this.callPanelVisible = true
-      this.callDurationVisible = true
-      // this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
-      this.$store.commit('callcenter/SET_USERTEL', row.telePhone)
+    editEntInfo(row){ 
+      this.$store.dispatch('callform/setEditType', 'edit')//只编辑公司信息不打电话
+      this.$store.dispatch('callform/toggleClueForm')//显示表单
       this.curCluesForm = {
         id:row.id,//线索id
         entName:row.entName,//公司名称
@@ -489,9 +395,39 @@ export default {
         remark:row.remark,//备注        
         callStatus:2
       }
-
-      this.$store.dispatch('callcenter/check_in')
-      this.$store.dispatch('callcenter/make_call')
+      this.$store.dispatch('callform/setCurClueForm', this.curCluesForm)//回显当前线索
+    },
+    oneTouchCall (index,row) {//一键呼叫
+      // this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
+      getxPhoneNums({entId: row.entId, callType: "call"}).then(response => {
+        if(response.status == 200){//虚拟号获取成功后开始拨打电话
+          this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
+          this.$store.dispatch('callform/setEditType', 'call')
+          this.$store.dispatch('callform/toggleClueForm')
+          this.$store.dispatch('callform/togglePanel')
+          // this.$store.dispatch('callcenter/check_in')
+          // this.$store.dispatch('callcenter/make_call')
+        }else{
+          this.$message.error(response.message)
+        }
+      })
+      
+      this.curCluesForm = {
+        id:row.id,//线索id
+        entName:row.entName,//公司名称
+        contact:row.contact,//联系方式
+        department:row.department,//部门
+        duties:row.duties,//职务
+        wechat:row.wechat,//微信
+        email:row.email,//邮箱
+        address:row.address,//地址
+        fllowupStatus:row.fllowupStatus || 0,//跟进状态
+        dataSource:row.dataSource,//线索来源
+        nextFllowupTime:row.nextFllowupTime,//下次跟进时间
+        remark:row.remark,//备注        
+        callStatus:2
+      }
+      this.$store.dispatch('callform/setCurClueForm', this.curCluesForm)
     },
     dropCall(){//挂断   
       this.curCluesForm.lastCallTime = new Date().getTime()   
@@ -564,6 +500,11 @@ export default {
 .main-box{
   h3{
     font-size:18px;
+    .el-icon-edit{
+      padding-left:15px;
+      color: #606266;
+      cursor: pointer;
+    }
   }
 }
 .add-clues{
@@ -635,6 +576,7 @@ export default {
       text-align: center;
       cursor: pointer;
       flex-grow: 1;
+      cursor:pointer;
     }    
   }
   .el-row {

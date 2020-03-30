@@ -13,6 +13,7 @@ import recycle from './modules/recycle' //回收站
 import companysearch from './modules/companysearch' //企业搜索
 import cluedetails from './modules/cluedetails' //线索明细
 import accountoverview from './modules/accountoverview' //账户总览
+import callform from './modules//callform' //通用通话表单弹窗
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ const store = new Vuex.Store({
     recycle,
     companysearch,
     cluedetails,
-    accountoverview
+    accountoverview,
+    callform
   },
   getters
 })

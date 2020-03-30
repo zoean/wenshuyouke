@@ -36,9 +36,9 @@ export function dropCallPost(data){
 }
 
 //发送坐席和线索号码
-export function sendPhoneNums(data){
+export function getxPhoneNums(data){
 	return request({
-		url:'/marketing/business/ax/number',
+		url:'/marketing/business/ax/xnumber',
 		method:'post',
 		data
 	})

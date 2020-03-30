@@ -11,13 +11,23 @@ export const constantRoutes = [{
   path: "/login",
   component: () => import("@/views/login/index"),
   hidden: true
+},{
+  path: "/regester",
+  component: () => import("@/views/regester/index"),
+  hidden: true
 }]
 
-// {
-//   path: "/regester",
-//   component: () => import("@/views/regester/index"),
-//   hidden: true
-// }
+export const notFoundRoutes = [{
+  path: "/404",
+  component: () => import("@/views/404"),
+  hidden: true
+},
+{
+  path: "*",
+  redirect: "/404",
+  hidden: true
+}]
+
 
 const createRouter = () =>
   new Router({
@@ -302,13 +312,6 @@ export const asyncRouterMap = [{
         icon: "dashboard"
       }
     }]
-  },
-  {
-    path: "/regester",
-    redirect: "/regester",
-    component: () => import("@/views/regester/index"),
-    name: 'regester',
-    hidden: true
   },
   // 404 page must be placed at the end !!!
   {
