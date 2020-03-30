@@ -10,7 +10,7 @@ export function requestNewComList(data){
 // 新企推荐-获取当前帐户的名单用于分配新企数据(不带分页用于下拉选择)
 export function getCurUserCard(data){
 	return request({
-		url:'marketing/list_manage/select_list',
+		url:'marketing/list_manage/select',
 		method:'post',
 		data
 	})

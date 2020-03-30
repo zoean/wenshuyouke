@@ -281,7 +281,8 @@ export default {
   		this.getNewComList()
   	},
   	getCurUserCardHandle(){//获取当前用户的名单列表
-			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{					
+			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{	
+        console.log(response)				
   			this.cardList = response.data.obj
 			})
   	},
