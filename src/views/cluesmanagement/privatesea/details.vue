@@ -8,7 +8,11 @@
         </el-col>
       </el-row>
       <el-row type="flex" align="middle">
-        <el-col :span="9"><h3 :title="cluesinfo.entName">{{ cluesinfo.entName | ellipsis(40) }}</h3></el-col>
+        <el-col :span="9">
+          <h3 class="highblue" :title="cluesinfo.entName">{{ cluesinfo.entName | ellipsis(40) }}
+            <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall" />
+          </h3>
+        </el-col>
         <el-col :span="15" style="text-align: right">
           {{ cluesinfo.legalName }}
           <span>|</span>
@@ -200,11 +204,14 @@
         </div>
       </el-col>
     </el-row>
+    <CallForm ref="callModule" :updateClue="detailsinfo" />
   </div>
 </template>
 <script>
+import CallForm from '@/components/CallForm/index' //引入通话表单组件
 import { getLocalStorage } from "@/utils/index"
 import { getCurUserCard } from "@/api/foundclues"
+import { getxPhoneNums } from '@/api/saleslead'
 import Vue from 'vue'
 let ellipsis = Vue.filter('ellipsis')//引入全局filter
 export default {
@@ -214,6 +221,9 @@ export default {
       type:Function,
       default:null
     }
+  },
+  components: {
+    CallForm
   },
   data() {
     return {
@@ -264,7 +274,7 @@ export default {
       },
       expireTimeOption: {
         disabledDate(date) {
-          return date.getTime() <= Date.now();
+          return date.getTime() <= Date.now()
         }
       }
     }
@@ -276,15 +286,28 @@ export default {
     this.searchlist()
     this.cluefollowselect()
     this.fetchCardList()
-    this.pickerOptions = {
-     disabledDate(time) {
-      return time.getTime() < new Date(this.date).getTime() - 8.64e6
-     }
-   }
   },
   methods: {
     backToList(){ 
       this.changeCom()
+    },
+    oneTouchCall(){
+      console.log(this.cluesinfo)
+      getxPhoneNums({entId: this.cluesinfo.entId, callType: "call"}).then(response => {
+        console.log(response)
+        if(response.data.status == 200){//虚拟号获取成功后开始拨打电话
+          this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
+          this.$store.dispatch('callform/setEditType', 'call')
+          this.$store.dispatch('callform/toggleClueForm')
+          this.$store.dispatch('callform/togglePanel')
+          this.$store.dispatch('callcenter/check_in')
+          this.$store.dispatch('callcenter/make_call')
+        }else{
+          this.$message.error(response.message)
+        }
+      })
+      this.$store.dispatch('callform/setCurClueForm', this.cluesinfo)
+
     },
     moveClueToCardHandle(){
       if(!this.moveClueToCardForm.listId){
@@ -527,6 +550,11 @@ export default {
     font-size: 24px;
     color: #333;
     display: inline-block;
+    .onthouch-outbound{
+      color:#F15533;
+      margin-left:15px;
+      cursor: pointer;
+    }
   }
   .editcont {
     .el-input {

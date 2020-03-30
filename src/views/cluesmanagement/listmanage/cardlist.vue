@@ -50,7 +50,7 @@
     <el-dialog :visible.sync="distributionVisible" width="30%">
     	<el-form>
     		<el-form-item label="分配给：" :label-width="addCardLableWidth">
-          <el-select v-model="distributionForm.userName" placeholder="请选择子帐户">
+          <el-select v-model="distributionForm.userId" placeholder="请选择子帐户">
             <el-option v-for="item in subAccount" :label="item.realName" :key="item.id" :value="item.id"></el-option>
           </el-select>
         </el-form-item>
@@ -164,8 +164,13 @@
 			distributionList(id, userId, userName){ //名单指派
 				this.distributionVisible = true
 				this.distributionForm.id = id
-				this.distributionForm.userId = userId				
-				this.distributionForm.userName = userName
+				this.distributionForm.userId = userId	
+        for(let i in this.subAccount){
+          if(this.subAccount[i].id == this.distributionForm.userId){
+            console.log(this.distributionForm.userName)
+            this.distributionForm.userName = this.subAccount[i].userName
+          }
+        }			
 			},
 			distrubutionSubmit(){
 				this.distributionVisible = false // 被指派人id

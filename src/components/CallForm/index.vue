@@ -114,7 +114,6 @@ import {updateClues} from '@/api/saleslead'
         cluesSource: ['新企推荐','企业查询', '转线索','回收站'],
         fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
         moreForm: false,
-        formTip:'展开更多信息',
         countTime:'正在呼叫中...',
         time:0,
         timer:null,
@@ -140,7 +139,10 @@ import {updateClues} from '@/api/saleslead'
       },
       holdOn(){
         return this.$store.state.callcenter.hodeOn
-      }
+      },
+      formTip(){
+        return this.moreForm ? '收起' : '展示更多信息'
+      } 
 		},
     watch: {
       hodeOn: function (val){
@@ -181,7 +183,6 @@ import {updateClues} from '@/api/saleslead'
 			},
       toggleHeight(){
         this.moreForm = !this.moreForm
-        this.formTip = this.moreForm ? '收起' : '展示更多信息'
       },
       cancleEditForm(){
         if(this.editType == 'call'){

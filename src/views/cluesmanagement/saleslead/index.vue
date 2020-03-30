@@ -149,7 +149,7 @@
                      :total="cluesListObj.total">
       </el-pagination>
     </div>
-      <CallForm ref="callModule" :updateClue="fetchCluesList" />
+    <CallForm ref="callModule" :updateClue="fetchCluesList" />
   </div>
 </template>
 <script>  
@@ -405,8 +405,8 @@ export default {
           this.$store.dispatch('callform/setEditType', 'call')
           this.$store.dispatch('callform/toggleClueForm')
           this.$store.dispatch('callform/togglePanel')
-          // this.$store.dispatch('callcenter/check_in')
-          // this.$store.dispatch('callcenter/make_call')
+          this.$store.dispatch('callcenter/check_in')
+          this.$store.dispatch('callcenter/make_call')
         }else{
           this.$message.error(response.message)
         }
