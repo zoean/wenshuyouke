@@ -30,6 +30,9 @@
 				</dd>
 			</dl>
 		</div>
+    <div class="companyHandle">
+      <p>当前有<b class="highred">{{orderDetailList.total}}</b>条通话记录</p>
+    </div>
 		<div class="order-data">
 			<el-table ref="listDetailTable"
                 :data="orderDetailList.list"
@@ -185,9 +188,9 @@ export default {
     text-align: center;
     cursor: pointer;
   }
-  div.companyHandle {
-    display: flex;
-    justify-content: space-between;
-  }
+}
+.companyHandle {
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

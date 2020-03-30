@@ -34,7 +34,7 @@
         </dd>
       </dl>
       <div class="companyHandle">
-        <p>本次更新<span class="highred">{{curCardList.total}}</span>条</p>
+        <p>本次更新<b class="highred">{{curCardList.total}}</b>条</p>
           <div class="move-clue-to-card">
             <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
               <el-option

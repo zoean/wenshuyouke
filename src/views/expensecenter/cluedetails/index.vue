@@ -17,6 +17,9 @@
 				</dd>
 			</dl>
 		</div>
+    <div class="companyHandle">
+      当前有<b class="highred">{{clueDetailList.total}}</b>条线索明细
+    </div>
 		<div class="order-data">
 			<el-table ref="clueDetailList"
                 :data="clueDetailList"
@@ -104,5 +107,8 @@ export default {
 <style lang="scss" scoped>
 .el-date-editor{
   margin-left:10px;
+}
+.companyHandle{
+  justify-content: flex-start
 }
 </style>

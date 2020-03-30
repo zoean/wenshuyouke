@@ -9,7 +9,7 @@
         </dd>
       </dl>
     </div>
-    <div class="commonHandle">
+    <div class="companyHandle">
     	当前有<b class="highred">{{entUserListObj.total}}</b>家企业入驻
     </div>
     <div class="data-content">
@@ -237,11 +237,11 @@ export default{
 			}			
 		},
     handleSizeChange(val){
-    	this.addEditEntUserForm.pageSize = val
+    	this.searchForm.pageSize = val
     	this.fetchEntUserList()
     },
 		handleCurrentChange(val){
-			this.addEditEntUserForm.pageNum = val
+			this.searchForm.pageNum = val
 			this.fetchEntUserList()
 		}
 	}
@@ -253,7 +253,7 @@ export default{
 	right:40px;
 	top:54px;
 }
-.commonHandle{
+.companyHandle{
 	display: flex;
 	justify-content: flex-start;
 	height: 40px;

@@ -45,6 +45,8 @@
         </dd>
       </dl>
       <div class="companyHandle">
+        <p>您当前有<b class="highred">{{total}}</b>条线索</p>
+        <div>
         <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
           <el-option
             v-for="item in curUserCardList"
@@ -71,6 +73,7 @@
           round
           @click="delclue"
         >删除</el-button>
+        </div>
       </div>
     </div>
     <div class="company-data">
@@ -413,7 +416,7 @@ export default {
     }
   }
   .companyHandle{
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 }
 .el-table >>> tr.el-table__row{

@@ -36,7 +36,8 @@
             </template>
           </dd>
         </dl>
-        <div class="search-result">
+        <div class="search-result companyHandle">
+          <p>当前有<b class="highred">{{total}}</b>条线索存放至回收站</p>
           <div class="get-data">
             <input
               class="btn-8032-general"
@@ -263,7 +264,7 @@ export default {
     }
     div.companyHandle {
       display: flex;
-      justify-content: flex-end;
+      justify-content: space-between;
     }
   }
   .change-type {

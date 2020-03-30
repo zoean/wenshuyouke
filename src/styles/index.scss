@@ -85,8 +85,12 @@ ul{
 .companyHandle {
   display: flex;
   justify-content: flex-end;
+  margin: 10px 0;
   .el-select{
     margin-right: 10px;
+  }
+  b.highred{
+    padding:0 10px;
   }
 }
 .highred{
