@@ -10,7 +10,7 @@
       </dl>
     </div>
     <div class="commonHandle">
-    	
+    	当前有<b class="highred">{{entUserListObj.total}}</b>家企业入驻
     </div>
     <div class="data-content">
     	<el-table ref="entUserTable" :data="entUserListObj.list">
@@ -53,7 +53,7 @@
 	      :page-sizes="[10,20,30,40,50,60,70,80,90,100, 200]"
 	      :page-size="searchForm.pageSize"
 	      layout="total, sizes, prev, pager, next, jumper"
-	      :total="searchForm.total">
+	      :total="entUserListObj.total">
 	    </el-pagination>
     </div>
     <!-- 增加企业用户 -->
@@ -255,10 +255,11 @@ export default{
 }
 .commonHandle{
 	display: flex;
-	justify-content: flex-end;
+	justify-content: flex-start;
 	height: 40px;
-	.el-button{
-		margin-left: 20px;
+	margin:20px 0 10px;
+	b{
+		padding: 0 5px;
 	}
 }
 </style>

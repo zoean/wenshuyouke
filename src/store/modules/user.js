@@ -84,14 +84,19 @@ const actions = {
         userName: username.trim(),
         passWord: password
       }).then(response => {
-        const {
-          obj
-        } = response.data
-        commit('SET_TOKEN', obj.token)
-        commit('SET_USERID', obj.userId)
-        setToken(obj.token)
-        setLocalStorage('userId',obj.userId)
-        resolve()
+          const {
+            obj
+          } = response.data
+          if(obj && obj.token){
+            commit('SET_TOKEN', obj.token)
+            commit('SET_USERID', obj.userId)
+            setToken(obj.token)
+            setLocalStorage('userId',obj.userId)
+            resolve()
+          }else{
+            reject('登录验证失败，请重试')
+          }
+        
       }).catch(error => {
         reject(error)
       })
@@ -116,7 +121,7 @@ const actions = {
           router.push(`/login`)
         }
         if (!obj) {
-          reject('Verification failed, please Login again.')
+          reject('权限验证失败，请重新登录！')
         }
 
         const {

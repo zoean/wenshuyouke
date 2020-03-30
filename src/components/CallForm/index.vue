@@ -24,16 +24,16 @@
           <el-input v-model="curCluesForm.name"
                     placeholder="请输入姓名"></el-input>
         </el-form-item>
-        <el-form-item label="联系方式：" prop="telePhone">
-          <el-input v-model="curCluesForm.telePhone" type="tel"
+        <el-form-item label="联系方式：" prop="contact">
+          <el-input v-model="curCluesForm.contact" type="tel"
                     placeholder="请输入联系电话"></el-input>
         </el-form-item>
         <el-form-item label="部门：" prop="department">
           <el-input v-model="curCluesForm.department"
                     placeholder="请输入部门名称"></el-input>
         </el-form-item>
-        <el-form-item label="职务：" prop="chargeMan">
-          <el-input v-model="curCluesForm.chargeMan"
+        <el-form-item label="职务：" prop="duties">
+          <el-input v-model="curCluesForm.duties"
                     placeholder="请输入职务"></el-input>
         </el-form-item>
         <el-form-item label="微信号：" prop="wechat">
@@ -63,7 +63,7 @@
                       placeholder="选择日期"
                       style="width: 100%;"
                       value-format="timestamp"
-                      :picker-options="expireTimeOption" />
+                      :picker-options="expireTimeOption" :default-value="curCluesForm.nextFllowupTime" />
         </el-form-item>
         <el-form-item label="备注：">
           <el-input v-model="curCluesForm.remark" prop="remark"

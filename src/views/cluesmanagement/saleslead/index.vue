@@ -382,6 +382,7 @@ export default {
       this.$store.dispatch('callform/toggleClueForm')//显示表单
       this.curCluesForm = {
         id:row.id,//线索id
+        name: row.name,
         entName:row.entName,//公司名称
         contact:row.contact,//联系方式
         department:row.department,//部门
@@ -391,7 +392,7 @@ export default {
         address:row.address,//地址
         fllowupStatus:row.fllowupStatus || 0,//跟进状态
         dataSource:row.dataSource,//线索来源
-        nextFllowupTime:row.nextFllowupTime,//下次跟进时间
+        nextFllowupTime:new Date(row.nextFllowupTime),//下次跟进时间
         remark:row.remark,//备注        
         callStatus:2
       }
@@ -414,6 +415,7 @@ export default {
       
       this.curCluesForm = {
         id:row.id,//线索id
+        name: row.name,
         entName:row.entName,//公司名称
         contact:row.contact,//联系方式
         department:row.department,//部门
@@ -423,10 +425,11 @@ export default {
         address:row.address,//地址
         fllowupStatus:row.fllowupStatus || 0,//跟进状态
         dataSource:row.dataSource,//线索来源
-        nextFllowupTime:row.nextFllowupTime,//下次跟进时间
+        nextFllowupTime:new Date(row.nextFllowupTime),//下次跟进时间
         remark:row.remark,//备注        
         callStatus:2
       }
+      console.log(this.curCluesForm)
       this.$store.dispatch('callform/setCurClueForm', this.curCluesForm)
     },
     dropCall(){//挂断   

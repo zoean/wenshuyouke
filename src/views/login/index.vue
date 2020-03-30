@@ -16,7 +16,7 @@
         </span>
         <el-input ref="username"
                   v-model="loginForm.username"
-                  placeholder="Username"
+                  placeholder="登录名"
                   name="username"
                   type="text"
                   tabindex="1"
@@ -31,7 +31,7 @@
                   ref="password"
                   v-model="loginForm.password"
                   :type="passwordType"
-                  placeholder="Password"
+                  placeholder="密码"
                   name="password"
                   tabindex="2"
                   auto-complete="on"
@@ -41,9 +41,9 @@
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
-      <el-row>
+      <el-row type="flex" justify="end">
         <el-col :span="20">
-          <el-checkbox>下次自动登录</el-checkbox>
+          <!-- <el-checkbox>下次自动登录</el-checkbox> -->
         </el-col>
         <el-col :span="4">
           <a class="forget-pw">忘记密码</a>
@@ -96,22 +96,22 @@ export default {
   data () {
     const validateUsername = (rule, value, callback) => {
       if (validUsername(value)) {
-        callback(new Error("Please enter the correct user name"));
+        callback(new Error("请输入登录名"));
       } else {
         callback();
       }
     };
     const validatePassword = (rule, value, callback) => {
       if (value.length < 1) {
-        callback(new Error("The password can not be less than 6 digits"));
+        callback(new Error("请输入密码"));
       } else {
         callback();
       }
     };
     return {
       loginForm: {
-        username: "bj001",
-        password: "123456"
+        username: "",
+        password: ""
       },
       loginRules: {
         username: [
