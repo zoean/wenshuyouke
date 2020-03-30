@@ -176,7 +176,6 @@ export default {
   watch:{//监听搜索条件变化，请求数据
     searchForm:{
       handler:function(val,oldval){//监听回调
-        console.log(val)
         this.getNewComList()
       },
       deep: true //开启深度监听
@@ -292,6 +291,7 @@ export default {
 			}else if(!this.getNewComForm.entId){
   			this.$message.error('请在列表前选取要领取的企业')
 			}else{
+        console.log(this.getNewComForm)
 				getNewComToCard(this.getNewComForm).then(response=>{
 	  			try{
 	  				if(response.status==200){
@@ -300,6 +300,7 @@ export default {
 	  					// 领取成功清空领取Form
 	  					this.getNewComForm.entId = []
 	  					this.getNewComForm.listId = ''
+              this.$refs.multipleTable.clearSelection()
 	  				}
 	  			}catch(e){}
 	  		})

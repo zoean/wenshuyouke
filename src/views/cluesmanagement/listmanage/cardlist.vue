@@ -167,7 +167,6 @@
 				this.distributionForm.userId = userId	
         for(let i in this.subAccount){
           if(this.subAccount[i].id == this.distributionForm.userId){
-            console.log(this.distributionForm.userName)
             this.distributionForm.userName = this.subAccount[i].userName
           }
         }			
