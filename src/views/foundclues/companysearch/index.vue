@@ -113,34 +113,6 @@
         <el-table-column width="380" label="地址">
           <template slot-scope="scope">{{scope.row.address}}</template>
         </el-table-column>
-
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <el-col :span="8">
-                <el-form-item label="法人">
-                  <span>法人：{{ props.row.legalName }} |</span>
-                </el-form-item>
-                <el-form-item label="成立时间">
-                  <span>{{ props.row.regDate }} |</span>
-                </el-form-item>
-                <el-form-item label="注册资本">
-                  <span>{{ props.row.regCapital }}{{ props.row.regCurrency }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="企业官网">
-                  <span>企业官网：{{ props.row.regCapital }}</span>
-                </el-form-item>
-              </el-col>
-              <el-col :span="10">
-                <el-form-item label="注册地址">
-                  <b>地址：</b>{{ props.row.address }}</span>
-                </el-form-item>
-              </el-col>
-            </el-form>
-          </template>
-        </el-table-column>
       </el-table>
       <el-pagination
         @size-change="handleSizeChange"
