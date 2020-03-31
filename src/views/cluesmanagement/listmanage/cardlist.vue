@@ -160,6 +160,7 @@
       },
 			addCard(){
 				this.addCardVisible = true
+        this.addCardForm.listName = ''
 			},
 			distributionList(id, userId, userName){ //名单指派
 				this.distributionVisible = true

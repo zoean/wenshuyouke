@@ -290,10 +290,9 @@ export default {
   	getNewComHandle(){//领取企业到名单
   		if(!this.getNewComForm.listId){
 				this.$message.error('请选择领取目标名单')
-			}else if(!this.getNewComForm.entId){
+			}else if(!this.getNewComForm.entId || this.getNewComForm.entId.length < 1){
   			this.$message.error('请在列表前选取要领取的企业')
 			}else{
-        console.log(this.getNewComForm)
 				getNewComToCard(this.getNewComForm).then(response=>{
 	  			try{
 	  				if(response.status==200){

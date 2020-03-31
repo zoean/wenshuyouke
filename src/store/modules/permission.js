@@ -44,7 +44,6 @@ export function resolveChildrenMenus(routes){
   const childrenMenusMap = []
   routes.map(route => {
     const { path, name, component, meta} = route
-    console.log(name)
     const item = {
       path,
       meta:{

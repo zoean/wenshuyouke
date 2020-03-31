@@ -27,12 +27,15 @@
         <dt>查询条件：</dt>
         <dd>
           <template>
-            <el-select v-model="searchForm.clueStatus"
+            <el-select v-model="searchForm.callStatus"
                        placeholder="请选择">
-              <el-option v-for="(item,index) in clueStatus"
+              <el-option v-for="(item,index) in callStatus"
                          :key="index"
                          :label="item"
                          :value="index">
+              </el-option>
+              <el-option label="不限"
+                         value="">
               </el-option>
             </el-select>
           </template>
@@ -187,7 +190,7 @@ export default {
         case 2:
           return '未接通'
           break
-        default:
+        default: //0
           return '未拨打'
       }
     }
@@ -199,7 +202,7 @@ export default {
     return {
       moreForm:false,
       cluesSource: ['新企推荐','企业查询', '转线索','回收站'],
-      clueStatus:['未拨打','已拨通','未拨通','不限'],
+      callStatus:['未拨打','已拨通','未拨通'],
       sortType:['注册资本-升序','注册资本-降序','成立时间-升序','成立时间-降序'],
       fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
       datePicker:[],
@@ -210,7 +213,7 @@ export default {
         dataSource:[],//线索来源
         startTime:'',//更新时间
         endTime:'',// 查询条件-子帐户
-        clueStatus:'',//商机类型（商机状态）
+        callStatus:'',//商机类型（商机状态）
         order:'',//排序
         entName:'',
         pageNum:0,
