@@ -10,8 +10,8 @@
             <svg-icon class="default-logo" v-show="!this.companyinfo.enterpriseLogo" icon-class="entlogo"/>
             <h5>{{ companyinfo.enterpriseName }}</h5>
             <div class="companysurvey">
-              <div><span>企业人数:</span>{{companyinfo.enterpriseCount}}人</div>
-              <div><span>部门数量:</span>{{companyinfo.enterpriseDepartCount}}个</div>
+              <div><span>企业人数:</span>{{companyinfo.enterpriseCount || 0}}人</div>
+              <div><span>部门数量:</span>{{companyinfo.enterpriseDepartCount || 0}}个</div>
               <div><span>认证情况:</span>{{companyinfo.enterpriseIsAuth = 1 ? "已认证" : "未认证"}}</div>
             </div>
             <button>
@@ -21,11 +21,11 @@
             <p>完成企业认证，获取更多权益</p>
           </el-col>
           <el-col :span="18" class="infoboxright">
-            <div><span>企业规模:</span>{{companyinfo.enterpriseScale}}</div>
-            <div><span>企业官网:</span>{{companyinfo.enterpeiseWebsite}}</div>
-            <div><span>联系电话:</span>{{companyinfo.enterpriseContact}}</div>
-            <div><span>主营业务:</span>{{companyinfo.enterpriseBusiness}}</div>
-            <div><span>企业简介:</span>{{companyinfo.enterpriseDesc}}</div>
+            <div><span>企业规模:</span>{{companyinfo.enterpriseScale || 0}}</div>
+            <div><span>企业官网:</span>{{companyinfo.enterpeiseWebsite || '--'}}</div>
+            <div><span>联系电话:</span>{{companyinfo.enterpriseContact || '--'}}</div>
+            <div><span>主营业务:</span>{{companyinfo.enterpriseBusiness || '--'}}</div>
+            <div><span>企业简介:</span>{{companyinfo.enterpriseDesc || '--'}}</div>
           </el-col>
         </el-row>
       </div>

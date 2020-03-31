@@ -102,7 +102,7 @@ export default {
       //   this.callDisable = false;
       // }
     },
-    async makeCall () {
+    makeCall () {
       this.$store.commit('callcenter/SET_USERTEL', this.telNumber)
       this.$store.dispatch('callcenter/make_call')
     }

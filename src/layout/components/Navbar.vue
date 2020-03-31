@@ -5,24 +5,16 @@
          height="29"
          class="logo"
          src="@/assets/images/logo.png" />
-         <!-- <div class="scroll-container">
-           <section class="marquee">
-            <ul class="content">
-              <li>已为您推送288条新企信息</li>
-              <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
-              <li>已为名单北京销售新增388条数据</li>
-              <li>新增企业</li>
-              <li>今日坐席组有效通话为108条，已有102家企业有意向</li>
-              <li>已为名单北京销售新增388条数据</li>
-            </ul>
-          </section>
-         </div> -->      
+         <i class="el-icon-bell highblue"></i>
+      <el-carousel direction="vertical" :autoplay="true">
+        <el-carousel-item>
+          <p>您的通话时长不足，请及时充值</p>
+        </el-carousel-item>
+        <el-carousel-item>
+          <p>阿里巴巴入驻文投优客啦，快去领取商机吧</p>
+        </el-carousel-item>
+      </el-carousel>
     </div>    
-     <el-carousel direction="vertical" :autoplay="true" style="width:20%;height:64px">
-      <el-carousel-item v-for="item in 5" :key="item">
-        <h6 class="medium">消息{{ item }}</h6>
-      </el-carousel-item>
-    </el-carousel>
     <div class="navbar-right">
       <div class="right-menu">
         <el-dropdown>          
@@ -171,30 +163,22 @@ export default {
     flex-direction: row;
     justify-content: flex-start;
     flex: 0 1 auto;
-    // width: 50%;
+    width: 100%;
     .logo {
       margin: 18px 60px 0 30px;
     }
-    // .scroll-container{
-    //   padding: 10px;
-    //   height: 28px;
-    //   margin: 10px;
-    //   .marquee{
-    //     height: 28px;
-    //     overflow: hidden;
-    //       width: 100%;
-    //     ul{
-    //       position: relative;
-    //       width: 100%;
-    //       animation: moveUp 8s 0.6s infinite;
-    //       -webkit-animation: moveUp 8s 0.6s infinite;
-    //       li{
-    //         line-height: 28px;
-    //         width: 100%;
-    //       }
-    //     }
-    //   }
-    // }
+    i{
+      margin-top:25px;
+      font-size:20px;
+    }
+    .el-carousel{
+      width: 50%;
+      margin-left: 10px;
+      p{
+        margin: 0;
+        line-height:64px;
+      }
+    }
   }
   
   .navbar-right {
