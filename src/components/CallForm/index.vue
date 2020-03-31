@@ -147,12 +147,14 @@ import {updateClues} from '@/api/saleslead'
     watch: {
       hodeOn: function (val){
         if(val){
+          this.hodeOn = true
           this.timerStart() 
-          this.curCluesForm.callStatus = 2       
+          this.curCluesForm.callStatus = 1       
         }else{
+          this.hodeOn = false
           this.timerClear()
           this.countTime = ''
-          this.curCluesForm.callStatus = 1 
+          this.curCluesForm.callStatus = 2 
         }
       }
     },
@@ -186,7 +188,7 @@ import {updateClues} from '@/api/saleslead'
       },
       cancleEditForm(){
         if(this.editType == 'call'){
-          updateClues({id: this.curCluesForm.id, callStatus: this.curCluesForm.callStatus,  lastCallTime:new Date().getTime()}).then(response => {
+          updateClues({id: this.curCluesForm.id, callStatus: this.curCluesForm.callStatus || 2,  lastCallTime:new Date().getTime()}).then(response => {
             if(response.status == 200){
               this.$store.dispatch('callform/toggleClueForm')
               this.updateClue()

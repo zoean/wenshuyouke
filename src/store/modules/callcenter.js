@@ -34,7 +34,6 @@ const mutations = {
     state.websocket.send(state.sendCheckout)
   },
   MAKE_CALL(state, userInfo) {
-    console.log(state.userTel)
     state.sendMakecall = `{"cmd":"3","seatno":"${rN(userInfo.seatId)}","telno":"${rN(state.userTel+'')}","para":"c=16727741409"}`
     state.websocket.send(state.sendMakecall)
   },

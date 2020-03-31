@@ -10,6 +10,7 @@ const getters = {
   bindTel: state => state.user.bindTel,
   userId: state => state.user.userId,
   telephone: state => state.user.telephone,
-  userMenu: state => state.user.userMenu
+  userMenu: state => state.user.userMenu,
+  userType: state => state.user.userType
 }
 export default getters

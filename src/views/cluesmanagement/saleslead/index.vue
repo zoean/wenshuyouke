@@ -57,7 +57,7 @@
         </dd>
       </dl>
       <div class="companyHandle">
-        <p>本次更新<span class="highred">{{cluesListObj.total || 0}}</span>条</p>
+        <p>本次更新<b class="highred">{{cluesListObj.total || 0}}</b>条</p>
         <div class="move-clue-to-card">
           <el-select v-model="moveClueToCardForm.listId" placeholder="请选择名单">
             <el-option
@@ -435,38 +435,6 @@ export default {
       }
       console.log(this.curCluesForm)
       this.$store.dispatch('callform/setCurClueForm', this.curCluesForm)
-    },
-    dropCall(){//挂断   
-      this.curCluesForm.lastCallTime = new Date().getTime()   
-      this.$store.dispatch('callcenter/drop_call')
-      this.callPanelVisible = false//隐藏通话计时
-    },
-    cancleEditForm(){ //
-      this.curCluesVisible = false
-      updateClues({id: this.curCluesForm.id, callStatus: this.curCluesForm.callStatus,  lastCallTime:new Date().getTime()}).then(response => {
-        try{
-          if(response.status == 200){
-            this.curCluesVisible =  false
-            this.fetchCluesList()
-            this.$message.success('当前线索更新成功') 
-          }
-        }catch(e){
-          this.$message.success('线索更新失败')
-        }
-      })
-    },
-    saveCluseForm(){//保存当前线索信息      
-      updateClues(this.curCluesForm).then(response=>{
-        try{
-          if(response.status == 200){
-            this.curCluesVisible =  false
-            this.fetchCluesList()
-            this.$message.success('当前线索更新成功')            
-          }
-        }catch(e){
-          this.$message.success('线索更新失败')
-        }
-      })
     },
     pickerDate(val){
       if(val==null){

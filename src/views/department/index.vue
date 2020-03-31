@@ -415,12 +415,14 @@
       },
       delDeSubmit(){
         delOrganize(this.delDepartmentForm).then(response=>{
-          if(response.status==200){
+          if(response.data.status==200){
             this.$message.success('删除部门成功')
             this.delDepartmentVisible = false
             this.getOrganizeHandle()
             this.getWorkerHandle()//reload员工列表
             this.getWorkerList()
+          }else{
+            this.$message.error(response.data.message)
           }
         })
       },
@@ -433,11 +435,13 @@
       delWorkerVerifyHandle(){//已确认删除用户
         delWorker(this.delWorkerForm).then(response=>{
           try{
-            if(response.status==200){
+            if(response.data.status==200){
               this.delWorkerVerifyVisible = false
               this.$message.success('删除成功')
               this.getWorkerHandle()//reload员工列表
               this.getWorkerList()
+            }else{
+              this.$message.error(response.data.message)
             }
           }catch(e){
 
@@ -445,7 +449,6 @@
         })
       },
       addWorkerDepartment(val){
-        console.log(val)
         this.addEditWorkerForm.department = val[val.length-1]
       },
       getWorkerHandle(){//获取员工列表

@@ -9,7 +9,7 @@
       </el-row>
       <el-row type="flex" align="middle">
         <el-col :span="9">
-          <h3 class="highblue" :title="cluesinfo.entName">{{ cluesinfo.entName | ellipsis(40) }}
+          <h3 class="highblue" :title="cluesinfo.entName">{{ cluesinfo.entName | ellipsis(30) }}
             <svg-icon class="onthouch-outbound" icon-class="onetouchcall" @click="oneTouchCall" />
           </h3>
         </el-col>
@@ -238,23 +238,23 @@ export default {
       curUserCardList: [],
       statusoptions: [
         {
-          value: "0",
+          value: 0,
           label: "待跟进"
         },
         {
-          value: "1",
+          value: 1,
           label: "有意向"
         },
         {
-          value: "2",
+          value: 2,
           label: "无意向"
         },
         {
-          value: "3",
+          value: 3,
           label: "已成交"
         },
         {
-          value: "4",
+          value: 4,
           label: "未成交"
         }
       ],
@@ -293,9 +293,7 @@ export default {
       this.changeCom()
     },
     oneTouchCall(){
-      console.log(this.cluesinfo)
       getxPhoneNums({entId: this.cluesinfo.entId, callType: "call"}).then(response => {
-        console.log(response)
         if(response.data.status == 200){//虚拟号获取成功后开始拨打电话
           // this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat  02103270050
           this.$store.commit('callcenter/SET_USERTEL', 17610100629)
@@ -338,7 +336,7 @@ export default {
         .dispatch("myclue/cluesdetail", { id: this.companyId })
         .then(res => {
           this.cluesinfo = res.obj
-          this.value = res.obj.clueStatus
+          this.value = res.obj.fllowupStatus
           this.moveClueToCardForm.ids=res.id
         })
         .catch(() => {});
@@ -355,6 +353,7 @@ export default {
             // console.log(this.lastid)
       	    this.$store.commit('myclue/SET_COMPANYID',this.lastid)
             this.detailsinfo()
+            this.cluefollowselect()
           } else {
             this.$message({
               type: "info",
@@ -373,6 +372,7 @@ export default {
             this.lastid = res.obj.id
       	    this.$store.commit('myclue/SET_COMPANYID',this.lastid)
             this.detailsinfo();
+            this.cluefollowselect()
           } else {
             this.$message({
               type: "info",
@@ -383,8 +383,6 @@ export default {
         .catch(() => {});
     },
     clueedit() {
-      this.id = { id: this.companyId };
-      this.clueStatus = { clueStatus: this.value };
       this.clueinfos = {
         name: this.cluesinfo.name,
         entName: this.cluesinfo.entName,
@@ -396,10 +394,10 @@ export default {
         entAddress: this.cluesinfo.entAddress
       };
       this.clueeditinfo = Object.assign(
-        this.id,
-        this.clueStatus,
         this.clueinfos
       );
+      this.clueeditinfo.id = this.companyId
+      this.clueeditinfo.followupStatus = this.value
       this.$store
         .dispatch("myclue/clueedit", this.clueeditinfo)
         .then(res => {

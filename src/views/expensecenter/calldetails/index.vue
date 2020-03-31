@@ -1,7 +1,7 @@
 <template>
 	<div class="main-box">
 		<div class="search-area">
-			<dl v-show="!isSeat">
+			<dl v-show="isSeat">
 				<dt>统计范围：</dt>
 				<dd>
 					<el-select v-model="searchForm.extentionno" placeholder="请选择名单">
@@ -96,21 +96,23 @@ export default {
 			subAccount:[],//当前用户下属子帐户
 			choseTime:[],//搜索时间选择
 			searchForm:{
-        extentionno:'6002',
+        extentionno:'',
         startTime:"",
         endTime:"",
 				pageNum:1,
         pageSize:10,
         userid:getLocalStorage('userId')       
 			},
-			orderDetailList:{},
-      isSeat:'false'
+			orderDetailList:{}
 		}
 	},
   computed: {
     ...mapGetters([
-      'roles'
-    ])
+      'userType'
+    ]),
+    isSeat(){
+      return this.userType == 'seat' ? true :false
+    }
   },
 	watch:{//监听搜索条件变化，请求数据
     searchForm:{
@@ -127,13 +129,8 @@ export default {
 			}catch(e){}
 		})
     this.fetchOrderList()
-    this.ifSeat()
 	},
 	methods:{
-    ifSeat(){
-      this.isSeat = this.roles.includes('seat') ? true :  false
-      console.log(this.isSeat)      
-    },
     formatDate(row, column, cellValue){//表格时间列格式化时间
       // return cellValue
       if(cellValue){

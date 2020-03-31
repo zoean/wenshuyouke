@@ -29,7 +29,7 @@
         <el-table-column label="日期" prop="receiveTime">
         </el-table-column>
         <el-table-column  label="操作">
-           <template slot-scope="scope">{{ scope.row.userName }}  领取到  {{ scope.row.listName }}</template>
+           <template slot-scope="scope">企业管理员  —>  {{ scope.row.listName }} ({{ scope.row.userName }})</template>
         </el-table-column>
         <el-table-column prop="receiveCount" label="领取数" >
         </el-table-column>
