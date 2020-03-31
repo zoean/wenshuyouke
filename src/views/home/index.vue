@@ -6,7 +6,8 @@
         <el-row type="flex" justify="end"><button class="editinfo" @click="show=true"><svg-icon icon-class="edit" />&nbsp;&nbsp;编辑企业信息</button></el-row>
         <el-row>
           <el-col :span="6" class="infoboxleft">
-            <img :src="this.companyinfo.enterpriseLogo" alt="">
+            <img v-show="this.companyinfo.enterpriseLogo" :src="this.companyinfo.enterpriseLogo" alt="">
+            <svg-icon class="default-logo" v-show="!this.companyinfo.enterpriseLogo" icon-class="entlogo"/>
             <h5>{{ companyinfo.enterpriseName }}</h5>
             <div class="companysurvey">
               <div><span>企业人数:</span>{{companyinfo.enterpriseCount}}人</div>
@@ -209,6 +210,10 @@ export default {
       padding:0 0px 23px;
       border-right:2px solid #E6F0FF;
       text-align: center;
+      .default-logo{
+        width: 100px;
+        height:100px;
+      }
         img{
           width:140px;
           height:140px;

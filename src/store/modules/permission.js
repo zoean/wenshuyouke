@@ -44,14 +44,14 @@ export function resolveChildrenMenus(routes){
   const childrenMenusMap = []
   routes.map(route => {
     const { path, name, component, meta} = route
+    console.log(name)
     const item = {
       path,
-      name:{
+      meta:{
         title: meta.title,
         icon: name
       },
-      component: componentsMap[component],
-      meta
+      component: componentsMap[component]
     }
     childrenMenusMap.push(item)
   })
@@ -60,7 +60,7 @@ export function resolveChildrenMenus(routes){
 
 export function resolveMenusMap(routes){
   const menusMap = []
-  routes.map(route => {
+  routes.map((route, index) => {
     const { path, name, component, redirect, meta, children } = route
     const item = {
       path,
@@ -71,7 +71,7 @@ export function resolveMenusMap(routes){
         title: meta.title,
         icon: name
       },
-      alwaysShow: true,
+      alwaysShow: index == 0 && name == 'home' ? false : true,//企业主页不显示嵌套菜单
       children: children && children.length > 0 ? resolveChildrenMenus(children) : null
     }
     menusMap.push(item)

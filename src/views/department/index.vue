@@ -153,7 +153,7 @@
           <el-input v-model="addEditWorkerForm.passWord" type="password" autocomplete="off" show-password></el-input>
         </el-form-item>
         <el-form-item label="手机号" :label-width="formLabelWidth" placeholder="请输入手机号" prop="phone">
-          <el-input v-model="addEditWorkerForm.phone"></el-input>
+          <el-input v-model="addEditWorkerForm.phone" type="tel" max-size="11"></el-input>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="realName">
           <el-input v-model="addEditWorkerForm.realName" autocomplete="off"></el-input>
@@ -506,6 +506,8 @@
                 }catch(e){}
               })
             }else{
+              // el-cascader回显需要Array类型，传值需要String叶子节点传值之前需要pop拿到叶子节点
+              this.addEditWorkerForm.department = this.addEditWorkerForm.department.pop()
               editWorker(this.addEditWorkerForm).then(response=>{
                 try{
                   if(response.status==200){
