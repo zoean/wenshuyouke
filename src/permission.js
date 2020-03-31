@@ -8,6 +8,7 @@ import 'nprogress/nprogress.css' // progress bar style
 import {
   getToken
 } from '@/utils/auth' // get token from cookie
+import { getLocalStorage } from '@/utils/index'
 import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({
@@ -15,7 +16,7 @@ NProgress.configure({
 }) // NProgress Configuration
 
 const whiteList = ['/login', '/regester'] // no redirect whitelist
-
+let flag = 0
 router.beforeEach(async (to, from, next) => {
   // start progress bar
   NProgress.start()
@@ -30,25 +31,31 @@ router.beforeEach(async (to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      if (hasRoles) {
+      let userMenus = store.getters.userMenus && store.getters.roles.length > 0
+      // let userMenus = getLocalStorage('u_r')
+      // const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      if (userMenus || flag > 0) {
         next()
       } else {
         try {
           // get user info
-          await store.dispatch('user/getInfo')
-          if(store.getters.roles){
-            const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.roles)
+          if(flag == 0){
+            await store.dispatch('user/getInfo')
+          }
+            // userMenus = getLocalStorage('u_r')
+          if(store.getters.userMenu){
+            const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.userMenu)
             // dynamically add accessible routes
             router.addRoutes(accessRoutes)
             router.options.routes.push(...accessRoutes)
+            flag++
             next({
               ...to,
               replace: true
             })
           }else{
             Message.error('您暂未分配角色，请联系管理员')
-          }          
+          }        
         } catch (error) {
           // remove token and go to login page to re-login
           await store.dispatch('user/resetToken')

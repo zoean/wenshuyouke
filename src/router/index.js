@@ -50,7 +50,21 @@ export function resetRouter() {
   //   name: 'login'
   // })
 }
-
+export const componentsMap = {
+  layout: () => import('@/layout'),
+  home: () => import('@/views/home/index'),//企业这一页
+  newcompanysearch: () => import('@/views/foundclues/newcompanysearch/index'),//发现线索-新企推荐
+  companysearch: () => import('@/views/foundclues/companysearch/index'),//发现线索-企业搜索
+  listmanage: () => import('@/views/cluesmanagement/listmanage/index'),//线索管理-名单管理
+  saleslead: () => import('@/views/cluesmanagement/saleslead/index'),//线索管理-销售商机
+  privatesea: () => import('@/views/cluesmanagement/privatesea/index'),//线索管理-我的线索
+  recycle: () => import('@/views/cluesmanagement/recycle/index'),//线索管理-回收站
+  cluedetails: () => import('@/views/expensecenter/cluedetails/index'),//费用中心-线索明细
+  calldetails: () => import('@/views/expensecenter/calldetails/index'),//费用中心-通话详情
+  department: () => import('@/views/department/index'),//设置中心-部门用户设置
+  rolepermission: () => import('@/views/rolepermission/index'),//设置中心-角色权限设置
+  user: () => import('@/views/ukadmin/user')//优数管理中心-企业帐户管理
+}
 //异步挂载的路由
 //动态需要根据权限加载的路由表
 export const asyncRouterMap = [{

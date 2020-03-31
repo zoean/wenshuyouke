@@ -35,7 +35,7 @@ const mutations = {
   },
   MAKE_CALL(state, userInfo) {
     console.log(state.userTel)
-    state.sendMakecall = `{"cmd":"3","seatno":"${rN(userInfo.seatId)}","telno":"${rN(state.userTel+'')}","para":"c=02103270050"}`
+    state.sendMakecall = `{"cmd":"3","seatno":"${rN(userInfo.seatId)}","telno":"${rN(state.userTel+'')}","para":"c=16727741405"}`
     state.websocket.send(state.sendMakecall)
   },
   DROP_CALL(state,userInfo){
@@ -60,7 +60,7 @@ const actions = {
   websocket_init({
     commit,rootGetters
   }, websocket) {
-    let connection = new WebSocket('wss://192.168.10.108:443/')
+    let connection = new WebSocket('ws://36.110.48.146:65006/')
     commit('WEBSOCKET_INIT', connection)
     connection.onopen = (evt) =>{
       commit('CHECK_IN',rootGetters)//创建链接之后
