@@ -37,7 +37,6 @@
         <dl>
           <dt>企业类型：</dt>
           <dd>
-            <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.entType">
               <el-radio
                 style="margin-right:0"
@@ -53,7 +52,6 @@
         <dl>
           <dt>联系方式：</dt>
           <dd>
-            <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.telePhone">
               <el-radio
                 style="margin-right:0"
@@ -69,17 +67,15 @@
         <dl>
           <dt>注册资本：</dt>
           <dd>
-          <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.regCapital">
-              <el-tooltip class="item" effect="dark" :content="index.title" placement="bottom-end" v-for="index in regCapital">
-                <el-radio
+                <el-radio v-for="index in regCapital"
                   style="margin-right:0"
                   :label="index.value"
                   :key="index.value"
+                  :title="index.title"
                   border
                   size="medium"
                 >{{index.label}}</el-radio>
-            </el-tooltip>
             </el-radio-group>
           </dd>
         </dl>

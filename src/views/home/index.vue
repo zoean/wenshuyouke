@@ -33,15 +33,15 @@
       <el-row :gutter="20" class="learnmore">
         <el-col :span="8"><img style="width:100%" src="@/assets/images/home1.png" />
           <h6>智能销售云平台</h6>
-          <p @click="router(learnmore)">点击链接更多</p>
+          <!-- <p @click="router(learnmore)">点击链接更多</p> -->
         </el-col>
         <el-col :span="8"><img style="width:100%" src="@/assets/images/home2.png" />
           <h6>智能销售云平台</h6>
-          <p @click="router(learnmore)">点击链接更多</p>
+          <!-- <p @click="router(learnmore)">点击链接更多</p> -->
         </el-col>
         <el-col :span="8"><img style="width:100%" src="@/assets/images/home3.png" />
           <h6>智能销售云平台</h6>
-          <p @click="router(learnmore)">点击链接更多</p>
+          <!-- <p @click="router(learnmore)">点击链接更多</p> -->
         </el-col>
       </el-row>
     </div>
@@ -288,7 +288,7 @@ export default {
         text-align: center;
         font-weight:bold;
         color:#FFF;
-        top:18%;
+        top:30%;
       }
       p{
         width: 100%;
