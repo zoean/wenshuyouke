@@ -402,11 +402,12 @@ export default {
       // this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
       getxPhoneNums({entId: row.entId, callType: "call"}).then(response => {
         if(response.status == 200){//虚拟号获取成功后开始拨打电话
-          this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
+          this.$store.commit('callcenter/SET_USERTEL', 17610100629)
+          // this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
           this.$store.dispatch('callform/setEditType', 'call')
           this.$store.dispatch('callform/toggleClueForm')
           this.$store.dispatch('callform/togglePanel')
-          this.$store.dispatch('callcenter/check_in')
+          // this.$store.dispatch('callcenter/check_in')
           this.$store.dispatch('callcenter/make_call')
         }else{
           this.$message.error(response.message)

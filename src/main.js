@@ -36,7 +36,6 @@ import '@/permission' // permission control
 // 如果想要中文版 element-ui，按如下方式声明
 Vue.use(ElementUI)
 filters(Vue)//注册全局filter
-
 new Vue({
   el: '#app',
   router,

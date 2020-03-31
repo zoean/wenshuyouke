@@ -25,9 +25,9 @@ const getDefaultState = () => {
     avatar: '',
     userId: '',
     roles: [],
-    seatId: '6002',
+    seatId: '6004',
     seatPw: '1234',
-    bindTel: '6002',
+    bindTel: '6004',
     telephone: '',
     userMenu: []
   }

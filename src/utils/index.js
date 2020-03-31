@@ -135,7 +135,49 @@ export function param2Obj(url) {
       '"}'
   )
 }
-
+/**
+ * [rN 电话号码替换-简单加密：数字换成对应的字母]
+ * @param  {[type]} str [传入要替换的tel]
+ * @return {[type]}     [description]
+ */
+export function rN(str){
+  if(!str){
+    return ''
+  }
+  return str.replace(/1/g, 'N')
+            .replace(/2/g, 'D')
+            .replace(/3/g, 'H')
+            .replace(/4/g, 'J')
+            .replace(/5/g, 'E')
+            .replace(/6/g, 'B')
+            .replace(/7/g, 'F')
+            .replace(/8/g, 'U')
+            .replace(/9/g, 'P')
+            .replace(/0/g, 'I')
+}
+// export function rN(str){
+//   var array1 = ['N','C',1]
+//   var array2 = ['D','M',2]
+//   var array3 = ['H','G',3]
+//   var array4 = ['J','K',4]
+//   var array5 = ['E','A',5]
+//   var array6 = ['B','T',6]
+//   var array7 = ['F','R',7]
+//   var array8 = ['U','O',8]
+//   var array9 = ['P','S',9]
+//   var array0 = ['I','Q',0]
+//   let result = str.replace(/1/g, array1[Math.floor(Math.random()*3)])
+//             .replace(/2/g, array2[Math.floor(Math.random()*3)])
+//             .replace(/3/g, array3[Math.floor(Math.random()*3)])
+//             .replace(/4/g, array4[Math.floor(Math.random()*3)])
+//             .replace(/5/g, array5[Math.floor(Math.random()*3)])
+//             .replace(/6/g, array6[Math.floor(Math.random()*3)])
+//             .replace(/7/g, array7[Math.floor(Math.random()*3)])
+//             .replace(/8/g, array8[Math.floor(Math.random()*3)])
+//             .replace(/9/g, array9[Math.floor(Math.random()*3)])
+//             .replace(/0/g, array0[Math.floor(Math.random()*3)])
+//   return 'uih45kjn0l' + result + 'ra8cmo3p9'
+// }
 
 export function setLocalStorage(itemKey, value){
   return localStorage.setItem(itemKey,value)

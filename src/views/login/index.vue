@@ -155,8 +155,10 @@ export default {
           this.$store
             .dispatch("user/login", this.loginForm)
             .then(() => {
+              // this.$store.dispatch('callcenter/websocket_init')
               this.$router.push({ path: this.redirect || "/" });
               this.loading = false;
+              reslove()
             })
             .catch(() => {
               this.loading = false;

@@ -324,9 +324,6 @@ export default {
                 });
                 this.searchclue();
               })
-              .catch(error => {
-                console.log(error);
-              });
           })
           .catch(() => {
             this.$message({

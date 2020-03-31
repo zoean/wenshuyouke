@@ -1,3 +1,5 @@
+import {rN} from '@/utils/index'
+
 const state = {
   wsUri: 'ws://36.110.48.146:65006/',
   websocket: null,
@@ -12,47 +14,32 @@ const state = {
 }
 
 const mutations = {
-  WEBSOCKET_INIT(state, wsUri) {
-    //连接之前确保连接已断开
+  WEBSOCKET_INIT(state, websocket) {
+    // 连接之前确保连接已断开
     if (state.websocket != null) {
       state.websocket.close()
       state.websocket = null
-    }
-    //建立连接
-    state.websocket = new WebSocket(wsUri)
-    state.websocket.onopen = evt => { 
-      console.log('onopen')
-    }
-    state.websocket.onclose = evt => {
-      console.log('onclose')
-    }
-    state.websocket.onmessage = evt => {
-      if(JSON.parse(evt.data).state == 3){
-        state.hodeOn = true
-      }else{
-        state.hodeOn = false
-      }
-    }
-    state.websocket.onerror = evt => {
-      console.log('onerror')
+    }else{
+      state.websocket = websocket
     }
   },
   CHECK_IN(state, userInfo) {
     state.checkStatus = 1
-    state.sendCheckin = `{"cmd":"1","seatno":"${userInfo.seatId}","telno":"${userInfo.bindTel}","para":"${userInfo.seatPw}"}`
+    state.sendCheckin = `{"cmd":"1","seatno":"${rN(userInfo.seatId)}","telno":"${rN(userInfo.bindTel)}","para":"${userInfo.seatPw}"}`
     state.websocket.send(state.sendCheckin) 
   },
   CHECK_OUT(state, userInfo) {
     state.checkStatus = 0
-    state.sendCheckout = `{"cmd":"2","seatno":"${userInfo.seatId}","telno":"","para":""}`
+    state.sendCheckout = `{"cmd":"2","seatno":"${rN(userInfo.seatId)}","telno":"","para":""}`
     state.websocket.send(state.sendCheckout)
   },
-  MAKE_CALL(state, userInfo) {     
-    state.sendMakecall = `{"cmd":"3","seatno":"${userInfo.seatId}","telno":"${state.userTel}","para":"1234567890-1234567890-1234567890-1234567890-ABCD"}`
+  MAKE_CALL(state, userInfo) {
+    console.log(state.userTel)
+    state.sendMakecall = `{"cmd":"3","seatno":"${rN(userInfo.seatId)}","telno":"${rN(state.userTel+'')}","para":"c=02103270050"}`
     state.websocket.send(state.sendMakecall)
   },
   DROP_CALL(state,userInfo){
-    state.sendDropcall = `{"cmd":"4","seatno":"${userInfo.seatId}","telno":"","para":""}`
+    state.sendDropcall = `{"cmd":"4","seatno":"${rN(userInfo.seatId)}","telno":"","para":""}`
     state.websocket.send(state.sendDropcall)
   },
   WEBSOCKET_OUT(state) {
@@ -63,14 +50,28 @@ const mutations = {
   },
   SET_USERTEL(state, userTel) {
     state.userTel = userTel
+  },
+  HOLD_ON(state, onOff){
+    state.hodeOn = onOff
   }
 }
 
 const actions = {
   websocket_init({
-    commit
-  }) {
-    commit('WEBSOCKET_INIT', state.wsUri)
+    commit,rootGetters
+  }, websocket) {
+    let connection = new WebSocket('wss://192.168.10.108:443/')
+    commit('WEBSOCKET_INIT', connection)
+    connection.onopen = (evt) =>{
+      commit('CHECK_IN',rootGetters)//创建链接之后
+    }
+    connection.onmessage = evt => {
+      if(JSON.parse(evt.data).state == 3){
+        commit('HOLD_ON', true)
+      }else{
+        commit('HOLD_ON', false)
+      }
+    }
   },
   check_in({
     commit,
