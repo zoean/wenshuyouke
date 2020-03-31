@@ -505,6 +505,7 @@
                   if(response.status==200){
                     this.addEditWorkerVisible = false
                     this.$message.success('添加用户成功！')
+                    this.workerListForm.department = this.addEditWorkerForm.department
                     this.getWorkerHandle()
                     this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
                   }
