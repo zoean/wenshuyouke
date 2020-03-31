@@ -287,6 +287,10 @@ export default {
       }
     },
     pickerDate(val){//监听时间选取
+    console.log(val)
+      if(val == null){
+        this.searchForm.startTime = this.searchForm.endTime = ''
+      }
       this.searchForm.startTime = parseToTimestamp(val[0],10)
       this.searchForm.endTime = parseToTimestamp(val[1],10)
       this.searchForm.fllowupStatus = this.searchForm.fllowupStatus

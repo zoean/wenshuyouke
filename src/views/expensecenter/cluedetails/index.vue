@@ -4,6 +4,7 @@
 			<dl>
 				<dt>时间选择：</dt>
 				<dd>
+          <el-button type="primary" plain @click="noLimit">不限</el-button>
 					<el-button type="primary" plain @click="pickerToday">今天</el-button>
 					<el-button type="primary" plain @click="pickerThisWeek">一周</el-button>
 					<el-date-picker v-model="choseTime" type="datetimerange"
@@ -78,15 +79,23 @@ export default {
         this.clueDetailList = res.obj.list
         this.clueDetailList.total = res.obj.total
 			})
-		},
-		pickerDate(val){//时间处理-转时间戳并截取前十位
+    },
+    noLimit(){
+      this.searchForm.starttime=this.searchForm.endtime=""
+      this.fetchcluesList()
+    },
+    pickerDate(val){//时间处理-转时间戳并截取前十位
+      // console.log(val)
+      if(val==null){
+        this.searchForm.starttime=this.searchForm.endtime=""
+      }
 			this.searchForm.starttime = parseToTimestamp(val[0],10)
     	this.searchForm.endtime = parseToTimestamp(val[1],10)
     	this.fetchcluesList()
 		},
 		pickerToday(){
 			this.searchForm.starttime = parseToTimestamp(beforeToday()[0],10)
-    	this.searchForm.endtime = parseToTimestamp(beforeToday()[1],10)
+      this.searchForm.endtime = parseToTimestamp(beforeToday()[1],10)
       this.fetchcluesList()
 		},
 		pickerThisWeek(){

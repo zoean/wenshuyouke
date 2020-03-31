@@ -10,7 +10,7 @@ import {
   removeToken,
   getLocal
 } from '@/utils/auth'
-import {  
+import {
   setLocalStorage,
   getLocalStorage,
   removeLocalStorage
@@ -96,7 +96,7 @@ const actions = {
           }else{
             reject('登录验证失败，请重试')
           }
-        
+
       }).catch(error => {
         reject(error)
       })
@@ -115,7 +115,7 @@ const actions = {
         } = response.data
         if (response.status !== 200) {
           removeToken()
-          removeLocalStorage('userId')          
+          removeLocalStorage('userId')
           removeLocalStorage('userName')
           removeLocalStorage('enterpriseName')
           router.push(`/login`)
@@ -159,16 +159,16 @@ const actions = {
     commit
   }) {
     return new Promise((resolve, reject)=>{
-      removeToken() // must remove  token  first    
-      removeLocalStorage('userId')    
+      removeToken() // must remove  token  first
+      removeLocalStorage('userId')
       removeLocalStorage('userName')
-      removeLocalStorage('enterpriseName')      
+      removeLocalStorage('enterpriseName')
       commit('SET_ROLES', [])
       commit('RESET_STATE')
       resetRouter()
       resolve()
     })
-    
+
     // return new Promise((resolve, reject) => {
     //   logout(state.token).then(() => {
     //     removeToken() // must remove  token  first
@@ -187,8 +187,8 @@ const actions = {
   }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
-      removeLocalStorage('userId')      
-      removeLocalStorage('userName')      
+      removeLocalStorage('userId')
+      removeLocalStorage('userName')
       removeLocalStorage('enterpriseName')
       commit('RESET_STATE')
       resolve()

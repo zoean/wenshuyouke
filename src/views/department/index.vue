@@ -332,7 +332,7 @@
         this.addEditVisible = true
         this.addEditForm.departParent = data.id
         this.editDepartmentType='添加部门'
-        this.isEnt = false  
+        this.isEnt = false
       },
       addFirstDepartmentHandle(){ //添加一级部门表单不显示上级部门
         this.addEditVisible = true
@@ -340,7 +340,7 @@
         this.editDepartmentType = '添加一级部门'
         this.isEnt = true
       },
-      editDepartmentHandle(data){ 
+      editDepartmentHandle(data){
         this.isEnt = data.parentId == -1 ? true : false //如果编辑一级部门表单不显示上级部门
         this.addEditVisible = true
         // this.isEnt = false
@@ -386,6 +386,8 @@
                     this.$refs['addEditForm'].resetFields()
                     this.addEditVisible = false
                     this.getOrganizeHandle()
+                    this.getWorkerHandle()//reload员工列表
+                    this.getWorkerList()
                   }else{
                     this.$message.error('添加部门失败，请重试')
                   }
@@ -417,6 +419,8 @@
             this.$message.success('删除部门成功')
             this.delDepartmentVisible = false
             this.getOrganizeHandle()
+            this.getWorkerHandle()//reload员工列表
+            this.getWorkerList()
           }
         })
       },
@@ -433,6 +437,7 @@
               this.delWorkerVerifyVisible = false
               this.$message.success('删除成功')
               this.getWorkerHandle()//reload员工列表
+              this.getWorkerList()
             }
           }catch(e){
 

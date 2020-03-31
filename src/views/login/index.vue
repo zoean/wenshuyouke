@@ -307,11 +307,18 @@ $light_gray: #eee;
   .show-pwd {
     position: absolute;
     right: 20px;
-    top: 7px;
+    // top: 7px;
     font-size: 16px;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
   }
+}
+input::-webkit-credentials-auto-fill-button {
+    display: none !important;
+    visibility: hidden;
+    pointer-events: none;
+    position: absolute; 
+    right: 0;
 }
 </style>

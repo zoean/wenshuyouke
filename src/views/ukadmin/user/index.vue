@@ -99,6 +99,29 @@ import {addEntUser,getEntUserList,updateEntUser,delEntUser,resetEntUserPassWord}
 import {editWorker} from '@/api/department'
 export default{
 	data(){
+		var validateentName = (rule, value, callback) => {
+			if (value =='') {
+				callback(new Error('请输入企业名称'));
+			}else if(value.length>15||value.length<2){
+				callback(new Error('企业名称在2~15字符之间'));
+			}else {
+				callback();
+			}
+		};
+		var validateuserName = (rule, value, callback) => {
+			if (value =='') {
+				callback(new Error('请输入用户名'));
+			}else {
+				callback();
+			}
+		};
+		// var passWord = (rule, value, callback) => {
+		// 	if (value =='') {
+		// 		callback(new Error('请输入密码'));
+		// 	}else {
+		// 		callback();
+		// 	}
+		// };
 		return {
 			searchForm: {
 				entName: '',
@@ -113,16 +136,24 @@ export default{
 				userType: 'admin'
 			},
 			addEditEntUserVisible: false,
-			addEditEntUserRules:{
-				entName: [{
-					required:true,message:'请输入企业名称',trigger:'blur'
-				}],
-				userName:[{
-					required:true, message: '请输入用户名', trigger: 'blur'
-				}],
-				passWord:[{
-					required: true, message:'请输入密码',trigger: 'blur'
-				}]
+			// addEditEntUserRules:{
+			// 	entName: [{
+			// 		required:true,message:'请输入企业名称',trigger:'blur'
+			// 	}],
+			// 	userName:[{
+			// 		required:true, message: '请输入用户名', trigger: 'blur'
+			// 	}],
+			// 	passWord:[{
+			// 		required: true, message:'请输入密码',trigger: 'blur'
+			// 	}]
+			// },
+			addEditEntUserRules: {
+				entName: [
+					{ validator: validateentName, trigger: 'blur' }
+				],
+				userName: [
+					{ validator: validateuserName, trigger: 'blur' }
+				]
 			},
 			delEntUserVisible: false,
 			resetPasswordTipVisible: false,
@@ -169,28 +200,34 @@ export default{
 			this.curId.push(id)
 			this.delEntUserVisible = true
 		},
-		addEditEntUserSubmit(){
-			if(this.addEditType == '编辑企业用户'){
-				updateEntUser(this.addEditEntUserForm).then(response => {
-					if(response.status == 200){
-						this.$message.success('企业用户已修改')						
-						this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
-						this.fetchEntUserList()
+		addEditEntUserSubmit(formName){
+			this.$refs.addEditEntUserForm.validate((valid) => {
+				if (valid) {
+					if(this.addEditType == '编辑企业用户'){
+						updateEntUser(this.addEditEntUserForm).then(response => {
+							if(response.status == 200){
+								this.$message.success('企业用户已修改')						
+								this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
+								this.fetchEntUserList()
+							}else{
+								this.$message.error('编辑企业用户失败，请重试')
+							}
+						})
 					}else{
-						this.$message.error('编辑企业用户失败，请重试')
-					}
-				})
-			}else{
-				addEntUser(this.addEditEntUserForm).then(response => {
-					if(response.status == 200){
-						this.$message.success('成功添加企业用户')		
-						this.fetchEntUserList()				
-						this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
-					}else{
-						this.$message.error('添加企业用户失败，请重试')
-					}
-				})
-			}
+						addEntUser(this.addEditEntUserForm).then(response => {
+							if(response.status == 200){
+								this.$message.success('成功添加企业用户')		
+								this.fetchEntUserList()				
+								this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
+							}else{
+								this.$message.error('添加企业用户失败，请重试')
+							}
+						})
+					}	
+				} else {
+					return false;
+				}
+			});
 		},
 		changeUserStatus(id,status){
 			let wantStatus = status

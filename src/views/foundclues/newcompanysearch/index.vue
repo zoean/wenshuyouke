@@ -269,7 +269,8 @@ export default {
           this.industryName = ''
           this.industryList = ''
           this.subIndustryName = ''
-          this.subIndustryList = []
+		  this.subIndustryList = []
+		  this.getIndustryObj()
   				break
   			default:
   				this.searchForm.entType = ''

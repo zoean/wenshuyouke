@@ -17,6 +17,7 @@
 			<dl>
 				<dt>时间选择：</dt>
 				<dd>
+          <el-button type="primary" plain @click="noLimit">不限</el-button>
 					<el-button type="primary" plain @click="pickerToday">今天</el-button>
 					<el-button type="primary" plain @click="pickerThisWeek">一周</el-button>
 					<el-date-picker v-model="choseTime" type="datetimerange"
@@ -45,10 +46,10 @@
                          label="坐席名称" width="100">
                          <template slot-scope="scope">{{ scope.row.workno }}</template>
         </el-table-column>   
-        <el-table-column prop="storageTime"
+        <!-- <el-table-column prop="storageTime"
                          label="坐席号码" width="100">
                          <template slot-scope="scope">{{ scope.row.extentionno }}</template>
-        </el-table-column>     
+        </el-table-column>      -->
         <el-table-column prop="updateTime"
                          label="主呼叫号码" width="120">
           <template slot-scope="scope">{{ scope.row.caller }}</template>
@@ -68,7 +69,7 @@
         <el-table-column prop="address"
                          label="通话录音">
           <template slot-scope="scope">
-            <audio v-if="scope.row.recordfilename" style="width: 100px" :src="scope.row.recordfilename" controls="controls"></audio>
+            <audio v-if="scope.row.recordfilename" style="width: 270px" :src="scope.row.recordfilename" controls="controls"></audio>
             <span v-else>--</span>
           </template>
         </el-table-column>
@@ -95,9 +96,12 @@ export default {
 			subAccount:[],//当前用户下属子帐户
 			choseTime:[],//搜索时间选择
 			searchForm:{
-				extentionno:'6002',
+        extentionno:'6002',
+        startTime:"",
+        endTime:"",
 				pageNum:1,
-				pageSize:10
+        pageSize:10,
+        userid:getLocalStorage('userId')       
 			},
 			orderDetailList:{},
       isSeat:'false'
@@ -145,11 +149,18 @@ export default {
         }catch(e){}
 			})
 		},
-		pickerDate(val){//时间处理-转时间戳并截取前十位
+    pickerDate(val){//时间处理-转时间戳并截取前十位
+      if(val==null){
+        this.searchForm.startTime=this.searchForm.endTime=""
+      }
 			this.searchForm.startTime = parseToTimestamp(val[0],10)
-    	this.searchForm.endTime = parseToTimestamp(val[1],10)
+      this.searchForm.endTime = parseToTimestamp(val[1],10)
     	this.fetchOrderList()
-		},
+    },
+    noLimit(){
+      this.searchForm.startTime=this.searchForm.endTime=""
+      this.fetchOrderList()
+    },
 		pickerToday(){
 			this.searchForm.endTime = parseToTimestamp(beforeToday()[0],10)
     	this.searchForm.startTime = parseToTimestamp(beforeToday()[1],10)

@@ -288,7 +288,7 @@ export default {
         text-align: center;
         font-weight:bold;
         color:#FFF;
-        top:25%;
+        top:18%;
       }
       p{
         width: 100%;
@@ -304,7 +304,7 @@ export default {
   /*编辑企业*/
   .editbg{
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     height: 100%;
     width: 100%;
     left: 0;
@@ -323,7 +323,7 @@ export default {
     left: 0;
     bottom: 0;
     margin: auto;
-    z-index: 101;
+    z-index: 1001;
     .el-form-item{
       margin:0 99px 24px 78px;
       .el-select,.el-input,.el-textarea{

@@ -18,6 +18,11 @@
           </section>
          </div> -->      
     </div>    
+     <el-carousel direction="vertical" :autoplay="true" style="width:20%;height:64px">
+      <el-carousel-item v-for="item in 5" :key="item">
+        <h6 class="medium">消息{{ item }}</h6>
+      </el-carousel-item>
+    </el-carousel>
     <div class="navbar-right">
       <div class="right-menu">
         <el-dropdown>          
@@ -166,7 +171,7 @@ export default {
     flex-direction: row;
     justify-content: flex-start;
     flex: 0 1 auto;
-    width: 50%;
+    // width: 50%;
     .logo {
       margin: 18px 60px 0 30px;
     }

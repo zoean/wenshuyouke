@@ -40,6 +40,7 @@
             <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.entType">
               <el-radio
+                style="margin-right:0"
                 v-for="index in entType"
                 :label="index.value"
                 :key="index.value"
@@ -55,6 +56,7 @@
             <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.telePhone">
               <el-radio
+                style="margin-right:0"
                 v-for="index in telePhone"
                 :label="index.value"
                 :key="index.value"
@@ -69,13 +71,15 @@
           <dd>
           <!-- <el-button type="primary" @click="clearindustry">不限</el-button> -->
             <el-radio-group v-model="searchForm.regCapital">
-              <el-radio
-                v-for="index in regCapital"
-                :label="index.value"
-                :key="index.value"
-                border
-                size="medium"
-              >{{index.label}}</el-radio>
+              <el-tooltip class="item" effect="dark" :content="index.title" placement="bottom-end" v-for="index in regCapital">
+                <el-radio
+                  style="margin-right:0"
+                  :label="index.value"
+                  :key="index.value"
+                  border
+                  size="medium"
+                >{{index.label}}</el-radio>
+            </el-tooltip>
             </el-radio-group>
           </dd>
         </dl>
@@ -135,7 +139,7 @@ export default {
     return {
       entType: [ { value: "", label: "不限" }, { value: "个人独资企业", label: "个人独资企业" },{ value: "有限责任公司", label: "有限责任公司" },{ value: "股份有限公司", label: "股份有限公司" },{ value: "外商投资企业", label: "外商投资企业" },{ value: "1", label: "其他" } ],
       telePhone: [{value :"2",label:"不限"},{value:"0",label:"无"},{value:"1",label:"有"} ],
-      regCapital: [ { value: "0", label: "不限" },{ value: "1", label: "20万以下" },{ value: "2", label: "20-50万" },{ value: "3", label: "50-100万" },{ value: "4", label: "100-200万" },{ value: "5", label: "200-500万" },{ value: "6", label: "500万以上" }],
+      regCapital: [ { value: "0", label: "不限",title:"不限" },{ value: "1", label: "20万以下" ,title:"包含20万"},{ value: "2", label: "20-50万",title:"不包含20万" },{ value: "3", label: "50-100万" ,title:"不包含50万" },{ value: "4", label: "100-200万" ,title:"不包含100万" },{ value: "5", label: "200-500万" ,title:"不包含200万" },{ value: "6", label: "500万以上",title:"包含500万"  }],
       searchForm: {
         userId: getLocalStorage("userId"),
         entName: "", //企业名字
@@ -204,10 +208,14 @@ export default {
       this.pname = "";
       this.cname = "";
       this.bname = "";
+      this.searchForm.pid = '';
+      this.ProvinceNoLimit()
     },
     clearindustry() {
       this.categoryname = "";
       this.industry = "";
+      this.searchForm.industryCode = '';
+      this.ProvinceNoLimit()
     },
     // 选省
     choseProvince() {
@@ -255,6 +263,19 @@ export default {
             this.searchForm.pid = this.bname
           }
       });
+    },
+    //不限
+    ProvinceNoLimit() {
+      this.$store
+      .dispatch("companysearch/companysearch",this.searchForm)
+      // .dispatch("myclue/cluessearch",this.searchForm)
+        .then(res => {
+            if(res){
+              this.companydata = res.obj.list;
+              this.companytotal = res.obj.total
+            }
+        })
+        .catch(() => {});
     },
     //一级行业
     choseCategory(){
@@ -399,6 +420,10 @@ export default {
 }
 .search-area{
   dl{
+    dt{
+      width:100px;
+      display:block
+    }
     dd{
       .el-button--primary{
         padding: 0

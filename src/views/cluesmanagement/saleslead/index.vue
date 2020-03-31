@@ -199,7 +199,7 @@ export default {
     return {
       moreForm:false,
       cluesSource: ['新企推荐','企业查询', '转线索','回收站'],
-      clueStatus:['已拔通','未拔通','空号'],
+      clueStatus:['未拨打','已拨通','未拨通','不限'],
       sortType:['注册资本-升序','注册资本-降序','成立时间-升序','成立时间-降序'],
       fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
       datePicker:[],
@@ -466,6 +466,9 @@ export default {
       })
     },
     pickerDate(val){
+      if(val==null){
+        this.searchForm.startTime=this.searchForm.endTime=""
+      }
       this.searchForm.startTime = parseToTimestamp(val[0],10)
       this.searchForm.endTime = parseToTimestamp(val[1],10)
     },

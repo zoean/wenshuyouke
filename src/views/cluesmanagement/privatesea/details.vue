@@ -270,7 +270,8 @@ export default {
       moveClueToCardForm:{
         dataSource:2,
         listId:'',
-        entId: ''//选取的线索列表
+        entId: '',//选取的线索列表
+        ids:"",
       },
       expireTimeOption: {
         disabledDate(date) {
@@ -288,7 +289,7 @@ export default {
     this.fetchCardList()
   },
   methods: {
-    backToList(){ 
+    backToList(){
       this.changeCom()
     },
     oneTouchCall(){
@@ -338,6 +339,7 @@ export default {
         .then(res => {
           this.cluesinfo = res.obj
           this.value = res.obj.clueStatus
+          this.moveClueToCardForm.ids=res.id
         })
         .catch(() => {});
     },
@@ -536,7 +538,7 @@ export default {
     .el-col-7 {
       padding: 3px 10px;
     }
-    
+
     button {
       padding: 8px 16px;
       span {
