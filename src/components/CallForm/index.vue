@@ -110,6 +110,7 @@
 </template>
 <script>
 import {updateClues} from '@/api/saleslead'
+import {entIdBindCallDetail} from '@/api/orderdetail'
 	export default {
 		name: 'CallForm',
     props: {
@@ -180,6 +181,9 @@ import {updateClues} from '@/api/saleslead'
       }
     },
 		methods: {
+      sendCurClueToUserCenter(){
+        entIdBindCallDetail({})
+      },
       timerStart(){      
         this.timer = setInterval(()=>{
           ++this.time

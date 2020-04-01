@@ -46,7 +46,7 @@
       </el-row>
     </div>
     <!--编辑企业信息-->
-    <div v-show="this.show" class="editbg" @click="show=false"></div>
+    <div v-show="this.show" class="editbg"></div>
     <div v-show="this.show" class="editcompany">
      <p>编辑企业信息</p>
      <el-form ref="upload" :model="upload" label-width="90px" :rules="uploadrules" >
@@ -314,7 +314,7 @@ export default {
   }
   .editcompany{
     width:640px;
-    max-height:78vh;
+    height: 560px;
     background:#FFF;
     border-radius:12px;
     position: fixed;

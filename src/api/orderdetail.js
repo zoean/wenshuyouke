@@ -6,3 +6,11 @@ export function getCallList(data){
 		data
 	})
 }
+// 企业ID绑定话单
+export function entIdBindCallDetail(data){
+	return request({
+		url: 'call/cdrbind/add',
+		method: 'post',
+		data
+	})
+}

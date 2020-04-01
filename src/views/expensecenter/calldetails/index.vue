@@ -1,7 +1,7 @@
 <template>
 	<div class="main-box">
 		<div class="search-area">
-			<dl v-show="isSeat">
+			<dl v-show="!isSeat">
 				<dt>统计范围：</dt>
 				<dd>
 					<el-select v-model="searchForm.extentionno" placeholder="请选择名单">

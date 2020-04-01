@@ -47,8 +47,8 @@
           <dd>
             <el-button class="btn-blue-default" type="primary" @click="resetSearchOption(4)">不限</el-button>
             <el-radio-group v-model="searchForm.telePhone">
-              <el-radio-button value="无" label="无">无</el-radio-button>
-              <el-radio-button value="有" label="有">有</el-radio-button>
+              <el-radio-button value="无" label="0">无</el-radio-button>
+              <el-radio-button value="有" label="1">有</el-radio-button>
             </el-radio-group>
           </dd>
         </dl>
@@ -57,12 +57,12 @@
           <dd>
             <el-button class="btn-blue-default" type="primary" @click="resetSearchOption(5)">不限</el-button>
             <el-radio-group v-model="searchForm.regCapital">
-              <el-radio-button value="包含20万" label="包含20万" title="包含20万">20万以下</el-radio-button>
-              <el-radio-button value="不包含20万" label="不包含20万" title="不包含20万">20-50万</el-radio-button>
-              <el-radio-button value="不包含50万" label="不包含50万" title="不包含50万">50-100万</el-radio-button>
-              <el-radio-button value="不包含100万" label="不包含100万" title="不包含100万">100-200万</el-radio-button>
-              <el-radio-button value="不包含200万" label="不包含200万" title="不包含200万">200-500万</el-radio-button>
-              <el-radio-button value="500万以上" label="500万以上" title="包含500万">500万以上</el-radio-button>
+              <el-radio-button value="包含20万" label="1" title="包含20万">20万以下</el-radio-button>
+              <el-radio-button value="不包含20万" label="2" title="不包含20万">20-50万</el-radio-button>
+              <el-radio-button value="不包含50万" label="3" title="不包含50万">50-100万</el-radio-button>
+              <el-radio-button value="不包含100万" label="4" title="不包含100万">100-200万</el-radio-button>
+              <el-radio-button value="不包含200万" label="5" title="不包含200万">200-500万</el-radio-button>
+              <el-radio-button value="500万以上" label="6" title="包含500万">500万以上</el-radio-button>
             </el-radio-group>
           </dd>
         </dl>
@@ -310,10 +310,10 @@ export default {
           this.searchForm.entType = ''
           break
         case 4:
-          this.searchForm.telePhone = ''
+          this.searchForm.telePhone = 2
           break
         case 5:
-          this.searchForm.regCapital=''
+          this.searchForm.regCapital=0
           break
   		}
   	},
