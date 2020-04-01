@@ -153,7 +153,7 @@
           <el-input v-model="addEditWorkerForm.passWord" type="password" autocomplete="off" show-password></el-input>
         </el-form-item>
         <el-form-item label="手机号" :label-width="formLabelWidth" placeholder="请输入手机号" prop="phone">
-          <el-input v-model="addEditWorkerForm.phone" type="tel" max-size="11"></el-input>
+          <el-input v-model="addEditWorkerForm.phone" type="tel" maxlength="11"></el-input>
         </el-form-item>
         <el-form-item label="姓名" :label-width="formLabelWidth" prop="realName">
           <el-input v-model="addEditWorkerForm.realName" autocomplete="off"></el-input>
@@ -281,6 +281,8 @@
           ],
           phone:[{
             required:true, message: '请输入坐席手机号码',trigger:'blur'
+          },{
+            pattern:/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/, message: "请输入合法的手机号", trigger: "blur" 
           }],
           department:[{
             required:true,message:'请选择员工/坐席所在部门',trigger:'blur'

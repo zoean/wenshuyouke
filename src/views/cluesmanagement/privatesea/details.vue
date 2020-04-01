@@ -397,7 +397,7 @@ export default {
         this.clueinfos
       );
       this.clueeditinfo.id = this.companyId
-      this.clueeditinfo.followupStatus = this.value
+      this.clueeditinfo.fllowupStatus = this.value
       this.$store
         .dispatch("myclue/clueedit", this.clueeditinfo)
         .then(res => {
