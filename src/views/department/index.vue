@@ -3,7 +3,7 @@
     <div class="department-wrap">
       <div class="department-tree">
         <div class="department-handle">
-          <h3>{{enterpriseName}}</h3>
+          <h3 :title="enterpriseName">{{enterpriseName | ellipsis(20)}}</h3>
           <p class="highblue" @click="addFirstDepartmentHandle">添加一级部门</p>
         </div>
         <el-tree :check-on-click-node=true :accordion=false ref="departmentTree" highlight-current :expand-on-click-node="false" default-expand-all show-checkbox :data="departmentTree" :props="defaultProps" show-checkbox :default-expand-all="true" node-key="id" @node-click="nodeClick" :check-strictly="false">
@@ -207,6 +207,8 @@
   import {getOrganize,addOrganize,delOrganize,editOrganize,getWorkerList,addWorker,delWorker, editWorker} from '@/api/department.js'
   import {loadRoleList} from '@/api/roleset'
   import {getLocalStorage} from '@/utils/index'
+  import Vue from 'vue'
+  let ellipsis = Vue.filter('ellipsis')//引入全局filter
   export default{
     data(){
       return {

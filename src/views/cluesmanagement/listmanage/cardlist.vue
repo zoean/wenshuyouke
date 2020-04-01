@@ -148,9 +148,7 @@
 		methods:{
 			getSubAccountsHandle(){
 				getSubAccounts({parentId:getLocalStorage('userId')}).then(response=>{//获取子帐户列表
-					try{
-						this.subAccount = response.data.obj
-					}catch(e){}
+					this.subAccount = response.data.obj   
 				})
 			},			
       getCardList(){
@@ -180,10 +178,14 @@
 				this.distributionForm.userName = curUser.realName
 				distributionPost(this.distributionForm).then(response=>{
 					try{
-						this.$message.success('名单分配成功')
-						this.getCardList()
+            if(response.data.status == 200){
+              this.$message.success('名单分配成功')
+              this.getCardList()
+            }else{
+              this.$message.error(response.data.message)
+            }
+						
 					}catch(e){
-						this.$message.error('名单分配失败，请重试')
 					}
 				})				
 			},
@@ -206,14 +208,12 @@
 			delListVerify(){
 				this.delVerifyVisible = false
 				delCardPost(this.delListForm).then(response=>{
-					try{
-						if(response.data.status==200){
-							this.getCardList()
-							this.$message.success('删除成功')
-						}
-					}catch(e){
-						this.$message.error('删除失败请重试')
-					}
+					if(response.data.status==200){
+						this.getCardList()
+						this.$message.success('删除成功')
+					}else{
+            this.$message.error(response.data.message)
+          }
 				})
 			},
 			renameSubmit(){
@@ -221,15 +221,13 @@
 					this.$message.error('请输入名单名称')
 				}else{
 					renameCardPost(this.renameForm).then(response=>{
-						try{
-							if(response.data.status==200){
-								this.$message.success('修改成功')
-								this.getCardList();
-								this.renameVisible = false;
-							}								
-						}catch(e){
-							this.$message.error('修改名单名称失败')
-						}
+						if(response.data.status==200){
+							this.$message.success('修改成功')
+							this.getCardList();
+							this.renameVisible = false;
+						}else{
+              this.$message.error(response.data.message)
+            }	
 					})
 				}
 			},
@@ -238,12 +236,14 @@
 					this.$message.error('请输入名单名称')
 				}else{
 					addCardPost(this.addCardForm).then(response=>{
-						if(response.status==200){
+						if(response.data.status==200){
 							this.resetForm('addCardForm');
 							this.addCardVisible = false;
 							this.getCardList();
 							this.$message.success('添加名单成功')
-						}
+						}else{
+              this.$message.error(response.data.message)
+            }
 					})
 				}
 			},

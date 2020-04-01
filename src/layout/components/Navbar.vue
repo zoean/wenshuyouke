@@ -8,10 +8,10 @@
          <i class="el-icon-bell highblue"></i>
       <el-carousel direction="vertical" :autoplay="true">
         <el-carousel-item>
-          <p>您的通话时长不足，请及时充值</p>
+          <p>文数优客今天为您推送<span class="highblue">86</span>家新企消息</p>
         </el-carousel-item>
         <el-carousel-item>
-          <p>阿里巴巴入驻文投优客啦，快去领取商机吧</p>
+          <p>线索明细增加导出功能，快去试试吧！</p>
         </el-carousel-item>
       </el-carousel>
     </div>    
@@ -25,12 +25,11 @@
             <span>消息</span>
           </p>
           <el-dropdown-menu>
-            <el-dropdown-item>2020-03-18 【帐户】坐席6001已开通帐号,请...</el-dropdown-item>
-            <el-dropdown-item>2020-03-16 【充值】您已成功充值200000元...</el-dropdown-item>
-            <el-dropdown-item>2020-03-12 【通话】您的通话时长已不足100...</el-dropdown-item>
+            <el-dropdown-item>欢迎您入驻文数优客，快去寻找商机吧！</el-dropdown-item>
+            <el-dropdown-item>又有新企加入文数优客了，第一时间...</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown> 
-        <el-dropdown @command="handleCommand">          
+        <!-- <el-dropdown @command="handleCommand">          
           <p>
             <span class="svg-container">
               <svg-icon icon-class="user-help" />
@@ -42,7 +41,7 @@
             <el-dropdown-item command="2">客服中心</el-dropdown-item>
             <el-dropdown-item command="3">帮助中心</el-dropdown-item>
           </el-dropdown-menu>
-        </el-dropdown> 
+        </el-dropdown>  -->
         <el-dropdown>          
           <p>
             <span class="svg-container">

@@ -2,7 +2,7 @@
 	<div class="main-box">
 		<div class="role-panel">
 			<div class="role-handle">
-				<h3>{{entUserName}}</h3>
+				<h3 :title="entUserName">{{entUserName | ellipsis(20)}}</h3>
 				<p>
 					<el-button type="primary" icon="el-icon-plus" circle @click="addRoleHandle"></el-button>
 						<el-button type="primary" icon="el-icon-edit" circle @click="editRoleHandle"></el-button>
@@ -56,6 +56,8 @@
 <script>
 import {loadRoleList,addRole,editRole,delRole,getRoleTree,setRoleTree} from '@/api/roleset'
 import {getLocalStorage} from '@/utils/index'
+import Vue from 'vue'
+let ellipsis = Vue.filter('ellipsis')//引入全局filter
 export default{
 	data(){
 		return {

@@ -10,8 +10,8 @@
             <svg-icon class="default-logo" v-show="!this.companyinfo.enterpriseLogo" icon-class="entlogo"/>
             <h5>{{ companyinfo.enterpriseName }}</h5>
             <div class="companysurvey">
-              <div><span>企业人数:</span>{{companyinfo.enterpriseCount || 0}}人</div>
-              <div><span>部门数量:</span>{{companyinfo.enterpriseDepartCount || 0}}个</div>
+              <!-- <div><span>企业人数:</span>{{companyinfo.enterpriseCount || 0}}人</div>
+              <div><span>部门数量:</span>{{companyinfo.enterpriseDepartCount || 0}}个</div> -->
               <div><span>认证情况:</span>{{companyinfo.enterpriseIsAuth = 1 ? "已认证" : "未认证"}}</div>
             </div>
             <button>
@@ -224,7 +224,7 @@ export default {
           font-size:24px;
           font-weight:400;
           color:#333;
-          padding:33px 0 39px;
+          padding:33px 20px 39px 20px;
           margin-block-start: 0;
           margin-block-end: 0;
         }

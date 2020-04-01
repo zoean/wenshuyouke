@@ -1,8 +1,7 @@
 <template>
   <div class="app-wrapper">
     <el-button-group>
-      <el-button icon="el-icon-phone"
-                 @click="toggleKeyboard">电话</el-button>
+      <el-button icon="el-icon-phone">电话</el-button>
       <el-button icon="el-icon-s-promotion">短信</el-button>
     </el-button-group>
     <PhoneKeyboard v-show="showKeyboard"
