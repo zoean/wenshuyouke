@@ -32,8 +32,6 @@ router.beforeEach(async (to, from, next) => {
       NProgress.done()
     } else {
       let userMenus = store.getters.userMenus && store.getters.roles.length > 0
-      // let userMenus = getLocalStorage('u_r')
-      // const hasRoles = store.getters.roles && store.getters.roles.length > 0
       if (userMenus || flag > 0) {
         next()
       } else {
@@ -42,7 +40,6 @@ router.beforeEach(async (to, from, next) => {
           if(flag == 0){
             await store.dispatch('user/getInfo')
           }
-            // userMenus = getLocalStorage('u_r')
           if(store.getters.userMenu){
             const accessRoutes = await store.dispatch('permission/generateRoutes', store.getters.userMenu)
             // dynamically add accessible routes

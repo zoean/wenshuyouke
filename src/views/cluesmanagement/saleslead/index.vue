@@ -433,7 +433,6 @@ export default {
         remark:row.remark,//备注        
         callStatus:2
       }
-      console.log(this.curCluesForm)
       this.$store.dispatch('callform/setCurClueForm', this.curCluesForm)
     },
     pickerDate(val){
