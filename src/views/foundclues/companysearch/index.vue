@@ -104,10 +104,12 @@
         <el-table-column label="法人">
           <template slot-scope="scope">{{scope.row.legalName}}</template>
         </el-table-column>
-        <el-table-column label="成立时间">
+        <el-table-column label="成立时间" sortable
+              :sort-method="sortByDate">
           <template slot-scope="scope">{{scope.row.regDate}}</template>
         </el-table-column>
-        <el-table-column label="注册资本">
+        <el-table-column label="注册资本" sortable 
+              :sort-method="sortRegCapital">
           <template slot-scope="scope">{{Math.floor(scope.row.regCapital)}}万元</template>
         </el-table-column>
         <el-table-column width="380" label="地址">
@@ -184,6 +186,12 @@ export default {
     this.searchlist()
   },
   methods: {
+    sortRegCapital(a,b){
+      return a.regCapital - b.regCapital
+    },
+    sortByDate(a,b){
+      return a.verifiedTime - b.verifiedTime
+    },
     load () {
         this.loading = true
         setTimeout(() => {

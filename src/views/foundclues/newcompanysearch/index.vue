@@ -42,6 +42,30 @@
 				    </el-radio-group>
     			</dd>
     		</dl>
+        <dl>
+          <dt>联系方式：</dt>
+          <dd>
+            <el-button class="btn-blue-default" type="primary" @click="resetSearchOption(4)">不限</el-button>
+            <el-radio-group v-model="searchForm.telePhone">
+              <el-radio-button value="无" label="无">无</el-radio-button>
+              <el-radio-button value="有" label="有">有</el-radio-button>
+            </el-radio-group>
+          </dd>
+        </dl>
+        <dl>
+          <dt>注册资本：</dt>
+          <dd>
+            <el-button class="btn-blue-default" type="primary" @click="resetSearchOption(5)">不限</el-button>
+            <el-radio-group v-model="searchForm.regCapital">
+              <el-radio-button value="包含20万" label="包含20万" title="包含20万">20万以下</el-radio-button>
+              <el-radio-button value="不包含20万" label="不包含20万" title="不包含20万">20-50万</el-radio-button>
+              <el-radio-button value="不包含50万" label="不包含50万" title="不包含50万">50-100万</el-radio-button>
+              <el-radio-button value="不包含100万" label="不包含100万" title="不包含100万">100-200万</el-radio-button>
+              <el-radio-button value="不包含200万" label="不包含200万" title="不包含200万">200-500万</el-radio-button>
+              <el-radio-button value="500万以上" label="500万以上" title="包含500万">500万以上</el-radio-button>
+            </el-radio-group>
+          </dd>
+        </dl>
     	</div>
     	<div class="search-result">
     		<span>文投优客今天为您推荐了<b class="highred">{{newComList.total}}</b>家符合条件的企业</span>
@@ -88,8 +112,10 @@
 				      <template slot-scope="scope">{{ scope.row.legalName }}</template>
 				    </el-table-column>
 				    <el-table-column
-				      prop="address"
+				      prop="regCapital"
 				      label="注册资本(万元)"
+              sortable
+              :sort-method="sortRegCapital"
 				      show-overflow-tooltip>
 				      <template slot-scope="scope">{{ Math.floor(scope.row.regCapital) }}</template>
 				    </el-table-column>
@@ -100,8 +126,10 @@
 				      <template slot-scope="scope">{{ scope.row.entType }}</template>
 				    </el-table-column>
 				    <el-table-column
-				      prop="address"
+				      prop="verifiedTime"
 				      label="注册日期"
+              sortable
+              :sort-method="sortByDate"
 				      show-overflow-tooltip>
 				      <template slot-scope="scope">{{ scope.row.verifiedTime }}</template>
 				    </el-table-column>
@@ -208,6 +236,12 @@ export default {
     }
   },
   methods: {
+    sortRegCapital(a,b){
+      return a.regCapital - b.regCapital
+    },
+    sortByDate(a,b){
+      return a.verifiedTime - b.verifiedTime
+    },
   	changeEntType(val){
   		console.log(val)
   	},
@@ -255,7 +289,7 @@ export default {
   			}  			
   		})
   	},
-  	resetSearchOption(tag){ //不限
+  	resetSearchOption(tag){ //不限 telePhone regCapital
   		switch (tag) {
   			case 1:
   				this.searchForm.raCode = ''
@@ -269,12 +303,18 @@ export default {
           this.industryName = ''
           this.industryList = ''
           this.subIndustryName = ''
-		  this.subIndustryList = []
-		  this.getIndustryObj()
+		      this.subIndustryList = []
+		      this.getIndustryObj()
   				break
-  			default:
-  				this.searchForm.entType = ''
-  				break;
+        case 3:
+          this.searchForm.entType = ''
+          break
+        case 4:
+          this.searchForm.telePhone = ''
+          break
+        case 5:
+          this.searchForm.regCapital=''
+          break
   		}
   	},
   	reloadNewComList(curPage){
@@ -282,8 +322,7 @@ export default {
   		this.getNewComList()
   	},
   	getCurUserCardHandle(){//获取当前用户的名单列表
-			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{	
-        console.log(response)				
+			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{
   			this.cardList = response.data.obj
 			})
   	},
