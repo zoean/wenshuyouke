@@ -337,8 +337,9 @@ export default {
     editclue() {
       this.$refs.multipleTable.selection;
       var ids = [];
+
       for (var id in this.$refs.multipleTable.selection) {
-        ids.push(this.$refs.multipleTable.selection[id].entId + '')
+        ids.push(this.$refs.multipleTable.selection[id].id + '')
       }
       // ids = ids.join(",")
       if(!this.moveClueToCardForm.listId){
@@ -346,7 +347,7 @@ export default {
       }else if(!this.moveClueToCardForm.entId || !this.moveClueToCardForm.entId.length){
         this.$message.error('请选择要转移的线索')
       }else{//转移到名单api后改
-        transforserClues({entId: ids, dataSource: 2, listId: this.moveClueToCardForm.listId})
+        transforserClues({ids: ids, dataSource: 2, listId: this.moveClueToCardForm.listId})
           .then(res => {
             this.searchclue();
             this.dialogFormVisible = false;

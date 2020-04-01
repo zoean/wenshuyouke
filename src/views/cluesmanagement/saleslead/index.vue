@@ -223,7 +223,7 @@ export default {
       moveClueToCardForm:{
         dataSource:2,
         listId:this.$store.state.cluesmanage.curCardId,
-        entId:[]//选取的线索列表
+        ids:[]//选取的线索列表
       },
       moveClueToSelfForm:{
         entId:[]//选取的线索列表
@@ -366,7 +366,7 @@ export default {
       this.searchForm.dataSource = val
     },
     moveClueToCardHandle(){// 转移线索至线索池          
-      if(this.moveClueToCardForm.entId.length == 0){
+      if(this.moveClueToCardForm.ids.length == 0){
         this.$message.error('请选择要转移的线索数据')
       }else if(this.moveClueToCardForm.listId == ''){
         this.$message.error('请选择要转移的目标名单')
@@ -402,9 +402,9 @@ export default {
       }
     },
     handleSelectionChange(val){//获取标签选取id用于线索转移
-      this.moveClueToCardForm.entId = []
+      this.moveClueToCardForm.ids = []
       for(let i in val){
-        this.moveClueToCardForm.entId.push(val[i].entId)   
+        this.moveClueToCardForm.ids.push(val[i].id)   
         this.moveClueToSelfForm.entId.push(val[i].id)     
       }
     },

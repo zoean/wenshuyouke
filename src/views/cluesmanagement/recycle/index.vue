@@ -210,7 +210,7 @@ export default {
         for(let i in idArr){
           ids.push(idArr[i].id)
         }
-        postCluesToSelf({entId: ids}).then(response => {
+        postCluesToSelf({entId: ids,dataSource:'3'}).then(response => {
           if(response.status == 200){
             this.$message.success(response.data.obj)
             this.searchclue()

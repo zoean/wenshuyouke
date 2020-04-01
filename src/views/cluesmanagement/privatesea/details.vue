@@ -314,6 +314,7 @@ export default {
       if(!this.moveClueToCardForm.listId){
         this.$message.error('请选择目标名单')
       }else{
+        console.log(this.moveClueToCardForm);
         transforserClues(this.moveClueToCardForm)
           .then(res => {
             this.nextshow()
@@ -333,11 +334,11 @@ export default {
     detailsinfo() {
       this.companyId = this.$store.state.myclue.companyId
       this.$store
-        .dispatch("myclue/cluesdetail", { id: this.companyId })
+        .dispatch("myclue/cluesdetail", { id: this.companyId }) 
         .then(res => {
           this.cluesinfo = res.obj
           this.value = res.obj.fllowupStatus
-          this.moveClueToCardForm.entId= new Array(this.cluesinfo.entId)
+          this.moveClueToCardForm.ids= new Array(this.cluesinfo.id)
         })
         .catch(() => {});
     },
