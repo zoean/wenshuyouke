@@ -15,6 +15,15 @@
     	<el-button type="danger"
                round @click="dropCall">挂断</el-button>
    </div>
+   <div class="fetch-xphone" v-show="fetchXphoneVisible">
+      <h2 class="call-company highblue">{{curCluesForm.entName}}</h2>
+     <section v-show="editType == 'fetchxphone'">
+        <p>您本次获取的虚拟号为：</p>
+        <h4 class="highblue txtc">{{xphone}}</h4>
+        <p>有效期为三分钟，过期后请重新获取</p>
+        <p class="txtc highred">{{countDownTime}}</p>
+      </section>
+   </div>
       <el-form label-width="120px" :class="moreForm ?'heightAuto':'heightShort'">
         <el-form-item label="公司名称：" prop="entName">
           <el-input v-model="curCluesForm.entName"
@@ -115,6 +124,7 @@ import {updateClues} from '@/api/saleslead'
         fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
         moreForm: false,
         countTime:'正在呼叫中...',
+        countDownTime: '',
         time:0,
         timer:null,
         expireTimeOption: {
@@ -142,7 +152,13 @@ import {updateClues} from '@/api/saleslead'
       },
       formTip(){
         return this.moreForm ? '收起' : '展示更多信息'
-      } 
+      },
+      xphone(){
+        return this.$store.state.callform.xphone
+      },
+      fetchXphoneVisible(){
+        return this.$store.state.callform.fetchXphoneVisible
+      }
 		},
     watch: {
       hodeOn: function (val){
@@ -156,6 +172,11 @@ import {updateClues} from '@/api/saleslead'
           this.countTime = ''
           this.curCluesForm.callStatus = 2 
         }
+      }
+    },
+    created(){
+      if(this.editType == 'fetchxphone'){
+        this.countDown()
       }
     },
 		methods: {
@@ -174,9 +195,20 @@ import {updateClues} from '@/api/saleslead'
         m < 10 ? m = `0${m}` : ''
         s < 10 ? s = `0${s}` : ''
         this.countTime = `${h}:${m}:${s}`
+        this.countDownTime = `${h}:${m}:${s}`
       },
       timerClear(){
         this.timer = null
+        this.time = 0
+      },
+      countDown(){
+        this.time = 3 * 60
+        this.timer = setInterval(() => {
+          if(this.time > 0){
+            this.time--
+            this.formateTime()
+          }
+        }, 1000)
       },
 			dropCall(){
         this.$store.dispatch('callform/togglePanel')
@@ -198,6 +230,9 @@ import {updateClues} from '@/api/saleslead'
               this.$message.success('线索更新失败')
             }
           })
+        }else if(this.editType == 'fetchxphone'){
+          this.$store.commit('callform/TOGGLE_XPHONE')
+          this.$store.dispatch('callform/toggleClueForm')
         }else{
           this.$store.dispatch('callform/toggleClueForm')
         }
@@ -247,7 +282,7 @@ import {updateClues} from '@/api/saleslead'
     .el-tips{
       margin-top: 5px;
     }
-    .call-duration{
+    .call-duration,.fetch-xphone{
       width: 300px;
       min-height: 200px;
       padding:25px;
@@ -265,6 +300,9 @@ import {updateClues} from '@/api/saleslead'
         width: 200px;
         font-weight: 100;
         color: #fff;
+      }
+      .txtc{
+        text-align:center;
       }
     }
   } 
