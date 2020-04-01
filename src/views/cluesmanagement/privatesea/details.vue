@@ -212,6 +212,7 @@ import CallForm from '@/components/CallForm/index' //引入通话表单组件
 import { getLocalStorage } from "@/utils/index"
 import { getCurUserCard } from "@/api/foundclues"
 import { getxPhoneNums } from '@/api/saleslead'
+import { transforserClues } from '@/api/cardmanage'
 import Vue from 'vue'
 let ellipsis = Vue.filter('ellipsis')//引入全局filter
 export default {
@@ -313,8 +314,7 @@ export default {
       if(!this.moveClueToCardForm.listId){
         this.$message.error('请选择目标名单')
       }else{
-        this.$store
-          .dispatch("myclue/cluesedit", this.moveClueToCardForm)
+        transforserClues(this.moveClueToCardForm)
           .then(res => {
             this.nextshow()
           }).catch(error => {
@@ -337,7 +337,7 @@ export default {
         .then(res => {
           this.cluesinfo = res.obj
           this.value = res.obj.fllowupStatus
-          this.moveClueToCardForm.ids=res.id
+          this.moveClueToCardForm.entId= new Array(this.cluesinfo.entId)
         })
         .catch(() => {});
     },

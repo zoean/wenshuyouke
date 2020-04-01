@@ -509,12 +509,14 @@
             if(this.addEditType == '添加用户'){
               addWorker(this.addEditWorkerForm).then(response=>{
                 try{
-                  if(response.status==200){
+                  if(response.data.status==200){
                     this.addEditWorkerVisible = false
                     this.$message.success('添加用户成功！')
                     this.workerListForm.department = this.addEditWorkerForm.department
                     this.getWorkerHandle()
                     this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
+                  }else{
+                    this.$message.error(response.data.message)
                   }
                 }catch(e){}
               })

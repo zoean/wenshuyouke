@@ -200,7 +200,7 @@ export default {
       },
       moveClueToCardForm:{
         dataSource:0,
-        listId:this.$store.state.cluesmanage.curCardId,
+        listId: this.$store.state.cluesmanage.curCardId,
         entId:[]//选取的线索列表
       },
       changeTipStatus:{}
@@ -278,9 +278,11 @@ export default {
       }else{
         transforserClues(this.moveClueToCardForm).then(response=>{
           try{
-            if(response.status == 200){
+            if(response.data.status == 200){
               this.$message.success('线索已转移至名单')
               this.fetchListDetail()//线索转移之后reload列表
+            }else{
+              this.$message.error(response.data.message)
             }
           }catch(e){}
         })

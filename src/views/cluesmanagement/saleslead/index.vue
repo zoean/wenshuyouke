@@ -164,7 +164,7 @@
 */
 import Vue from 'vue'
 import { mapGetters } from 'vuex'
-import {transforserClues} from '@/api/cardmanage'
+import {transforserClues} from '@/api/cardmanage'//线索转移接口后改
 import {parseToTimestamp, parseTime} from '@/utils/index'
 import {getCluesList,postCluesToSelf,updateClues, getxPhoneNums} from '@/api/saleslead'
 import {getCurUserCard,getNewComToCard} from '@/api/foundclues'

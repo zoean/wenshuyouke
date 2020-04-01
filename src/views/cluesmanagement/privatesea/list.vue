@@ -137,6 +137,7 @@ import Vue from 'vue'
 import { getLocalStorage } from "@/utils/index"
 import { parseToTimestamp, parseTime, parseDateTime } from "@/utils/index"
 import { getCurUserCard, getNewComToCard } from "@/api/foundclues"
+import { transforserClues } from '@/api/cardmanage'
 let ellipsis = Vue.filter('ellipsis')//引入全局filter
 
 export default {
@@ -337,16 +338,15 @@ export default {
       this.$refs.multipleTable.selection;
       var ids = [];
       for (var id in this.$refs.multipleTable.selection) {
-        ids.push(this.$refs.multipleTable.selection[id].id)
+        ids.push(this.$refs.multipleTable.selection[id].entId + '')
       }
-      ids = ids.join(",")
+      // ids = ids.join(",")
       if(!this.moveClueToCardForm.listId){
         this.$message.error('请选择目标名单')
       }else if(!this.moveClueToCardForm.entId || !this.moveClueToCardForm.entId.length){
         this.$message.error('请选择要转移的线索')
-      }else{
-        this.$store
-          .dispatch("myclue/cluesedit", {ids: ids, dataSource: 2, listId: this.moveClueToCardForm.listId})
+      }else{//转移到名单api后改
+        transforserClues({entId: ids, dataSource: 2, listId: this.moveClueToCardForm.listId})
           .then(res => {
             this.searchclue();
             this.dialogFormVisible = false;
