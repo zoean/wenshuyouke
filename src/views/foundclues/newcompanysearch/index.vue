@@ -172,7 +172,8 @@ export default {
     		pageSize:20,
     		raCode: '', //省市区
     		industryCode:'', //行业
-    		entType: '' //企业类型
+    		entType: '', //企业类型
+        telePhone: 1
     	},
     	getNewComForm:{//领取新企推荐数据
     		dataSource:0,
@@ -273,44 +274,41 @@ export default {
   	},
   	getNewComList(){//新企列表
   		requestNewComList(this.searchForm).then(response=>{
-  			try{
-  				if(response.status==200){
-  					this.newComList = response.data.obj
-  				}
-  			}catch(e){
-  				console.log(e)
-  			}
+				if(response.data.status==200){
+					this.newComList = response.data.obj
+				}else{
+          this.$message.error(response.data.message)
+        }
   		})
   	},
   	getAreaObj(obj){
       if(this.pid){
         area({pid: this.pid}).then(response => {
-          try{
-            if(response.status == 200){
-              if(obj == 'province'){
-                this.provinceList = response.data.obj
-              }else if(obj == 'city'){
-                this.cityList = response.data.obj
-              }else{
-                this.districtList = response.data.obj
-              }
+          if(response.data.status == 200){
+            if(obj == 'province'){
+              this.provinceList = response.data.obj
+            }else if(obj == 'city'){
+              this.cityList = response.data.obj
+            }else{
+              this.districtList = response.data.obj
             }
-          }catch(e){}
+          }else{
+            this.$message.error(response.data.message)
+          }
       })
       }
 			
   	},
   	getIndustryObj(){//获取行业
 			category().then(response => {
-				if(response.status == 200){
+				if(response.data.status == 200){
 					this.industryList = response.data.obj
 				}
 			})
   	},
   	getSubIndustryObj(code){
   		industry({ industryCode: code}).then(response => {
-  			if(response.status == 200){
-  				console.log(response)
+  			if(response.data.status == 200){
   				this.subIndustryList = response.data.obj
   			}  			
   		})
@@ -336,7 +334,7 @@ export default {
           this.searchForm.entType = ''
           break
         case 4:
-          this.searchForm.telePhone = 2
+          this.searchForm.telePhone = ''
           break
         case 5:
           this.searchForm.regCapital=0
@@ -360,7 +358,7 @@ export default {
 			}else{
 				getNewComToCard(this.getNewComForm).then(response=>{
 	  			try{
-	  				if(response.status==200){
+	  				if(response.data.status==200){
 	  					this.reloadNewComList()
 	  					this.$message.success(`您已成功领取${this.getNewComForm.entId.length}条数据至名单`)
 	  					// 领取成功清空领取Form

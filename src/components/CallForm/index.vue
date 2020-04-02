@@ -11,7 +11,7 @@
                width="600px">
 		<div class="call-duration" v-show="callPanelVisible">
       <h2 class="call-company highblue">{{curCluesForm.entName}}</h2>
-      <p class="call-company-duration">{{countTime}}</p>        
+      <p class="call-company-duration" v-show="holdOn">{{countTime}}</p>        
     	<el-button type="danger"
                round @click="dropCall">挂断</el-button>
    </div>
@@ -125,7 +125,7 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
         moreForm: false,
         countTime:'正在呼叫中...',
-        countDownTime: '',
+        countDownTime: '00:03:00',
         time:0,
         timer:null,
         expireTimeOption: {
@@ -170,22 +170,23 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         }else{
           this.hodeOn = false
           this.timerClear()
-          this.countTime = ''
+          this.countTime = '正在呼叫中...'
           this.curCluesForm.callStatus = 2 
         }
-      }
-    },
-    created(){
-      if(this.editType == 'fetchxphone'){
-        this.countDown()
+      },
+      fetchXphoneVisible: function (val){
+        if(val){
+          this.countDown()
+        }
       }
     },
 		methods: {
       sendCurClueToUserCenter(){
         entIdBindCallDetail({})
       },
-      timerStart(){      
-        this.timer = setInterval(()=>{
+      timerStart(){ 
+        this.timerClear()    
+        this.timer = window.setInterval(()=>{
           ++this.time
           this.formateTime()
         },1000)
@@ -202,10 +203,14 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         this.countDownTime = `${h}:${m}:${s}`
       },
       timerClear(){
-        this.timer = null
         this.time = 0
+        this.countDownTime= ''
+        this.countTime = '正在呼叫中...'
+        window.clearInterval(this.timer)
+        this.timer = null
       },
       countDown(){
+        this.timerClear()
         this.time = 3 * 60
         this.timer = setInterval(() => {
           if(this.time > 0){
@@ -223,15 +228,16 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         this.moreForm = !this.moreForm
       },
       cancleEditForm(){
+        this.timerClear()
         if(this.editType == 'call'){
           updateClues({id: this.curCluesForm.id, callStatus: this.curCluesForm.callStatus || 2,  lastCallTime:new Date().getTime()}).then(response => {
-            if(response.status == 200){
+            if(response.data.status == 200){
               this.$store.dispatch('callform/toggleClueForm')
               this.updateClue()
               this.moreForm = false //收起表单
               this.$message.success('当前线索更新成功') 
             }else{
-              this.$message.success('线索更新失败')
+              this.$message.success(response.data.message)
             }
           })
         }else if(this.editType == 'fetchxphone'){
@@ -242,14 +248,15 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         }
       },
       saveCluseForm(){
+        this.timerClear()
         updateClues(this.curCluesForm).then(response => {
-          if(response.status == 200){
+          if(response.data.status == 200){
             this.$store.dispatch('callform/toggleClueForm')
             this.updateClue()
             this.moreForm = false //收起表单
             this.$message.success('当前线索更新成功') 
           }else{
-            this.$message.success('线索更新失败')
+            this.$message.success(response.data.message)
           }
         })
       }

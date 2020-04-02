@@ -316,11 +316,11 @@
       },
       loadRoleList(){ //加载权限角色
         loadRoleList({entUserId:getLocalStorage('userId')}).then(response=>{
-          try{
-            if(response.status==200){
-              this.roleList = response.data.obj
-            }
-          }catch(e){}
+          if(response.data.status==200){
+            this.roleList = response.data.obj
+          }else{
+            this.$message.error(response.data.message)
+          } 
         })
       },
       getOrganizeHandle(){//获取组织架构
@@ -384,18 +384,16 @@
           if(valid){
             if(this.editDepartmentType != '编辑部门'){
               addOrganize(this.addEditForm).then(response=>{
-                try{
-                  if(response.status==200){
-                    this.$message.success('部门添加成功')
-                    this.$refs['addEditForm'].resetFields()
-                    this.addEditVisible = false
-                    this.getOrganizeHandle()
-                    this.getWorkerHandle()//reload员工列表
-                    this.getWorkerList()
-                  }else{
-                    this.$message.error('添加部门失败，请重试')
-                  }
-                }catch(e){}
+                if(response.data.status==200){
+                  this.$message.success('部门添加成功')
+                  this.$refs['addEditForm'].resetFields()
+                  this.addEditVisible = false
+                  this.getOrganizeHandle()
+                  this.getWorkerHandle()//reload员工列表
+                  this.getWorkerList()
+                }else{
+                  this.$message.error(response.data.message)
+                }
               })
             }else{//编辑部门
               editOrganize(this.addEditForm).then(response=>{
@@ -457,7 +455,11 @@
       },
       getWorkerHandle(){//获取员工列表
         getWorkerList(this.workerListForm).then(response=>{
-          this.workerList = response.data.obj
+          if(response.data.status == 200){
+            this.workerList = response.data.obj
+          }else{
+            this.$message.error(response.data.message)
+          }
         })
       },
       handleSizeChange(val){
@@ -508,30 +510,28 @@
           if (valid) {
             if(this.addEditType == '添加用户'){
               addWorker(this.addEditWorkerForm).then(response=>{
-                try{
-                  if(response.data.status==200){
-                    this.addEditWorkerVisible = false
-                    this.$message.success('添加用户成功！')
-                    this.workerListForm.department = this.addEditWorkerForm.department
-                    this.getWorkerHandle()
-                    this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
-                  }else{
-                    this.$message.error(response.data.message)
-                  }
-                }catch(e){}
+                if(response.data.status==200){
+                  this.addEditWorkerVisible = false
+                  this.$message.success('添加用户成功！')
+                  this.workerListForm.department = this.addEditWorkerForm.department
+                  this.getWorkerHandle()
+                  this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
+                }else{
+                  this.$message.error(response.data.message)
+                }
               })
             }else{
               // el-cascader回显需要Array类型，传值需要String叶子节点传值之前需要pop拿到叶子节点
               this.addEditWorkerForm.department = this.addEditWorkerForm.department.pop()
               editWorker(this.addEditWorkerForm).then(response=>{
-                try{
-                  if(response.status==200){
-                    this.addEditWorkerVisible = false
-                    this.$message.success('用户编辑成功！')
-                    this.getWorkerHandle()
-                    this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
-                  }
-                }catch(e){}
+                if(response.data.status==200){
+                  this.addEditWorkerVisible = false
+                  this.$message.success('用户编辑成功！')
+                  this.getWorkerHandle()
+                  this.cancleHandle('addEditWorkerVisible','addEditWorkerForm')
+                }else{
+                  this.$message.error(response.data.message)
+                }
               })
             }
           }

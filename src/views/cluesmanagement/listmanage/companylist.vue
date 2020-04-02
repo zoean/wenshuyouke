@@ -213,18 +213,16 @@ export default {
     },
     fetchListDetail(){ //名单列表数据请求
       searchGetListDetail(this.searchForm).then(response=>{
-        try{
-          if(response.status==200){
-            try{}catch(e){}
-            this.curCardList = response.data.obj
-            // console.log(this.curCardList)
-          }
-        }catch(e){}
+        if(response.data.status==200){
+          this.curCardList = response.data.obj
+          // console.log(this.curCardList)
+        }else{
+          this.$message.error(response.data.message)
+        }
       })
     },
     fetchCardList(){//获取当前用户名单列表用于线索转移
       getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{ 
-
         this.curUserCardList = response.data.obj
       })
     },
@@ -303,9 +301,11 @@ export default {
     handleCommand(command){
       this.changeTipStatus.clueRemind = command
       changeFollowStatus(this.changeTipStatus).then(response => {
-        if(response.status == 200){
+        if(response.data.status == 200){
           this.$message.success('提醒成功')
           this.fetchListDetail()
+        }else{
+          this.$message.error(response.data.message)
         }
       })
     },

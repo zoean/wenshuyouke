@@ -304,7 +304,7 @@ export default {
           this.$store.dispatch('callcenter/check_in')
           this.$store.dispatch('callcenter/make_call')
         }else{
-          this.$message.error(response.message)
+          this.$message.error(response.data.message)
         }
       })
       this.$store.dispatch('callform/setCurClueForm', this.cluesinfo)

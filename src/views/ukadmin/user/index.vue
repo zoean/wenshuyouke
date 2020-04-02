@@ -178,7 +178,11 @@ export default{
 	methods: {
 		fetchEntUserList(){
 			getEntUserList(this.searchForm).then(response => {
-				this.entUserListObj = response.data.obj
+				if(response.data.status == 200){
+					this.entUserListObj = response.data.obj
+				}else{
+					this.$message.error(response.data.message)
+				}
 			})
 		},
 		addEntUserHandle(){
@@ -205,22 +209,22 @@ export default{
 				if (valid) {
 					if(this.addEditType == '编辑企业用户'){
 						updateEntUser(this.addEditEntUserForm).then(response => {
-							if(response.status == 200){
+							if(response.data.status == 200){
 								this.$message.success('企业用户已修改')						
 								this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
 								this.fetchEntUserList()
 							}else{
-								this.$message.error('编辑企业用户失败，请重试')
+								this.$message.error(response.data.message)
 							}
 						})
 					}else{
 						addEntUser(this.addEditEntUserForm).then(response => {
-							if(response.status == 200){
+							if(response.data.status == 200){
 								this.$message.success('成功添加企业用户')		
 								this.fetchEntUserList()				
 								this.cancleHandle('addEditEntUserVisible','addEditEntUserForm')
 							}else{
-								this.$message.error('添加企业用户失败，请重试')
+								this.$message.error(response.data.message)
 							}
 						})
 					}	
@@ -237,31 +241,31 @@ export default{
 				wantStatus = 1
 			}
 			editWorker({id:id, userStatus:wantStatus}).then(response => {
-				if(response.status == 200){
+				if(response.data.status == 200){
 					this.$message.success('用户状态改变成功')
 					this.fetchEntUserList()
 				}else{
-					this.$message.success('用户状态改变失败，请重试')
+					this.$message.success(response.data.message)
 				}
 			})
 		},
 		delEntUserSubmit(){
 			delEntUser({ids: this.curId}).then(response => {
-				if(response.status == 200){
+				if(response.data.status == 200){
 					this.$message.success('企业用户删除成功')
 					this.delEntUserVisible = false
 					this.fetchEntUserList()
 				}else{
-					this.$message.error('删除操作失败，请重试')
+					this.$message.error(response.data.message)
 				}
 			})
 		},
 		resetPasswordHandle(id){
 			resetEntUserPassWord({id}).then(response => {
-				if(response.status == 200){
+				if(response.data.status == 200){
 					this.resetPasswordTipVisible = true
 				}else{
-					this.$message.error('重置密码失败，请重试')
+					this.$message.error(response.data.message)
 				}
 				
 			})

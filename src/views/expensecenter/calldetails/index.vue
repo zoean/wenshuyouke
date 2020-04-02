@@ -42,6 +42,10 @@
         <el-table-column
                 type="index"
                 width="50" label="序号"></el-table-column>
+
+        <el-table-column prop="entname"
+                         label="企业名称" width="200" show-overflow-tooltip>
+                       </el-table-column>
         <el-table-column prop="storageTime"
                          label="坐席名称" width="100">
                          <template slot-scope="scope">{{ scope.row.workno }}</template>
@@ -62,11 +66,11 @@
         <el-table-column prop="endtime"
                          label="结束呼叫时间" :formatter="formatDate" width="180">
         </el-table-column>
-        <el-table-column prop="address"
+        <el-table-column prop="timelen"
                          label="通话时长" width="120">
           <template slot-scope="scope">{{ scope.row.timelen }}s</template>
         </el-table-column>
-        <el-table-column prop="address"
+        <el-table-column prop="recordfilename"
                          label="通话录音">
           <template slot-scope="scope">
             <audio v-if="scope.row.recordfilename" style="width: 270px" :src="scope.row.recordfilename" controls="controls"></audio>
@@ -124,9 +128,11 @@ export default {
   },
 	created(){	
 		getSubAccounts({parentId:getLocalStorage('userId')}).then(response=>{//获取子帐户列表
-			try{
-				this.subAccount = response.data.obj
-			}catch(e){}
+      if(response.data.status == 200){
+        this.subAccount = response.data.obj
+      }else{
+        this.$message.error(response.data.message)
+      }
 		})
     this.fetchOrderList()
 	},
@@ -141,9 +147,11 @@ export default {
     },
 		fetchOrderList(){
 			getCallList(this.searchForm).then(response => {
-				try{
+        if(response.data.status == 200){
           this.orderDetailList = response.data.obj
-        }catch(e){}
+        }else{
+          this.$message.error(response.data.message)
+        }
 			})
 		},
     pickerDate(val){//时间处理-转时间戳并截取前十位

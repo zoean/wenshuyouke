@@ -99,21 +99,24 @@ export default{
 	methods:{
 		loadRoleList(){ //加载权限角色
 			loadRoleList({entUserId:getLocalStorage('userId')}).then(response=>{
-				try{
-					if(response.status==200){
-						this.roleList = response.data.obj		
-						this.roleId = this.roleList[0].id
-						this.roleType = this.roleList[0].roleType
-						this.loadRoleTree()
-					}
-				}catch(e){}
+				if(response.data.status==200){
+					this.roleList = response.data.obj		
+					this.roleId = this.roleList[0].id
+					this.roleType = this.roleList[0].roleType
+					this.loadRoleTree()
+				}else{
+					this.$message.error(response.data.message)
+				}
 			})
 		},
 		loadRoleTree(){	
-			console.log(this.roleId)
 			getRoleTree({roleId: this.roleId, menuRole: this.roleType}).then(response => {
-				this.menuTree = response.data.obj.menus				
-				this.curUserRoleList = response.data.obj.keys	
+				if(response.data.status == 200){
+					this.menuTree = response.data.obj.menus				
+					this.curUserRoleList = response.data.obj.keys	
+				}else{
+					this.$message.error(response.data.message)
+				}
 			})
 		},
 		roleSelection(tab,event){
@@ -147,10 +150,12 @@ export default{
 		},
 		delRoleSubmit(){
 			delRole(this.addEditRoleForm).then(response =>{
-				if(response.status == 200){
+				if(response.data.status == 200){
     			this.$message.success('角色删除成功')
     			this.loadRoleList()
     			this.delRoleVisibel = false
+    		}else{
+    			this.$message.error(response.data.message)
     		}
 			})
 		},
@@ -159,18 +164,22 @@ export default{
         if (valid) {
           if(this.addEditRoleType=="添加角色"){
           	addRole(this.addEditRoleForm).then(response => {
-          		if(response.status == 200){
+          		if(response.data.status == 200){
           			this.$message.success('添加角色成功')
           			this.loadRoleList()
           			this.cancleHandle('addEditRoleVisible','addEditRoleForm')
+          		}else{
+          			this.$message.error(response.data.message)
           		}
           	})
           }else{
           	editRole(this.addEditRoleForm).then(response => {
-          		if(response.status == 200){
+          		if(response.data.status == 200){
           			this.$message.success('角色编辑成功')
           			this.loadRoleList()  
           			this.cancleHandle('addEditRoleVisible','addEditRoleForm')
+          		}else{
+          			this.$message.error(response.data.message)
           		}
           	})
           }
@@ -203,9 +212,11 @@ export default{
 					}
 				}
 				setRoleTree(this.setCurRoleTreeForm).then(response=>{
-					if(response.status == 200){
+					if(response.data.status == 200){
 						this.$message.success('权限设置成功')
 						this.setCurRoleTreeForm.ids = []
+					}else{
+						this.$message.error(response.data.message)
 					}
 				})
 			}

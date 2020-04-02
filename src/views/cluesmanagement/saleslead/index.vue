@@ -323,7 +323,7 @@ export default {
           //   }
           // })
         }else{
-          this.$message.error(response.message)
+          this.$message.error(response.data.message)
         }
       })
     },
@@ -353,11 +353,11 @@ export default {
     },
     fetchCluesList(){//获取线索列表
       getCluesList(this.searchForm).then(response=>{
-        try{
-          if(response.data.status==200){
-            this.cluesListObj = response.data.obj
-          }
-        }catch(e){}
+        if(response.data.status==200){
+          this.cluesListObj = response.data.obj
+        }else{
+          this.$message.error(response.data.message)
+        }
       })
     },
     selectSource(val){//选择线索来源-将状态处理为状态对应id
@@ -370,14 +370,12 @@ export default {
         this.$message.error('请选择要转移的目标名单')
       }else{
         transforserClues(this.moveClueToCardForm).then(response=>{
-          try{
-            if(response.data.status == 200){
-              this.$message.success('线索已转移至名单')
-              this.fetchCluesList()//线索转移之后reload列表
-            }else{
-
-            }
-          }catch(e){}
+          if(response.data.status == 200){
+            this.$message.success('线索已转移至名单')
+            this.fetchCluesList()//线索转移之后reload列表
+          }else{
+            this.$message.error(response.data.message)
+          }
         })
       }
     },
@@ -386,16 +384,12 @@ export default {
         this.$message.error('请选择要转移的线索数据')
       }else{
         postCluesToSelf(this.moveClueToSelfForm).then(response=>{
-          try{
             if(response.data.status == 200){
               this.$message.success('线索已转移至线索池')
               this.fetchCluesList()//线索转移之后reload列表
             }else{
               this.$message.error(response.data.message)
             }
-          }catch(e){
-
-          }
         })
       }
     },
@@ -418,7 +412,7 @@ export default {
       }
       getxPhoneNums({entId: row.entId, callType: "call"}).then(response => {
         if(response.data.status == 200){//虚拟号获取成功后开始拨打电话
-          this.$store.commit('callcenter/SET_USERTEL', 17610100629)
+          this.$store.commit('callcenter/SET_USERTEL', 13661190279)
           this.$store.commit('callcenter/SET_ENTNAME', row.entName)
           this.$store.commit('callcenter/SET_NEWENTID', row.entId)
           // this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
@@ -429,7 +423,7 @@ export default {
           // 
           this.$store.dispatch('callcenter/make_call')
         }else{
-          this.$message.error(response.message)
+          this.$message.error(response.data.message)
         }
       })
       this.setCallFormData(row)

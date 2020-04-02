@@ -142,14 +142,14 @@ export default {
   data() {
     return {
       entType: [ { value: "", label: "不限" }, { value: "个人独资企业", label: "个人独资企业" },{ value: "有限责任公司", label: "有限责任公司" },{ value: "股份有限公司", label: "股份有限公司" },{ value: "外商投资企业", label: "外商投资企业" },{ value: "1", label: "其他" } ],
-      telePhone: [{value :"2",label:"不限"},{value:"0",label:"无"},{value:"1",label:"有"} ],
+      telePhone: [{value :"",label:"不限"},{value:"0",label:"无"},{value:"1",label:"有"} ],
       regCapital: [ { value: "0", label: "不限",title:"不限" },{ value: "1", label: "20万以下" ,title:"包含20万"},{ value: "2", label: "20-50万",title:"不包含20万" },{ value: "3", label: "50-100万" ,title:"不包含50万" },{ value: "4", label: "100-200万" ,title:"不包含100万" },{ value: "5", label: "200-500万" ,title:"不包含200万" },{ value: "6", label: "500万以上",title:"包含500万"  }],
       searchForm: {
         userId: getLocalStorage("userId"),
         entName: "", //企业名字
         entType: "", //企业类型
         regCapital: "0", // 注册资本
-        telePhone: "2", //联系方式
+        telePhone: "1", //联系方式
         industryCode: "", //行业
         pid:"100000",
         pageNum: 1,
@@ -245,7 +245,7 @@ export default {
       area({ pid: this.searchForm.pid })
         .then(res => {
           if(res){
-            this.city = res.obj;
+            this.city = res.data.obj
             this.searchForm.pid = this.pname
           }
         })
@@ -256,7 +256,7 @@ export default {
       area({ pid: this.searchForm.pid })
         .then(res => {
           if(res){
-            this.block = res.obj;
+            this.block = res.data.obj;
             this.searchForm.pid = this.cname
           }
         })
@@ -264,12 +264,6 @@ export default {
     // 选区
     choseBlock(val) {
       this.searchForm.pid = val
-      this.$store.dispatch("companysearch/area", this.cid).then(res => {
-          if(res){
-            this.block = res.obj;
-            this.searchForm.pid = this.bname
-          }
-      });
     },
     //不限
     ProvinceNoLimit() {
@@ -320,24 +314,6 @@ export default {
     handleCurrentChange(pageNum) {
       this.searchForm.pageNum = pageNum;
     },
-    // companyinfoshow(row) {
-    //   this.dialogVisible = true;
-    //   this.rowid = {id:row.id}
-    //   this.$store
-    //   .dispatch("companysearch/searchinfo",this.rowid)
-    //     .then(res => {
-    //         if(res){
-    //           this.rowinfo = res.obj
-    //           if(rowinfo.enterpriseLogo){
-    //             this.rowinfo.enterpriseLogo = rowinfo.enterpriseLogo
-    //           }else{
-    //             this.rowinfo.enterpriseLogo = require('@/assets/images/companylogo.png')
-    //           }
-    //         }
-    //     })
-    //     .catch(() => {});
-      
-    // },
     searchlist() {
       this.$store.dispatch('recycle/selectList', {"entUserId":getLocalStorage('userId')})
       // this.$store.dispatch('recycle/selectList', { 'entUserId': 3 })

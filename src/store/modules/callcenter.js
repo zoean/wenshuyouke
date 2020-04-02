@@ -83,9 +83,8 @@ const actions = {
       if(wsstate == -2){
         let startIndex = para.indexOf('=')
         let endIndex = para.indexOf(';')
-        let cdrid = para.slice(startIndex + 1,endIndex)
-        console.log(state)
-        entIdBindCallDetail({cdrid, newEntid: state.newEntid, entName:state.entName}).then(response => {
+        let cdrid = Number(para.slice(startIndex + 1,endIndex))
+        entIdBindCallDetail({cdrid, newEntid: state.newEntid, entName:state.entName,workno: rootGetters.seatId}).then(response => {
           console.log(response)
         })
       }
