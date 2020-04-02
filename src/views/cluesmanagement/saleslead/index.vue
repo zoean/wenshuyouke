@@ -413,7 +413,6 @@ export default {
     },
     oneTouchCall (index,row) {//一键呼叫
       // this.$store.commit('callcenter/SET_USERTEL', '13051029868')//传入当前被叫用户手机号码
-      console.log(this.websocket)
       if(this.websocket == null){
         this.$store.dispatch('callcenter/websocket_init')
       }

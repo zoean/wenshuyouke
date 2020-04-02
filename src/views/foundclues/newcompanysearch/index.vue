@@ -9,10 +9,10 @@
     				<el-select v-model="provinceName" placeholder="省级地区">
     					<el-option v-for="(item,index) in provinceList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
-    				<el-select v-model="cityName" placeholder="市级地区">
+    				<el-select v-model="cityName" placeholder="市级地区" @change="changeCity">
     					<el-option v-for="(item,index) in cityList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
-    				<el-select v-model="districtName" placeholder="区级地区">
+    				<el-select v-model="districtName" placeholder="区级地区" @change="changeDistrict">
     					<el-option v-for="(item,index) in districtList" :value="item.id" :label="item.name"></el-option>
     				</el-select>
     			</dd>
@@ -215,27 +215,50 @@ export default {
       this.districtList = []
       this.cityName = ''
       this.districtName = ''
-    	this.getAreaObj('city')
+      console.log(this.pid)
+    	if(this.pid != '') this.getAreaObj('city')
     },
-    cityName: function (val, oldval){//市
-    	this.pid = val
-    	this.searchForm.raCode = val
-    	this.getAreaObj()
-    },
-    districtName: function (val,oldval){//区
-    	this.searchForm.raCode = val
-    },
+    // cityName: function (val, oldval){//市
+    // 	this.pid = val
+    //   console.log(this.pid)
+    // 	this.searchForm.raCode = val
+    // 	if(this.pid != '') this.getAreaObj()
+    // },
+    // districtName: function (val,oldval){//区
+    // 	this.searchForm.raCode = val
+    // },
     industryName: function (val,oldval){ //行业
       this.subIndustryList = [] // 监听当行业一级发生变化，清空上一次二级行业的选中状态和数据
       this.subIndustryName = '' 
     	this.getSubIndustryObj(val)
     	this.searchForm.industryCode = val
     },
-    subIndustryName: function (val, oldval){
-    	this.searchForm.industryCode = val
-    }
+    // subIndustryName: function (val, oldval){
+    // 	this.searchForm.industryCode = val
+    // }
   },
   methods: {
+    changeCity(val){
+      this.searchForm.raCode = val
+      this.pid = val
+      this.getAreaObj()
+      if(val){
+        this.getNewComList()
+      }
+    },
+    changeDistrict(val){
+      console.log(val)
+      this.searchForm.raCode = val
+      if(val){
+        this.getNewComList()
+      }
+    },
+    changeSubIndustry(val){
+      this.searchForm.industryCode = val
+      if(val){
+        this.getNewComList()
+      }
+    },
     sortRegCapital(a,b){
       return a.regCapital - b.regCapital
     },
@@ -260,19 +283,22 @@ export default {
   		})
   	},
   	getAreaObj(obj){
-			area({pid: this.pid}).then(response => {
-				try{
-					if(response.status == 200){
-						if(obj == 'province'){
-							this.provinceList = response.data.obj
-						}else if(obj == 'city'){
-							this.cityList = response.data.obj
-						}else{
-							this.districtList = response.data.obj
-						}
-					}
-				}catch(e){}
-			})
+      if(this.pid){
+        area({pid: this.pid}).then(response => {
+          try{
+            if(response.status == 200){
+              if(obj == 'province'){
+                this.provinceList = response.data.obj
+              }else if(obj == 'city'){
+                this.cityList = response.data.obj
+              }else{
+                this.districtList = response.data.obj
+              }
+            }
+          }catch(e){}
+      })
+      }
+			
   	},
   	getIndustryObj(){//获取行业
 			category().then(response => {
