@@ -100,7 +100,12 @@
         stripe
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column prop="entName" label="公司名称" width="280"></el-table-column>
+        <el-table-column prop="entName" label="企业名称" width="280"></el-table-column><el-table-column
+          prop="industryName"
+          label="所属行业"
+          show-overflow-tooltip>
+          <template slot-scope="scope">{{ scope.row.industryName }}</template>
+        </el-table-column>
         <el-table-column label="法人">
           <template slot-scope="scope">{{scope.row.legalName}}</template>
         </el-table-column>
@@ -130,7 +135,8 @@
 </template>
 <script>
 import { parseToTimestamp, parseTime } from "@/utils/index";
-import { getLocalStorage } from "@/utils/index";
+import { getLocalStorage } from "@/utils/index"
+import {category, industry, area} from '@/api/companysearch'
 
 export default {
   data() {
@@ -145,7 +151,7 @@ export default {
         regCapital: "0", // 注册资本
         telePhone: "2", //联系方式
         industryCode: "", //行业
-        pid:"",
+        pid:"100000",
         pageNum: 1,
         pageSize: 10
       },
@@ -180,8 +186,8 @@ export default {
     }
   },
   created() {
-    this.choseProvince();
-    this.choseCategory()
+    this.fetchProvince()
+    this.fetchCategory()
     this.companylist();
     this.searchlist()
   },
@@ -201,12 +207,10 @@ export default {
     this.companylist(this.searchForm);
       },
     changeValue(value) {
-        // console.log(value);
         let obj = {};
         obj = this.entType.find((index)=>{
             return index.value === value;
-        });
-        // console.log(obj.label);
+        })
     },
     clearcity() {
       this.pname = "";
@@ -221,46 +225,45 @@ export default {
       this.searchForm.industryCode = '';
       this.ProvinceNoLimit()
     },
-    // 选省
-    choseProvince() {
-      const pid = 100000;
-      this.cname = "";
-      this.bname = "";
-      this.block = []
-      this.choseprovince = { pid: pid };
+    fetchProvince(){
       this.$store
-        .dispatch("companysearch/area", this.choseprovince)
+        .dispatch("companysearch/area", { pid: this.searchForm.pid })
         .then(res => {
           if(res){
             this.province = res.obj;
             this.searchForm.pid = this.pname
           }
         })
-        .catch(() => {});
-      if (this.pname) {
-        this.pid = { pid: this.pname };
-        this.choseCity(this.pid);
-      }
     },
-    // 选市
-    choseCity() {
+    // 选省
+    choseProvince(val) {
+      // const pid = 100000;
+      this.searchForm.pid = val
+      this.cname = "";
       this.bname = "";
-      this.$store
-        .dispatch("companysearch/area", this.pid)
+      this.block = []
+      area({ pid: this.searchForm.pid })
         .then(res => {
           if(res){
             this.city = res.obj;
+            this.searchForm.pid = this.pname
+          }
+        })
+    },
+    // 选市
+    choseCity(val) {
+      this.bname = "";
+      area({ pid: this.searchForm.pid })
+        .then(res => {
+          if(res){
+            this.block = res.obj;
             this.searchForm.pid = this.cname
           }
         })
-        .catch(() => {});
-      if (this.cname) {
-        this.cid = { pid: this.cname };
-        this.choseBlock(this.cid);
-      }
     },
     // 选区
-    choseBlock() {
+    choseBlock(val) {
+      this.searchForm.pid = val
       this.$store.dispatch("companysearch/area", this.cid).then(res => {
           if(res){
             this.block = res.obj;
@@ -281,36 +284,22 @@ export default {
         })
         .catch(() => {});
     },
+    fetchCategory(){
+      category().then(response => {
+        this.Category = response.data.obj
+      })
+    },
     //一级行业
-    choseCategory(){
-      this.industry = "";
-      this.$store
-        .dispatch("companysearch/category")
-        .then(res => {
-            if(res){
-              this.Category = res.obj;
-              this.searchForm.industryCode = this.categoryname
-
-            }
-        })
-        .catch(() => {});
-        if (this.categoryname) {
-          this.industryid = { "industryCode": this.categoryname};
-          console.log(this.industryid)
-          this.choseIndustry(this.industryid);
-        }
+    choseCategory(val){
+      this.industry = ''
+      this.searchForm.industryCode = val
+      industry({industryCode: this.searchForm.industryCode}).then(response => {
+        this.Industry = response.data.obj
+      })
     },
     //二级行业
-    choseIndustry() {
-      this.$store
-      .dispatch("companysearch/industry",this.industryid)
-        .then(res => {
-            if(res){
-              this.Industry = res.obj;
-              this.searchForm.industryCode = this.industry
-            }
-        })
-        .catch(() => {});
+    choseIndustry(val) {
+      this.searchForm.industryCode = val
     },
     //公司信息展示
     companylist() {

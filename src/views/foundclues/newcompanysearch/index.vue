@@ -255,7 +255,6 @@ export default {
     },
     changeSubIndustry(val){
       this.searchForm.industryCode = val
-      console.log(val)
       if(val){
         this.getNewComList()
       }
