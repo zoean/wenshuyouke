@@ -25,7 +25,7 @@
     					<el-option v-for="item in industryList" :value="item.industryCode" :label="item.industryName"></el-option>
     				</el-select>
     				<el-select v-model="subIndustryName" placeholder="二级">
-    					<el-option v-for="item in subIndustryList" :value="item.id" :label="item.industryName"></el-option>
+    					<el-option v-for="item in subIndustryList" :value="item.industryCode" :label="item.industryName"></el-option>
     				</el-select>
     			</dd>
     		</dl>
