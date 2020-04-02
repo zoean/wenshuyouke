@@ -24,7 +24,7 @@
     				<el-select v-model="industryName" placeholder="一级">
     					<el-option v-for="item in industryList" :value="item.industryCode" :label="item.industryName"></el-option>
     				</el-select>
-    				<el-select v-model="subIndustryName" placeholder="二级">
+    				<el-select v-model="subIndustryName" placeholder="二级" @change="changeSubIndustry">
     					<el-option v-for="item in subIndustryList" :value="item.industryCode" :label="item.industryName"></el-option>
     				</el-select>
     			</dd>
@@ -255,6 +255,7 @@ export default {
     },
     changeSubIndustry(val){
       this.searchForm.industryCode = val
+      console.log(val)
       if(val){
         this.getNewComList()
       }
