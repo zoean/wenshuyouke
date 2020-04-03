@@ -43,3 +43,11 @@ export function getxPhoneNums(data){
 		data
 	})
 }
+
+//虚拟号解绑
+export function unbindXphone(data){
+	return request({
+		url: `business/ax/unBind/${data}`,
+		method: 'delete'
+	})
+}

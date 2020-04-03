@@ -315,7 +315,8 @@ export default {
           this.$store.dispatch('callform/setEditType', 'fetchxphone')
           this.$store.dispatch('callform/toggleClueForm')
           this.$store.commit('callform/TOGGLE_XPHONE')
-          this.$store.commit('callform/SET_XPHONE',response.data.obj)
+          this.$store.commit('callform/SET_XPHONE',response.data.obj.xNumber)
+          this.$store.commit('callform/SET_XPHONEID',response.data.obj.bindid)
           this.setCallFormData(row)
           // this.$alert(`您本次获取的虚拟号是：${response.data.obj}，有效时长为3分钟，超时请重新获取`,'获取虚拟号',{
           //   confirmButtonText: '确定',
@@ -415,7 +416,9 @@ export default {
           // this.$store.commit('callcenter/SET_USERTEL', 13661190279)
           this.$store.commit('callcenter/SET_ENTNAME', row.entName)
           this.$store.commit('callcenter/SET_NEWENTID', row.entId)
-          this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat
+          this.$store.commit('callcenter/SET_USERTEL', response.data.obj.xNumber)//虚拟号赋值给当前user/seat
+          this.$store.commit('callform/SET_XPHONE',response.data.obj.xNumber)
+          this.$store.commit('callform/SET_XPHONEID',response.data.obj.bindid)
           this.$store.dispatch('callform/setEditType', 'call')
           this.$store.dispatch('callform/toggleClueForm')
           this.$store.dispatch('callform/togglePanel')

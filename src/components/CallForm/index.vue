@@ -236,6 +236,7 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
               this.updateClue()
               this.moreForm = false //收起表单
               this.$message.success('当前线索更新成功') 
+              this.$store.dispatch('callform/unbindXphone')
             }else{
               this.$message.success(response.data.message)
             }
@@ -255,6 +256,7 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
             this.updateClue()
             this.moreForm = false //收起表单
             this.$message.success('当前线索更新成功') 
+            this.$store.dispatch('callform/unbindXphone')
           }else{
             this.$message.success(response.data.message)
           }

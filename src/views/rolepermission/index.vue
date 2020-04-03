@@ -2,7 +2,7 @@
 	<div class="main-box">
 		<div class="role-panel">
 			<div class="role-handle">
-				<h3 :title="entUserName">{{entUserName | ellipsis(20)}}</h3>
+				<h3 :title="entUserName">{{entUserName | ellipsis(16)}}</h3>
 				<p>
 					<el-button type="primary" icon="el-icon-plus" circle @click="addRoleHandle"></el-button>
 						<el-button type="primary" icon="el-icon-edit" circle @click="editRoleHandle"></el-button>

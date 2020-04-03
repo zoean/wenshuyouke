@@ -21,28 +21,26 @@
     <div class="companyHandle">
       当前有<b class="highred">{{clueDetailList.total}}</b>条线索明细
     </div>
-		<div class="order-data">
-			<el-table ref="clueDetailList"
-                :data="clueDetailList"
-                tooltip-effect="dark"
-                style="width: 100%">        
-        <el-table-column label="日期" prop="receiveTime">
-        </el-table-column>
-        <el-table-column  label="操作">
-           <template slot-scope="scope">企业管理员  —>  {{ scope.row.listName }} ({{ scope.row.userName }})</template>
-        </el-table-column>
-        <el-table-column prop="receiveCount" label="领取数" >
-        </el-table-column>
-      </el-table>
-      <el-pagination @size-change="handleSizeChange"
-                     @current-change="handleCurrentChange"
-                     :current-page="searchForm.pageNum"
-                     :page-sizes="[10, 20, 30, 40, 50, 60,70,80,90,100]"
-                     :page-size="searchForm.pageSize"
-                     layout="total, sizes, prev, pager, next, jumper"
-                     :total="clueDetailList.total">
-      </el-pagination>
-		</div>
+		<el-table ref="clueDetailList"
+              :data="clueDetailList"
+              tooltip-effect="dark"
+              style="width: 100%">        
+      <el-table-column label="日期" prop="receiveTime">
+      </el-table-column>
+      <el-table-column  label="操作">
+         <template slot-scope="scope">企业管理员  —>  {{ scope.row.listName }} ({{ scope.row.userName }})</template>
+      </el-table-column>
+      <el-table-column prop="receiveCount" label="领取数" >
+      </el-table-column>
+    </el-table>
+    <el-pagination @size-change="handleSizeChange"
+                   @current-change="handleCurrentChange"
+                   :current-page="searchForm.pageNum"
+                   :page-sizes="[10, 20, 30, 40, 50, 60,70,80,90,100]"
+                   :page-size="searchForm.pageSize"
+                   layout="total, sizes, prev, pager, next, jumper"
+                   :total="clueDetailList.total">
+    </el-pagination>
 	</div>
 </template>
 <script>
@@ -54,8 +52,8 @@ export default {
 			searchForm:{
         starttime:"",
         endtime:"",
-				pageNum:"1",
-				pageSize:"10"
+				pageNum:1,
+				pageSize:10
 			},
 			clueDetailList:{}
 		}

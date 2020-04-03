@@ -33,7 +33,7 @@
     			<dt>企业类型：</dt>
     			<dd>
     				<el-button class="btn-blue-default" type="primary" @click="resetSearchOption(3)">不限</el-button>
-    				<el-radio-group v-model="searchForm.entType" @change="changeEntType">
+    				<el-radio-group v-model="searchForm.entType">
 				      <el-radio-button value="个人独资企业" label="个人独资企业">个人独资企业</el-radio-button>
 				      <el-radio-button value="有限责任公司" label="有限责任公司">有限责任公司</el-radio-button>
 				      <el-radio-button value="股份有限公司" label="股份有限公司">股份有限公司</el-radio-button>
@@ -96,7 +96,7 @@
 				    </el-table-column>
 				    <el-table-column
 				      prop="name"
-				      label="企业名称" ref="multipleTable" width="320px" show-overflow-tooltip>				      
+				      label="企业名称" ref="multipleTable" width="320" show-overflow-tooltip>				      
 				      <template slot-scope="scope">{{ scope.row.entName }}</template>
 				    </el-table-column>
 				    <el-table-column
@@ -115,6 +115,7 @@
 				      prop="regCapital"
 				      label="注册资本(万元)"
               sortable
+              width="160"
               :sort-method="sortRegCapital"
 				      show-overflow-tooltip>
 				      <template slot-scope="scope">{{ Math.floor(scope.row.regCapital) }}</template>
@@ -216,7 +217,6 @@ export default {
       this.districtList = []
       this.cityName = ''
       this.districtName = ''
-      console.log(this.pid)
     	if(this.pid != '') this.getAreaObj('city')
     },
     // cityName: function (val, oldval){//市
@@ -248,7 +248,6 @@ export default {
       }
     },
     changeDistrict(val){
-      console.log(val)
       this.searchForm.raCode = val
       if(val){
         this.getNewComList()
@@ -266,9 +265,6 @@ export default {
     sortByDate(a,b){
       return a.verifiedTime - b.verifiedTime
     },
-  	changeEntType(val){
-  		console.log(val)
-  	},
   	getRowKey(row){
   		return row.id
   	},
@@ -341,10 +337,6 @@ export default {
           break
   		}
   	},
-  	reloadNewComList(curPage){
-  		this.searchForm.pageNum = curPage
-  		this.getNewComList()
-  	},
   	getCurUserCardHandle(){//获取当前用户的名单列表
 			getCurUserCard({entUserId:getLocalStorage('userId')}).then(response=>{
   			this.cardList = response.data.obj
@@ -359,7 +351,7 @@ export default {
 				getNewComToCard(this.getNewComForm).then(response=>{
 	  			try{
 	  				if(response.data.status==200){
-	  					this.reloadNewComList()
+	  					this.getNewComList()
 	  					this.$message.success(`您已成功领取${this.getNewComForm.entId.length}条数据至名单`)
 	  					// 领取成功清空领取Form
 	  					this.getNewComForm.entId = []

@@ -34,7 +34,6 @@
     <div class="companyHandle">
       <p>当前有<b class="highred">{{orderDetailList.total}}</b>条通话记录</p>
     </div>
-		<div class="order-data">
 			<el-table ref="listDetailTable"
                 :data="orderDetailList.list"
                 tooltip-effect="dark"
@@ -86,7 +85,6 @@
                      layout="total, sizes, prev, pager, next, jumper"
                      :total="orderDetailList.total">
       </el-pagination>
-		</div>
 	</div>
 </template>
 <script>

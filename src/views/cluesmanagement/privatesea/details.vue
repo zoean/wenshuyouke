@@ -296,7 +296,9 @@ export default {
     oneTouchCall(){
       getxPhoneNums({entId: this.cluesinfo.entId, callType: "call"}).then(response => {
         if(response.data.status == 200){//虚拟号获取成功后开始拨打电话
-          this.$store.commit('callcenter/SET_USERTEL', response.data.obj)//虚拟号赋值给当前user/seat  02103270050
+          this.$store.commit('callcenter/SET_USERTEL', response.data.obj.xNumber)//虚拟号赋值给当前user/seat  02103270050
+          this.$store.commit('callform/SET_XPHONE',response.data.obj.xNumber)
+          this.$store.commit('callform/SET_XPHONEID',response.data.obj.bindid)
           // this.$store.commit('callcenter/SET_USERTEL', 17610100629)
           this.$store.dispatch('callform/setEditType', 'call')
           this.$store.dispatch('callform/toggleClueForm')

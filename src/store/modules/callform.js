@@ -1,3 +1,4 @@
+import { unbindXphone } from '@/api/saleslead'
 const state = {
 	curCluesVisible: false, // 弹窗
   callPanelVisible: false,// 通话计时
@@ -5,7 +6,8 @@ const state = {
   curCluesForm:{},// 当前线索信息
   countTime:'正在呼叫中...',// 通话计时
   editType: '',//edit-只编辑不打电话 call打电话
-  xphone:''
+  xphone:'',
+  xphoneId: ''
 }
 
 const mutations = {
@@ -26,6 +28,9 @@ const mutations = {
   },
   SET_XPHONE:(state, xphone) => {
     state.xphone = xphone
+  },
+  SET_XPHONEID: (state, xphoneid) => {
+    state.xphoneid = xphoneid
   }
 }
 
@@ -45,6 +50,11 @@ const actions = {
   },
   setEditType({commit}, type){
     commit('CHANGE_EDITTYPE', type)
+  },
+  unbindXphone(state){
+    unbindXphone(state.xphoneid).then(response => {
+      console.log(response)
+    })
   }
 }
 
