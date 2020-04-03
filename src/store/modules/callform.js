@@ -51,7 +51,7 @@ const actions = {
   setEditType({commit}, type){
     commit('CHANGE_EDITTYPE', type)
   },
-  unbindXphone(state){
+  unbindXphone(){
     unbindXphone(state.xphoneid).then(response => {
       console.log(response)
     })

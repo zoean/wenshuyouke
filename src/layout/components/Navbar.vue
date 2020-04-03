@@ -5,14 +5,15 @@
          height="29"
          class="logo"
          src="@/assets/images/logo.png" />
-         <i class="el-icon-bell highblue"></i>
+         <svg-icon icon-class="bell" />
       <el-carousel direction="vertical" :autoplay="true">
         <el-carousel-item>
-          <p>文数优客今天为您推送<span class="highblue">86</span>家新企消息</p>
+          <!-- <p>文数优客今天为您推送<span class="highblue">86</span>家新企消息</p> -->
+          <p>文数优客1.0版本上线了！</p>
         </el-carousel-item>
-        <el-carousel-item>
+        <!-- <el-carousel-item>
           <p>线索明细增加导出功能，快去试试吧！</p>
-        </el-carousel-item>
+        </el-carousel-item> -->
       </el-carousel>
     </div>    
     <div class="navbar-right">
@@ -169,6 +170,11 @@ export default {
     i{
       margin-top:25px;
       font-size:20px;
+    }
+    .svg-icon{
+      margin-top: 20px;
+      width:1.5rem;
+      height: 1.5rem;
     }
     .el-carousel{
       width: 50%;

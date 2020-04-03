@@ -111,6 +111,7 @@
 <script>
 import {updateClues} from '@/api/saleslead'
 import {entIdBindCallDetail} from '@/api/orderdetail'
+import { unbindXphone } from '@/api/saleslead'
 	export default {
 		name: 'CallForm',
     props: {
@@ -135,6 +136,11 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         }
 			}
 		},
+    mounted(){
+      // if(this.fetchXphoneVisible || this.callPanelVisible){
+      this.$store.dispatch('callform/unbindXphone')
+      // }
+    },
 		computed:{ // 计算依赖
 			callPanelVisible(){ //通话计时
 				return this.$store.state.callform.callPanelVisible
@@ -236,7 +242,6 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
               this.updateClue()
               this.moreForm = false //收起表单
               this.$message.success('当前线索更新成功') 
-              this.$store.dispatch('callform/unbindXphone')
             }else{
               this.$message.success(response.data.message)
             }
@@ -244,6 +249,7 @@ import {entIdBindCallDetail} from '@/api/orderdetail'
         }else if(this.editType == 'fetchxphone'){
           this.$store.commit('callform/TOGGLE_XPHONE')
           this.$store.dispatch('callform/toggleClueForm')
+          this.$store.dispatch('callform/unbindXphone')
         }else{
           this.$store.dispatch('callform/toggleClueForm')
         }

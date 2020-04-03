@@ -38,7 +38,7 @@ export function dropCallPost(data){
 //发送坐席和线索号码
 export function getxPhoneNums(data){
 	return request({
-		url:'/marketing/business/ax/xnumber',
+		url:'marketing/business/ax/xnumber',
 		method:'post',
 		data
 	})
@@ -47,7 +47,7 @@ export function getxPhoneNums(data){
 //虚拟号解绑
 export function unbindXphone(data){
 	return request({
-		url: `business/ax/unBind/${data}`,
+			url: data ? `marketing/business/ax/unBind/${data}` : 'marketing/business/ax/unBind/1',
 		method: 'delete'
 	})
 }

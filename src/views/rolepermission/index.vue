@@ -265,6 +265,9 @@ export default{
 			flex-direction: row;
 			justify-content: space-between;
 			align-items: center;
+			.el-button{
+				padding: 8px;
+			}
 		}
 	}
 	.gutter-line{
