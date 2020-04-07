@@ -81,7 +81,6 @@ const actions = {
         enterpriseBusiness:enterpriseBusiness,
         enterpriseDesc:enterpriseDesc
       }).then(response => {
-		  console.log(editcompanyInfo)
         resolve(response.data)
       }).catch(error => {
         reject(error)

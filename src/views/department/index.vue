@@ -31,7 +31,10 @@
       </div>
       <div class="gutter-line"></div>
       <div class="department-data">
-        <h2 class="highblue">用户列表</h2>
+        <h2>
+          <b class="highblue">用户列表</b>
+          <span @click="showAllWorkers">显示全部成员</span>
+        </h2>
         <div class="result-handle">
           <p>该主管名下有<span class="highblue">{{workerList.total}}</span>名成员</p>
           <p>
@@ -328,6 +331,10 @@
           this.departmentTree = response.data.obj.data
         })
       },
+      showAllWorkers(){
+        this.workerListForm.department = ''
+        this.getWorkerHandle()
+      },
       nodeClick(obj, data, node){
         this.workerListForm.department = obj.id
         this.getWorkerHandle()
@@ -592,6 +599,14 @@
         display: flex;
         flex-grow:1;
         flex-direction: column;
+        h2{
+          display: flex;
+          justify-content: space-between;
+          span{
+            font-size: 16px;
+            cursor: pointer;
+          }
+        }
         .result-handle{
           display: flex;
           flex-direction: row;

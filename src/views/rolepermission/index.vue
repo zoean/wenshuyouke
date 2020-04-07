@@ -100,10 +100,14 @@ export default{
 		loadRoleList(){ //加载权限角色
 			loadRoleList({entUserId:getLocalStorage('userId')}).then(response=>{
 				if(response.data.status==200){
-					this.roleList = response.data.obj		
-					this.roleId = this.roleList[0].id
-					this.roleType = this.roleList[0].roleType
-					this.loadRoleTree()
+					this.roleList = response.data.obj
+					if(this.roleList && this.roleList.length > 0){
+						this.roleId = this.roleList[0].id
+						this.roleType = this.roleList[0].roleType
+						this.loadRoleTree()
+					}else{
+						this.menuTree = []
+					}
 				}else{
 					this.$message.error(response.data.message)
 				}

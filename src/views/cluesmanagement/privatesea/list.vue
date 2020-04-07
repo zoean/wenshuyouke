@@ -309,6 +309,7 @@ export default {
     delclue() {
       let ids = this.delClueForm.ids.join(",")
       if (ids.length == 0) {
+        this.$message.error('请选择要删除的线索')
       } else {
         this.$confirm("确认删除, 是否继续?", "提示", {
           confirmButtonText: "确定",

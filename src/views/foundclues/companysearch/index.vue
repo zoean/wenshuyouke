@@ -245,6 +245,7 @@ export default {
       area({ pid: this.searchForm.pid })
         .then(res => {
           if(res){
+            console.log(res)
             this.city = res.data.obj
             this.searchForm.pid = this.pname
           }
@@ -252,7 +253,8 @@ export default {
     },
     // 选市
     choseCity(val) {
-      this.bname = "";
+      this.bname = ""
+      this.searchForm.pid = val
       area({ pid: this.searchForm.pid })
         .then(res => {
           if(res){

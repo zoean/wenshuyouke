@@ -52,8 +52,8 @@ export default {
 			searchForm:{
         starttime:"",
         endtime:"",
-				pageNum:1,
-				pageSize:10
+				pageNum:"1",
+				pageSize:"10"
 			},
 			clueDetailList:{}
 		}

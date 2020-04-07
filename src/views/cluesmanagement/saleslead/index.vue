@@ -201,7 +201,7 @@ export default {
   data () {
     return {
       moreForm:false,
-      cluesSource: ['新企推荐','企业查询', '转线索','回收站'],
+      cluesSource: ['新企推荐','企业搜索', '转线索','回收站'],
       callStatus:['未拨打','已拨通','未拨通'],
       sortType:['注册资本-升序','注册资本-降序','成立时间-升序','成立时间-降序'],
       fllowupStatus:['待跟进','有意向','无意向','已成交','未成交'],
